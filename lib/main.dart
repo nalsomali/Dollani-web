@@ -1,6 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:web/dashboard.dart';
 import 'login.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
@@ -35,11 +36,7 @@ class MyApp extends StatelessWidget {
       ],
       locale: Locale("ar", "AE"),
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-          colorSchemeSeed: const Color.fromARGB(255, 215, 189, 226),
-          useMaterial3: true,
-          brightness: Brightness.light),
-      home: UserLogin(),
+      home: DashboardScreen(),
     );
   }
 }
