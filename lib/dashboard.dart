@@ -185,7 +185,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                             ],
                             rows: [
                               DataRow(cells: [
-                                DataCell(Text("0")),
+                                DataCell(Text("٠")),
                                 DataCell(Text("كلية الحاسب والمعلومات")),
                                 DataCell(Text("٣٠٠ متر")),
                                 DataCell(Text("مكتمل")),
@@ -195,7 +195,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                 ))
                               ]),
                               DataRow(cells: [
-                                DataCell(Text("1")),
+                                DataCell(Text("١")),
                                 DataCell(Text("كليةالحقوق")),
                                 DataCell(Text("٢٥٠ متر ")),
                                 DataCell(Text("قيد التحميل")),
@@ -205,7 +205,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                 )),
                               ]),
                               DataRow(cells: [
-                                DataCell(Text("2")),
+                                DataCell(Text("٢")),
                                 DataCell(Text("كليةالعلوم")),
                                 DataCell(Text("٣٤٠ متر")),
                                 DataCell(Text("مكتمل")),
