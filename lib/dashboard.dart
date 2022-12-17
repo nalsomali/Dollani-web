@@ -1,4 +1,7 @@
+import 'package:cool_alert/cool_alert.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:web/login.dart';
 
 class DashboardScreen extends StatefulWidget {
   const DashboardScreen({Key? key}) : super(key: key);
@@ -12,6 +15,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
   bool isExpanded = false;
   @override
   Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
+
     return Scaffold(
       backgroundColor: Colors.white,
       body: Row(
@@ -25,6 +30,29 @@ class _DashboardScreenState extends State<DashboardScreen> {
               unselectedLabelTextStyle: TextStyle(
                 color: Color.fromARGB(255, 255, 255, 255),
               ),
+              onDestinationSelected: (index) {
+                CoolAlert.show(
+                  context: context,
+                  title: "تسجيل الخروج",
+                  width: size.width * 0.2,
+                  confirmBtnColor: Color.fromARGB(181, 172, 22, 12),
+                  showCancelBtn: false,
+                  //cancelBtnColor: Color.fromARGB(144, 64, 6, 87),
+                  type: CoolAlertType.confirm,
+                  backgroundColor: Color.fromARGB(255, 45, 66, 142),
+                  text: "هل تريد تسجيل الخروج",
+                  confirmBtnText: 'تسجيل الخروج',
+                  cancelBtnText: "إلغاء",
+                  onCancelBtnTap: () {
+                    Navigator.pop(context);
+                  },
+                  onConfirmBtnTap: () async {
+                    await FirebaseAuth.instance.signOut();
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => UserLogin()));
+                  },
+                );
+              },
               selectedIconTheme:
                   IconThemeData(color: Color.fromARGB(255, 25, 54, 152)),
               destinations: [
@@ -35,6 +63,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 NavigationRailDestination(
                   icon: Icon(Icons.person),
                   label: Text("الحساب"),
+                ),
+                NavigationRailDestination(
+                  icon: Icon(Icons.logout),
+                  label: Text("تسجيل الخروج"),
                 ),
               ],
               selectedIndex: 0),

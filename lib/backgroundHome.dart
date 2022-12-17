@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
-class Background extends StatelessWidget {
+class BackgroundHome extends StatelessWidget {
   final Widget child;
 
-  const Background({
+  const BackgroundHome({
     Key? key,
     required this.child,
   }) : super(key: key);
@@ -15,20 +15,12 @@ class Background extends StatelessWidget {
       width: double.infinity,
       height: size.height,
       child: Stack(
-        alignment: Alignment.center,
+        alignment: Alignment.topCenter,
         children: <Widget>[
           Positioned(
-            height: size.height * 0.5,
-            width: size.width * 0.5,
-            right: size.width * 0.5,
-            child: new Image.asset(
-              'images/Admin.png',
-              height: size.height * 0.5,
-              width: size.width * 0.5,
-            ),
+            child: Image.asset("assets/images/Admin.png", width: size.width),
           ),
-        
-          
+          child
         ],
       ),
     );
