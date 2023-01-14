@@ -81,8 +81,8 @@ class _UserLogin extends State<UserLogin> {
                           fontSize: 19,
                           color: Color.fromARGB(255, 45, 66, 142),
                         )),
-                    validator: MultiValidator(
-                        [RequiredValidator(errorText: 'إلزامي')]),
+                    validator:
+                        MultiValidator([RequiredValidator(errorText: 'مطلوب')]),
                   ),
                 ),
                 SizedBox(height: size.height * 0.03),
@@ -90,13 +90,13 @@ class _UserLogin extends State<UserLogin> {
                   width: size.width * 0.25,
                   margin: EdgeInsets.only(left: size.width * 0.45),
                   child: TextFormField(
-                    validator: (value) {
-                      if (value!.isEmpty) {
-                        return "إلزامي";
-                      }
-                    },
                     onChanged: (value) {
                       password = value;
+                    },
+                    validator: (value) {
+                      if (value!.isEmpty) {
+                        return "مطلوب";
+                      }
                     },
                     obscureText: showpass,
                     decoration: InputDecoration(
