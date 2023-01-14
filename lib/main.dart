@@ -36,7 +36,7 @@ class MyApp extends StatelessWidget {
       ],
       locale: Locale("ar", "AE"),
       debugShowCheckedModeBanner: false,
-      home: UserLogin(),
+      home: DashboardScreen(),
     );
   }
 }

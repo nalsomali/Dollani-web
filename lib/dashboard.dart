@@ -2,6 +2,7 @@ import 'package:cool_alert/cool_alert.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:web/login.dart';
+import 'package:web/addMap.dart';
 
 class DashboardScreen extends StatefulWidget {
   const DashboardScreen({Key? key}) : super(key: key);
@@ -302,7 +303,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
       ),
       //let's add the floating action button
       floatingActionButton: FloatingActionButton(
-        onPressed: () {},
+        onPressed: () {
+          Navigator.push(
+              context, MaterialPageRoute(builder: (context) => addMap()));
+        },
         child: Icon(Icons.add),
         backgroundColor: Color.fromARGB(255, 79, 99, 192),
       ),
