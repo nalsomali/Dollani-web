@@ -131,7 +131,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                           width: 300.0,
                           child: TextField(
                             decoration: InputDecoration(
-                              hintText: "البحث بالاسم",
+                              hintText: "البحث بإسم المبنى",
                               prefixIcon: Icon(Icons.search),
                               border: OutlineInputBorder(
                                 borderSide: BorderSide(
@@ -155,48 +155,31 @@ class _DashboardScreenState extends State<DashboardScreen> {
                           onPressed: () {},
                           icon: Icon(
                             Icons.arrow_downward,
-                            color: Color.fromARGB(255, 87, 94, 194),
+                            color: Color.fromARGB(255, 45, 66, 142),
                           ),
                           label: Text(
                             "هنا قائمة بجمبع الخرائط المضافة",
                             style: TextStyle(
-                              color: Color.fromARGB(255, 87, 94, 194),
+                              color: Color.fromARGB(255, 45, 66, 142),
                             ),
                           ),
                         ),
-                        Row(
-                          children: [
-                            DropdownButton(
-                                hint: Text("التصنيف حسب"),
-                                items: [
-                                  DropdownMenuItem(
-                                    value: "تاريخ",
-                                    child: Text("التاريخ"),
-                                  ),
-                                  DropdownMenuItem(
-                                    value: "الحالة",
-                                    child: Text("الحالة"),
-                                  ),
-                                ],
-                                onChanged: (value) {}),
-                            SizedBox(
-                              width: 20.0,
+                        TextButton(
+                            style: TextButton.styleFrom(
+                              backgroundColor: Color.fromARGB(255, 45, 66, 142),
                             ),
-                            DropdownButton(
-                                hint: Text("الترتيب حسب"),
-                                items: [
-                                  DropdownMenuItem(
-                                    value: "التاريخ",
-                                    child: Text("التاريخ"),
-                                  ),
-                                  DropdownMenuItem(
-                                    value: "المساجة",
-                                    child: Text("المساحة"),
-                                  ),
-                                ],
-                                onChanged: (value) {}),
-                          ],
-                        ),
+                            onPressed: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => addMap()));
+                            },
+                            child: Text(
+                              "اضافة خريطة جديدة",
+                              style: TextStyle(
+                                color: Color.fromARGB(255, 255, 255, 255),
+                              ),
+                            ))
                       ],
                     ),
                     SizedBox(
@@ -210,38 +193,39 @@ class _DashboardScreenState extends State<DashboardScreen> {
                             headingRowColor: MaterialStateProperty.resolveWith(
                                 (states) => Color.fromARGB(255, 227, 227, 227)),
                             columns: [
-                              DataColumn(label: Text("ID")),
                               DataColumn(label: Text("اسم المبنى")),
-                              DataColumn(label: Text("المساحة")),
-                              DataColumn(label: Text("الحالة")),
+                              DataColumn(label: Text("تعديل")),
                               DataColumn(label: Text("حذف")),
                             ],
                             rows: [
                               DataRow(cells: [
-                                DataCell(Text("٠")),
                                 DataCell(Text("كلية الحاسب والمعلومات")),
-                                DataCell(Text("٣٠٠ متر")),
-                                DataCell(Text("مكتمل")),
+                                DataCell(Icon(
+                                  Icons.edit,
+                                  color: Color.fromARGB(255, 74, 93, 188),
+                                )),
                                 DataCell(Icon(
                                   Icons.delete,
                                   color: Color.fromARGB(255, 74, 93, 188),
                                 ))
                               ]),
                               DataRow(cells: [
-                                DataCell(Text("١")),
                                 DataCell(Text("كليةالحقوق")),
-                                DataCell(Text("٢٥٠ متر ")),
-                                DataCell(Text("قيد التحميل")),
+                                DataCell(Icon(
+                                  Icons.edit,
+                                  color: Color.fromARGB(255, 74, 93, 188),
+                                )),
                                 DataCell(Icon(
                                   Icons.delete,
                                   color: Color.fromARGB(255, 74, 93, 188),
                                 )),
                               ]),
                               DataRow(cells: [
-                                DataCell(Text("٢")),
                                 DataCell(Text("كليةالعلوم")),
-                                DataCell(Text("٣٤٠ متر")),
-                                DataCell(Text("مكتمل")),
+                                DataCell(Icon(
+                                  Icons.edit,
+                                  color: Color.fromARGB(255, 74, 93, 188),
+                                )),
                                 DataCell(Icon(
                                   Icons.delete,
                                   color: Color.fromARGB(255, 74, 93, 188),
@@ -252,46 +236,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
                         SizedBox(
                           height: 40.0,
                         ),
-                        Row(
-                          children: [
-                            TextButton(
-                              onPressed: () {},
-                              child: Text(
-                                "١",
-                                style: TextStyle(
-                                  color: Color.fromARGB(255, 87, 94, 194),
-                                ),
-                              ),
-                            ),
-                            TextButton(
-                              onPressed: () {},
-                              child: Text(
-                                "٢",
-                                style: TextStyle(
-                                  color: Color.fromARGB(255, 87, 94, 194),
-                                ),
-                              ),
-                            ),
-                            TextButton(
-                              onPressed: () {},
-                              child: Text(
-                                "٣",
-                                style: TextStyle(
-                                  color: Color.fromARGB(255, 87, 94, 194),
-                                ),
-                              ),
-                            ),
-                            TextButton(
-                              onPressed: () {},
-                              child: Text(
-                                "الكل",
-                                style: TextStyle(
-                                  color: Color.fromARGB(255, 87, 94, 194),
-                                ),
-                              ),
-                            ),
-                          ],
-                        )
                       ],
                     )
                   ],
@@ -300,15 +244,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
             ),
           ),
         ],
-      ),
-      //let's add the floating action button
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.push(
-              context, MaterialPageRoute(builder: (context) => addMap()));
-        },
-        child: Icon(Icons.add),
-        backgroundColor: Color.fromARGB(255, 79, 99, 192),
       ),
     );
   }
