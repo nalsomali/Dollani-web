@@ -19,6 +19,9 @@ class addMap extends StatefulWidget {
 
 class _addMapState extends State<addMap> {
   //setting the expansion function for the navigation rail
+  late String building;
+  final TextEditingController buildingName = TextEditingController();
+
   bool isExpanded = false;
   File? _pickedImage;
   Uint8List webImage = Uint8List(8);
@@ -29,9 +32,8 @@ class _addMapState extends State<addMap> {
     Size size = MediaQuery.of(context).size;
 
     return Scaffold(
-      backgroundColor: Colors.white,
-      body: Row(
-        children: [
+        backgroundColor: Colors.white,
+        body: Row(children: [
           //Let's start by adding the Navigation Rail
           NavigationRail(
               extended: isExpanded,
@@ -82,35 +84,83 @@ class _addMapState extends State<addMap> {
               ],
               selectedIndex: 0),
 
-          MouseRegion(
-            onHover: _updateLocation,
-            child: Column(
-              children: [
-                Container(
-                    height: 500,
-                    width: 400,
-                    decoration: BoxDecoration(
-                      color: Theme.of(context).scaffoldBackgroundColor,
-                      borderRadius: BorderRadius.circular(12.0),
+          Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              MouseRegion(
+                onHover: _updateLocation,
+                child: Column(
+                  children: [
+                    Container(
+                        height: 500,
+                        width: 400,
+                        decoration: BoxDecoration(
+                          color: Theme.of(context).scaffoldBackgroundColor,
+                          borderRadius: BorderRadius.circular(12.0),
+                        ),
+                        child: _pickedImage == null
+                            ? dottedBorder(color: Colors.black)
+                            : ClipRRect(
+                                borderRadius: BorderRadius.circular(12),
+                                child: kIsWeb
+                                    ? Image.memory(webImage, fit: BoxFit.fill)
+                                    : Image.file(_pickedImage!,
+                                        fit: BoxFit.fill),
+                              )),
+                    Text(
+                      'The cursor is here: (${x.toStringAsFixed(2)}, ${y.toStringAsFixed(2)})',
+                    )
+                  ],
+                ),
+              ),
+              SizedBox(height: 10),
+              Center(
+                child: Container(
+                  width: size.width * 0.25,
+                  child: TextFormField(
+                    autovalidateMode: AutovalidateMode.onUserInteraction,
+                    onChanged: (value) {
+                      building = value;
+                    },
+                    controller: buildingName,
+                    decoration: const InputDecoration(
+                        labelText: "اسم الخريطة",
+                        hintText: "كلية الحقوق",
+                        hintStyle: TextStyle(
+                            color: Color.fromARGB(255, 202, 198, 198)),
+                        floatingLabelBehavior: FloatingLabelBehavior.always,
+                        labelStyle: TextStyle(
+                          fontSize: 19,
+                          color: Color.fromARGB(255, 45, 66, 142),
+                        )),
+                  ),
+                ),
+              ),
+              SizedBox(height: 10),
+              TextButton(
+                  style: TextButton.styleFrom(
+                    backgroundColor: Color.fromARGB(255, 45, 66, 142),
+                  ),
+                  onPressed: () {
+                    FirebaseFirestore.instance
+                        .collection('maps')
+                        .doc(building)
+                        .set({
+                      "building": building,
+                      'floor plan': "-",
+                    });
+                    buildingName.clear();
+                  },
+                  child: Text(
+                    "حفظ",
+                    style: TextStyle(
+                      color: Color.fromARGB(255, 255, 255, 255),
                     ),
-                    child: _pickedImage == null
-                        ? dottedBorder(color: Colors.black)
-                        : ClipRRect(
-                            borderRadius: BorderRadius.circular(12),
-                            child: kIsWeb
-                                ? Image.memory(webImage, fit: BoxFit.fill)
-                                : Image.file(_pickedImage!, fit: BoxFit.fill),
-                          )),
-                Text(
-                  'The cursor is here: (${x.toStringAsFixed(2)}, ${y.toStringAsFixed(2)})',
-                )
-              ],
-            ),
+                  ))
+            ],
           ),
-        ],
-      ),
-      //let's add the floating action button
-    );
+          //let's add the floating action button
+        ]));
   }
 
   Future<void> _pickImage() async {

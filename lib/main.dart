@@ -12,10 +12,10 @@ void main() async {
   if (kIsWeb)
     await Firebase.initializeApp(
         options: FirebaseOptions(
-      apiKey: "AIzaSyAx_De2KrXMrlH-vEniLsQVyrhAcHBHn3Q",
-      appId: "1:696354841698:web:5001dcfacf6891d7219d3b",
-      messagingSenderId: "696354841698",
-      projectId: "dollani-581a1",
+      apiKey: "AIzaSyAe9jaAIGhaP2gl-qjxezdSqUh51d3z7-E",
+      appId: "1:3404171949:web:8847a21a342bf49d31d424",
+      messagingSenderId: "3404171949",
+      projectId: "dollani-app",
     ));
   //
   runApp(const MyApp());

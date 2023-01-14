@@ -14,8 +14,8 @@ class DashboardScreen extends StatefulWidget {
 
 class _DashboardScreenState extends State<DashboardScreen> {
   @override
-  String buildingName = "";
-  String floorPlan = "";
+  var buildingName = [];
+  var floorPlan = [];
 
   void initState() {
     getMap();
@@ -24,14 +24,14 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
   Future getMap() async {
     setState(() {
-      buildingName = "";
-      floorPlan = "";
+      buildingName = [];
+      floorPlan = [];
     });
     await for (var snapshot
         in FirebaseFirestore.instance.collection('maps').snapshots())
       for (var map in snapshot.docs) {
         setState(() {
-          buildingName = map['building'].toString();
+          buildingName.add(map['building']);
         });
       }
   }
@@ -223,17 +223,50 @@ class _DashboardScreenState extends State<DashboardScreen> {
                               DataColumn(label: Text("حذف")),
                             ],
                             rows: [
-                              DataRow(cells: [
-                                DataCell(Text(buildingName)),
-                                DataCell(Icon(
-                                  Icons.edit,
-                                  color: Color.fromARGB(255, 74, 93, 188),
-                                )),
-                                DataCell(Icon(
-                                  Icons.delete,
-                                  color: Color.fromARGB(255, 74, 93, 188),
-                                ))
-                              ]),
+                              for (var i = 0; i < buildingName.length; i++)
+                                DataRow(cells: [
+                                  DataCell(Text(buildingName[i])),
+                                  DataCell(Icon(
+                                    Icons.edit,
+                                    color: Color.fromARGB(255, 74, 93, 188),
+                                  )),
+                                  DataCell(TextButton(
+                                      onPressed: () {
+                                        CoolAlert.show(
+                                          context: context,
+                                          title: " حذف الخريطة",
+                                          width: size.width * 0.2,
+                                          confirmBtnColor:
+                                              Color.fromARGB(181, 172, 22, 12),
+                                          showCancelBtn: false,
+                                          //cancelBtnColor: Color.fromARGB(144, 64, 6, 87),
+                                          type: CoolAlertType.confirm,
+                                          backgroundColor:
+                                              Color.fromARGB(255, 45, 66, 142),
+                                          text: "هل تريد حذف الخريطة",
+                                          confirmBtnText: 'حذف ',
+                                          cancelBtnText: "إلغاء",
+                                          onCancelBtnTap: () {
+                                            Navigator.pop(context);
+                                          },
+                                          onConfirmBtnTap: () async {
+                                            FirebaseFirestore.instance
+                                                .collection('maps')
+                                                .doc(buildingName[i])
+                                                .delete();
+                                            Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        DashboardScreen()));
+                                          },
+                                        );
+                                      },
+                                      child: Icon(
+                                        Icons.delete,
+                                        color: Color.fromARGB(255, 74, 93, 188),
+                                      )))
+                                ]),
                             ]),
                         //Now let's set the pagination
                         SizedBox(
