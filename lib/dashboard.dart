@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cool_alert/cool_alert.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -12,6 +13,29 @@ class DashboardScreen extends StatefulWidget {
 }
 
 class _DashboardScreenState extends State<DashboardScreen> {
+  @override
+  String buildingName = "";
+  String floorPlan = "";
+
+  void initState() {
+    getMap();
+    super.initState();
+  }
+
+  Future getMap() async {
+    setState(() {
+      buildingName = "";
+      floorPlan = "";
+    });
+    await for (var snapshot
+        in FirebaseFirestore.instance.collection('maps').snapshots())
+      for (var map in snapshot.docs) {
+        setState(() {
+          buildingName = map['building'].toString();
+        });
+      }
+  }
+
   //setting the expansion function for the navigation rail
   bool isExpanded = false;
   @override
@@ -186,6 +210,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                       height: 40.0,
                     ),
                     //Now let's add the Table
+
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
@@ -199,29 +224,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                             ],
                             rows: [
                               DataRow(cells: [
-                                DataCell(Text("كلية الحاسب والمعلومات")),
-                                DataCell(Icon(
-                                  Icons.edit,
-                                  color: Color.fromARGB(255, 74, 93, 188),
-                                )),
-                                DataCell(Icon(
-                                  Icons.delete,
-                                  color: Color.fromARGB(255, 74, 93, 188),
-                                ))
-                              ]),
-                              DataRow(cells: [
-                                DataCell(Text("كليةالحقوق")),
-                                DataCell(Icon(
-                                  Icons.edit,
-                                  color: Color.fromARGB(255, 74, 93, 188),
-                                )),
-                                DataCell(Icon(
-                                  Icons.delete,
-                                  color: Color.fromARGB(255, 74, 93, 188),
-                                )),
-                              ]),
-                              DataRow(cells: [
-                                DataCell(Text("كليةالعلوم")),
+                                DataCell(Text(buildingName)),
                                 DataCell(Icon(
                                   Icons.edit,
                                   color: Color.fromARGB(255, 74, 93, 188),
@@ -237,7 +240,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                           height: 40.0,
                         ),
                       ],
-                    )
+                    ),
                   ],
                 ),
               ),
