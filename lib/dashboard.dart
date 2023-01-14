@@ -86,10 +86,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   label: Text("الخرائط"),
                 ),
                 NavigationRailDestination(
-                  icon: Icon(Icons.person),
-                  label: Text("الحساب"),
-                ),
-                NavigationRailDestination(
                   icon: Icon(Icons.logout),
                   label: Text("تسجيل الخروج"),
                 ),
