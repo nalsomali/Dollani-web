@@ -8,6 +8,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:web/login.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:web/loading_manager.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class addMap extends StatefulWidget {
   const addMap({Key? key}) : super(key: key);
@@ -21,7 +22,8 @@ class _addMapState extends State<addMap> {
   bool isExpanded = false;
   File? _pickedImage;
   Uint8List webImage = Uint8List(8);
-
+  double x = 0.0;
+  double y = 0.0;
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -80,21 +82,31 @@ class _addMapState extends State<addMap> {
               ],
               selectedIndex: 0),
 
-          Container(
-              height: 500,
-              width: 400,
-              decoration: BoxDecoration(
-                color: Theme.of(context).scaffoldBackgroundColor,
-                borderRadius: BorderRadius.circular(12.0),
-              ),
-              child: _pickedImage == null
-                  ? dottedBorder(color: Colors.black)
-                  : ClipRRect(
-                      borderRadius: BorderRadius.circular(12),
-                      child: kIsWeb
-                          ? Image.memory(webImage, fit: BoxFit.fill)
-                          : Image.file(_pickedImage!, fit: BoxFit.fill),
-                    )),
+          MouseRegion(
+            onHover: _updateLocation,
+            child: Column(
+              children: [
+                Container(
+                    height: 500,
+                    width: 400,
+                    decoration: BoxDecoration(
+                      color: Theme.of(context).scaffoldBackgroundColor,
+                      borderRadius: BorderRadius.circular(12.0),
+                    ),
+                    child: _pickedImage == null
+                        ? dottedBorder(color: Colors.black)
+                        : ClipRRect(
+                            borderRadius: BorderRadius.circular(12),
+                            child: kIsWeb
+                                ? Image.memory(webImage, fit: BoxFit.fill)
+                                : Image.file(_pickedImage!, fit: BoxFit.fill),
+                          )),
+                Text(
+                  'The cursor is here: (${x.toStringAsFixed(2)}, ${y.toStringAsFixed(2)})',
+                )
+              ],
+            ),
+          ),
         ],
       ),
       //let's add the floating action button
@@ -164,5 +176,12 @@ class _addMapState extends State<addMap> {
             ),
           )),
     );
+  }
+
+  void _updateLocation(PointerEvent details) {
+    setState(() {
+      x = details.position.dx;
+      y = details.position.dy;
+    });
   }
 }
