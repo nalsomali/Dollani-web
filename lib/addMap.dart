@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:cool_alert/cool_alert.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -9,6 +10,9 @@ import 'package:web/login.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:web/loading_manager.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:uuid/uuid.dart';
+//import 'package:firebase_dart/firebase_dart.dart' as fb;
+import 'package:firebase/firebase.dart' as fb;
 
 class addMap extends StatefulWidget {
   const addMap({Key? key}) : super(key: key);
@@ -17,16 +21,42 @@ class addMap extends StatefulWidget {
   State<addMap> createState() => _addMapState();
 }
 
+String selctFile = '';
+
+bool isExpanded = false;
+File? _pickedImage;
+Uint8List webImage = Uint8List(8);
+double x = 0.0;
+double y = 0.0;
+// Future<String> _uploadFile() async {
+//   String imageUrl = '';
+//   try {
+//     firabase_storage.UploadTask uploadTask;
+
+//     firabase_storage.Reference ref = firabase_storage.FirebaseStorage.instance
+//         .ref()
+//         .child('mapImages')
+//         .child('/' + selctFile);
+
+//     final metadata =
+//         firabase_storage.SettableMetadata(contentType: 'image/jpeg');
+
+//     //uploadTask = ref.putFile(File(file.path));
+//     uploadTask = ref.putData(webImage, metadata);
+
+//     await uploadTask.whenComplete(() => null);
+//     imageUrl = await ref.getDownloadURL();
+//   } catch (e) {
+//     print(e);
+//   }
+//   return imageUrl;
+// }
+
 class _addMapState extends State<addMap> {
   //setting the expansion function for the navigation rail
   late String building;
   final TextEditingController buildingName = TextEditingController();
 
-  bool isExpanded = false;
-  File? _pickedImage;
-  Uint8List webImage = Uint8List(8);
-  double x = 0.0;
-  double y = 0.0;
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -141,14 +171,28 @@ class _addMapState extends State<addMap> {
                   style: TextButton.styleFrom(
                     backgroundColor: Color.fromARGB(255, 45, 66, 142),
                   ),
-                  onPressed: () {
+                  onPressed: () async {
+                    FocusScope.of(context).unfocus();
+                    final _uuid = const Uuid().v4();
+                    fb.StorageReference storageRef = fb
+                        .storage()
+                        .ref()
+                        .child('productsImages')
+                        .child(_uuid + 'jpg');
+                    final fb.UploadTaskSnapshot uploadTaskSnapshot =
+                        await storageRef
+                            .put(kIsWeb ? webImage : _pickedImage)
+                            .future;
+                    Uri imageUri =
+                        await uploadTaskSnapshot.ref.getDownloadURL();
                     FirebaseFirestore.instance
                         .collection('maps')
                         .doc(building)
                         .set({
                       "building": building,
-                      'floor plan': "-",
+                      'floor plan': imageUri.toString(),
                     });
+                    print(imageUri.toString());
                     buildingName.clear();
                   },
                   child: Text(
