@@ -128,10 +128,9 @@ class _addPlacesState extends State<addPlaces> {
             children: [
               Container(
                 width: 400,
-                height: 300,
+                height: 500,
                 //margin: EdgeInsets.only(left: 15, top: 140),
                 decoration: BoxDecoration(
-                 
                   borderRadius: BorderRadius.circular(10),
                   image: DecorationImage(
                     image: NetworkImage("$photo"),
