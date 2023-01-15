@@ -173,26 +173,26 @@ class _addMapState extends State<addMap> {
                   ),
                   onPressed: () async {
                     FocusScope.of(context).unfocus();
-                    final _uuid = const Uuid().v4();
-                    fb.StorageReference storageRef = fb
-                        .storage()
-                        .ref()
-                        .child('productsImages')
-                        .child(_uuid + 'jpg');
-                    final fb.UploadTaskSnapshot uploadTaskSnapshot =
-                        await storageRef
-                            .put(kIsWeb ? webImage : _pickedImage)
-                            .future;
-                    Uri imageUri =
-                        await uploadTaskSnapshot.ref.getDownloadURL();
+                    // final _uuid = const Uuid().v4();
+                    // fb.StorageReference storageRef = fb
+                    //     .storage()
+                    //     .ref()
+                    //     .child('mapImages')
+                    //     .child(_uuid + 'jpg');
+                    // final fb.UploadTaskSnapshot uploadTaskSnapshot =
+                    //     await storageRef
+                    //         .put(kIsWeb ? webImage : _pickedImage)
+                    //         .future;
+                    // Uri imageUri =
+                    //     await uploadTaskSnapshot.ref.getDownloadURL();
                     FirebaseFirestore.instance
                         .collection('maps')
                         .doc(building)
                         .set({
                       "building": building,
-                      'floor plan': imageUri.toString(),
+                      'floor plan': '' //imageUri.toString(),
                     });
-                    print(imageUri.toString());
+                    // print(imageUri.toString());
                     buildingName.clear();
                   },
                   child: Text(
