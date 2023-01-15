@@ -17,15 +17,16 @@ class _DashboardScreenState extends State<DashboardScreen> {
   var buildingName = [];
   var floorPlan = [];
 
+  TextEditingController? _searchEditingController = TextEditingController();
   void initState() {
     getMap();
+
     super.initState();
   }
 
   Future getMap() async {
     setState(() {
       buildingName = [];
-      floorPlan = [];
     });
     await for (var snapshot
         in FirebaseFirestore.instance.collection('maps').snapshots())
@@ -41,6 +42,41 @@ class _DashboardScreenState extends State<DashboardScreen> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
+
+    Future getSearch(String search) async {
+      if (search == "") return;
+      if (buildingName.where((element) => element == (search)).isEmpty) {
+        CoolAlert.show(
+          context: context,
+          title: "نعتذر",
+          width: size.width * 0.2,
+          confirmBtnColor: Color.fromARGB(255, 45, 66, 142),
+          //cancelBtnColor: Color.fromARGB(144, 64, 6, 87),
+          type: CoolAlertType.error,
+          backgroundColor: Color.fromARGB(255, 45, 66, 142),
+          text: "لا توجد خريطة بهذا الاسم",
+          confirmBtnText: 'حاول مره اخرى',
+          onConfirmBtnTap: () {
+            Navigator.of(context).pop();
+          },
+        );
+        return;
+      }
+      //clear first
+      setState(() {
+        buildingName = [];
+      });
+
+      await for (var snapshot in FirebaseFirestore.instance
+          .collection('maps')
+          .where('building', isEqualTo: search)
+          .snapshots())
+        for (var maps in snapshot.docs) {
+          setState(() {
+            buildingName.add(maps['building']);
+          });
+        }
+    }
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -158,9 +194,26 @@ class _DashboardScreenState extends State<DashboardScreen> {
                         Container(
                           width: 300.0,
                           child: TextField(
+                            controller: _searchEditingController,
                             decoration: InputDecoration(
                               hintText: "البحث بإسم المبنى",
-                              prefixIcon: Icon(Icons.search),
+                              icon: IconButton(
+                                icon: Icon(Icons.cancel_presentation),
+                                onPressed: () {
+                                  setState(() {
+                                    getMap();
+                                    _searchEditingController?.clear();
+                                  });
+                                },
+                              ),
+                              prefixIcon: IconButton(
+                                icon: Icon(Icons.search),
+                                onPressed: () {
+                                  setState(() {
+                                    getSearch(_searchEditingController!.text);
+                                  });
+                                },
+                              ),
                               border: OutlineInputBorder(
                                 borderSide: BorderSide(
                                   color: Color.fromARGB(66, 0, 0, 0),
@@ -168,7 +221,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                               ),
                             ),
                           ),
-                        )
+                        ),
                       ],
                     ),
                     SizedBox(
