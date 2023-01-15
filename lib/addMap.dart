@@ -104,15 +104,15 @@ class _addMapState extends State<addMap> {
                   label: Text("الخرائط"),
                 ),
                 NavigationRailDestination(
-                  icon: Icon(Icons.person),
-                  label: Text("الحساب"),
+                  icon: Icon(Icons.add_location_alt_outlined),
+                  label: Text("اضافة خريطة جديدة"),
                 ),
                 NavigationRailDestination(
                   icon: Icon(Icons.logout),
                   label: Text("تسجيل الخروج"),
                 ),
               ],
-              selectedIndex: 0),
+              selectedIndex: 1),
 
           Column(
             mainAxisAlignment: MainAxisAlignment.center,
