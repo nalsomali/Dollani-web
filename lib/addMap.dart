@@ -188,8 +188,11 @@ class _addMapState extends State<addMap> {
                     });
                     // print(imageUri.toString());
                     buildingName.clear();
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => addPlaces()));
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) =>
+                                addPlaces(mapName: building)));
                   },
                   child: Text(
                     "التالي",

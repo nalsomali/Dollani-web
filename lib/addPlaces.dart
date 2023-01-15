@@ -15,15 +15,20 @@ import 'package:uuid/uuid.dart';
 import 'package:firebase/firebase.dart' as fb;
 
 class addPlaces extends StatefulWidget {
-  const addPlaces({Key? key}) : super(key: key);
+  String mapName;
+  //const addPlaces({Key? key}) : super(key: key);
+  addPlaces({required this.mapName});
 
   @override
-  State<addPlaces> createState() => _addPlacesState();
+  State<addPlaces> createState() => _addPlacesState(mapName);
 }
 
 final _firestore = FirebaseFirestore.instance;
 
 class _addPlacesState extends State<addPlaces> {
+  String mapName;
+  _addPlacesState(this.mapName);
+
   //setting the expansion function for the navigation rail
   bool isExpanded = false;
   List<String> options = [];
@@ -57,7 +62,9 @@ class _addPlacesState extends State<addPlaces> {
   Future getMap() async {
     await for (var snapshot in FirebaseFirestore.instance
         .collection('maps')
-        .where("building", isEqualTo: "كلية العلوم")
+        .where("building",
+            isEqualTo: "كلية العلوم" // we will replacet to mapName
+            )
         .snapshots())
       for (var map in snapshot.docs) {
         setState(() {
@@ -122,99 +129,140 @@ class _addPlacesState extends State<addPlaces> {
                 ),
               ],
               selectedIndex: 1),
-
-          Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Container(
-                width: 400,
-                height: 500,
-                //margin: EdgeInsets.only(left: 15, top: 140),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
-                  image: DecorationImage(
-                    image: NetworkImage("$photo"),
-                    fit: BoxFit.cover,
-                  ),
-                ),
-              ),
-              ElevatedButton(
-                child: Text("Open Popup"),
-                onPressed: () {
-                  // print(photo);
-                  _updateLocation();
-                },
-              ),
-              SizedBox(height: 10),
-              SizedBox(height: 10),
-              TextButton(
-                  style: TextButton.styleFrom(
-                    backgroundColor: Color.fromARGB(255, 45, 66, 142),
-                  ),
-                  onPressed: () async {
-                    FocusScope.of(context).unfocus();
-                    ;
-                    FirebaseFirestore.instance
-                        .collection('places')
-                        .doc(selectedCat! +
-                            '-' +
-                            _placeNameEditingController.text)
-                        .set({
-                      "category": selectedCat,
-                      'name': _placeNameEditingController.text,
-                      'x': x,
-                      "y": y
-                    });
-                  },
-                  child: Text(
-                    "حفظ",
-                    style: TextStyle(
-                      color: Color.fromARGB(255, 255, 255, 255),
+          Expanded(
+            child: Column(
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    IconButton(
+                      onPressed: () {
+                        //let's trigger the navigation expansion
+                        setState(() {
+                          isExpanded = !isExpanded;
+                        });
+                      },
+                      icon: Icon(Icons.menu),
                     ),
-                  ))
-            ],
+                    Text(
+                      " تحديد المواقع على خريطة مبنى" + ": " + "$mapName",
+                      style: TextStyle(
+                          fontSize: 30,
+                          //  fontWeight: FontWeight.bold,
+                          color: Color.fromARGB(255, 23, 39, 112)),
+                    ),
+                    Image.asset(
+                      'assets/images/logo.png',
+                      scale: 7,
+                    ),
+                  ],
+                ),
+                SizedBox(
+                  height: 20.0,
+                ),
+                Row(
+                  children: [
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          "تعليمات اضافة اماكن من خريطة",
+                          style: TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                              color: Color.fromARGB(255, 28, 51, 151)),
+                        ),
+                        Text(
+                          " ١-لتحديد مكان من الخريطة الرجاء اختيار المكان المحدد اختيارة من صورة الخريطة   ",
+                          style: TextStyle(
+                              // fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                              color: Color.fromARGB(255, 0, 0, 0)),
+                          textAlign: TextAlign.right,
+                        ),
+                        Text(
+                          "٢-عند تحديد المكان سيظهر لك نافذه يتم تحديد فيها اسم المكان ،تصنيفه",
+                          style: TextStyle(
+                              //fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                              color: Color.fromARGB(255, 0, 0, 0)),
+                          textAlign: TextAlign.right,
+                        ),
+                        Text(
+                          "٣-الرجاء ادخال البيانات المطلوبة والنقر على اضافة .                            ",
+                          style: TextStyle(
+                              //   fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                              color: Color.fromARGB(255, 0, 0, 0)),
+                          textAlign: TextAlign.right,
+                        )
+                      ],
+                    ),
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        MouseRegion(
+                          // cursor: SystemMouseCursors.click,
+                          onHover: _updateLocation,
+                          child: Container(
+                            width: 400,
+                            height: 530,
+                            decoration: BoxDecoration(
+                              image: DecorationImage(
+                                image: NetworkImage("$photo"),
+                                fit: BoxFit.cover,
+                              ),
+                            ),
+                          ),
+                        ),
+                        SizedBox(height: 30),
+                        Container(
+                          height: 30,
+                          width: 150,
+                          child: TextButton(
+                              style: TextButton.styleFrom(
+                                backgroundColor:
+                                    Color.fromARGB(255, 45, 66, 142),
+                              ),
+                              onPressed: () async {
+                                FocusScope.of(context).unfocus();
+                                ;
+                                FirebaseFirestore.instance
+                                    .collection('places')
+                                    .doc(selectedCat! +
+                                        '-' +
+                                        _placeNameEditingController.text)
+                                    .set({
+                                  "category": selectedCat,
+                                  'name': _placeNameEditingController.text,
+                                  'x': x,
+                                  "y": y
+                                });
+                              },
+                              child: Text(
+                                "حفظ",
+                                style: TextStyle(
+                                  color: Color.fromARGB(255, 255, 255, 255),
+                                ),
+                              )),
+                        )
+                      ],
+                    ),
+                  ],
+                ),
+              ],
+            ),
           ),
+
           //let's add the floating action button
         ]));
   }
 
-  Widget dottedBorder({
-    required Color color,
-  }) {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: DottedBorder(
-          dashPattern: const [6.7],
-          borderType: BorderType.RRect,
-          color: color,
-          radius: const Radius.circular(12),
-          child: Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Icon(
-                  Icons.image_outlined,
-                  color: color,
-                  size: 50,
-                ),
-                const SizedBox(
-                  height: 20,
-                ),
-                TextButton(
-                    onPressed: (() {
-                      //_pickImage();
-                    }),
-                    child: Text(
-                      "اضغط هنا لإضافة صورة الخريطة",
-                    ))
-              ],
-            ),
-          )),
-    );
-  }
-
-  void _updateLocation() {
+  void _updateLocation(PointerEvent details) {
+    setState(() {
+      x = details.position.dx;
+      y = details.position.dy;
+    });
     showDialog(
         context: context,
         builder: (BuildContext context) {
@@ -343,8 +391,8 @@ class _addPlacesState extends State<addPlaces> {
                         .set({
                       "category": selectedCat,
                       'name': _placeNameEditingController.text,
-                      'x': 6,
-                      "y": 8
+                      'x': x,
+                      "y": y
                     });
                   })
             ],
