@@ -13,6 +13,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:uuid/uuid.dart';
 //import 'package:firebase_dart/firebase_dart.dart' as fb;
 import 'package:firebase/firebase.dart' as fb;
+import 'package:web/addPlaces.dart';
 
 class addMap extends StatefulWidget {
   const addMap({Key? key}) : super(key: key);
@@ -117,31 +118,24 @@ class _addMapState extends State<addMap> {
           Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              MouseRegion(
-                onHover: _updateLocation,
-                child: Column(
-                  children: [
-                    Container(
-                        height: 500,
-                        width: 400,
-                        decoration: BoxDecoration(
-                          color: Theme.of(context).scaffoldBackgroundColor,
-                          borderRadius: BorderRadius.circular(12.0),
-                        ),
-                        child: _pickedImage == null
-                            ? dottedBorder(color: Colors.black)
-                            : ClipRRect(
-                                borderRadius: BorderRadius.circular(12),
-                                child: kIsWeb
-                                    ? Image.memory(webImage, fit: BoxFit.fill)
-                                    : Image.file(_pickedImage!,
-                                        fit: BoxFit.fill),
-                              )),
-                    Text(
-                      'The cursor is here: (${x.toStringAsFixed(2)}, ${y.toStringAsFixed(2)})',
-                    )
-                  ],
-                ),
+              Column(
+                children: [
+                  Container(
+                      height: 500,
+                      width: 400,
+                      decoration: BoxDecoration(
+                        color: Theme.of(context).scaffoldBackgroundColor,
+                        borderRadius: BorderRadius.circular(12.0),
+                      ),
+                      child: _pickedImage == null
+                          ? dottedBorder(color: Colors.black)
+                          : ClipRRect(
+                              borderRadius: BorderRadius.circular(12),
+                              child: kIsWeb
+                                  ? Image.memory(webImage, fit: BoxFit.fill)
+                                  : Image.file(_pickedImage!, fit: BoxFit.fill),
+                            )),
+                ],
               ),
               SizedBox(height: 10),
               Center(
@@ -194,9 +188,11 @@ class _addMapState extends State<addMap> {
                     });
                     // print(imageUri.toString());
                     buildingName.clear();
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => addPlaces()));
                   },
                   child: Text(
-                    "حفظ",
+                    "التالي",
                     style: TextStyle(
                       color: Color.fromARGB(255, 255, 255, 255),
                     ),
