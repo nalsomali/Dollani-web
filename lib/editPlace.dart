@@ -235,9 +235,9 @@ class _editPlacesState extends State<editPlaces> {
                     Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        MouseRegion(
+                        Listener(
                           // cursor: SystemMouseCursors.click,
-                          onHover: _updateLocation,
+                          onPointerMove: _updateLocation,
                           child: Container(
                             width: 400,
                             height: 530,
@@ -260,11 +260,7 @@ class _editPlacesState extends State<editPlaces> {
                               ),
                               onPressed: () async {
                                 FocusScope.of(context).unfocus();
-                                ;
-                                FirebaseFirestore.instance
-                                    .collection('places')
-                                    .doc(category + '-' + name)
-                                    .update({'x': x, "y": y});
+
                                 CoolAlert.show(
                                   context: context,
                                   width: size.width * 0.2,

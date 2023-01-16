@@ -213,9 +213,9 @@ class _addNewPlacesState extends State<addNewPlace> {
                     Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        MouseRegion(
+                        Listener(
                           // cursor: SystemMouseCursors.click,
-                          onHover: _updateLocation,
+                          onPointerMove: _updateLocation,
                           child: Container(
                             width: 400,
                             height: 530,
@@ -238,19 +238,7 @@ class _addNewPlacesState extends State<addNewPlace> {
                               ),
                               onPressed: () async {
                                 FocusScope.of(context).unfocus();
-                                ;
-                                FirebaseFirestore.instance
-                                    .collection('places')
-                                    .doc(selectedCat! +
-                                        '-' +
-                                        _placeNameEditingController.text)
-                                    .set({
-                                  "building": mapName,
-                                  "category": selectedCat,
-                                  'name': _placeNameEditingController.text,
-                                  'x': x,
-                                  "y": y
-                                });
+
                                 CoolAlert.show(
                                   context: context,
                                   width: size.width * 0.2,
