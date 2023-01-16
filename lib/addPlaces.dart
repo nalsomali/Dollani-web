@@ -237,18 +237,6 @@ class _addPlacesState extends State<addPlaces> {
                                     Color.fromARGB(255, 45, 66, 142),
                               ),
                               onPressed: () async {
-                                FirebaseFirestore.instance
-                                    .collection('places')
-                                    .doc(selectedCat! +
-                                        '-' +
-                                        _placeNameEditingController.text)
-                                    .set({
-                                  "building": mapName,
-                                  "category": selectedCat,
-                                  'name': _placeNameEditingController.text,
-                                  'x': x,
-                                  "y": y
-                                });
                                 CoolAlert.show(
                                   context: context,
                                   width: size.width * 0.2,
@@ -358,11 +346,11 @@ class _addPlacesState extends State<addPlaces> {
                           if (value == null ||
                               value.isEmpty ||
                               value.trim() == '')
-                            return 'required';
+                            return 'مطلوب';
                           else if (!RegExp(r'^[a-z A-Z . , -]+$')
                                   .hasMatch(value!) &&
                               !RegExp(r'^[, . - أ-ي]+$').hasMatch(value!))
-                            return "Only English or Arabic letters";
+                            return "حروف فقط";
                         }),
                     DropdownButtonFormField(
                       autovalidateMode: AutovalidateMode.onUserInteraction,
@@ -418,6 +406,9 @@ class _addPlacesState extends State<addPlaces> {
             ),
             actions: [
               ElevatedButton(
+                  style: TextButton.styleFrom(
+                    backgroundColor: Color.fromARGB(255, 45, 66, 142),
+                  ),
                   child: Text("اضافة"),
                   onPressed: () {
                     FocusScope.of(context).unfocus();
