@@ -3,6 +3,8 @@ import 'dart:io';
 import 'package:cool_alert/cool_alert.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_dart/storage.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -12,8 +14,9 @@ import 'package:web/loading_manager.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:uuid/uuid.dart';
 //import 'package:firebase_dart/firebase_dart.dart' as fb;
-import 'package:firebase/firebase.dart' as fb;
+
 import 'package:web/addPlaces.dart';
+import 'package:firebase_storage/firebase_storage.dart' as firabase_storage;
 
 import 'maps.dart';
 
@@ -56,6 +59,11 @@ double y = 0.0;
 // }
 
 class _addMapState extends State<addMap> {
+  String imageUrl = "نرا ماحفظ";
+  Uint8List? selectedImageInByets;
+  XFile? file;
+  String selectimage = "";
+  TextEditingController sampleController = TextEditingController();
   //setting the expansion function for the navigation rail
   late String building;
   final TextEditingController buildingName = TextEditingController();
@@ -138,14 +146,20 @@ class _addMapState extends State<addMap> {
                         color: Theme.of(context).scaffoldBackgroundColor,
                         borderRadius: BorderRadius.circular(12.0),
                       ),
-                      child: _pickedImage == null
-                          ? dottedBorder(color: Colors.black)
-                          : ClipRRect(
-                              borderRadius: BorderRadius.circular(12),
-                              child: kIsWeb
-                                  ? Image.memory(webImage, fit: BoxFit.fill)
-                                  : Image.file(_pickedImage!, fit: BoxFit.fill),
-                            )),
+                      child: //selctFile.isEmpty
+                          //     ? dottedBorder(color: Color.fromARGB(255, 0, 0, 0))
+                          //     :
+
+                          selctFile.isEmpty
+                              ? dottedBorder(color: Colors.black)
+                              : ClipRRect(
+                                  borderRadius: BorderRadius.circular(50),
+                                  child: kIsWeb
+                                      ? Image.memory(selectedImageInByets!,
+                                          fit: BoxFit.fill)
+                                      : Image.file(_pickedImage!,
+                                          fit: BoxFit.fill),
+                                )),
                 ],
               ),
               SizedBox(height: 10),
@@ -173,30 +187,29 @@ class _addMapState extends State<addMap> {
               ),
               SizedBox(height: 10),
               TextButton(
+                  onPressed: uploadFile,
+                  child: Text(
+                    "رفع صورة الخريطة",
+                    style: TextStyle(
+                      color: Color.fromARGB(255, 141, 17, 17),
+                    ),
+                  )),
+              TextButton(
                   style: TextButton.styleFrom(
                     backgroundColor: Color.fromARGB(255, 45, 66, 142),
                   ),
                   onPressed: () async {
+                    uploadFile;
                     FocusScope.of(context).unfocus();
-                    // final _uuid = const Uuid().v4();
-                    // fb.StorageReference storageRef = fb
-                    //     .storage()
-                    //     .ref()
-                    //     .child('mapImages')
-                    //     .child(_uuid + 'jpg');
-                    // final fb.UploadTaskSnapshot uploadTaskSnapshot =
-                    //     await storageRef
-                    //         .put(kIsWeb ? webImage : _pickedImage)
-                    //         .future;
-                    // Uri imageUri =
-                    //     await uploadTaskSnapshot.ref.getDownloadURL();
+
                     FirebaseFirestore.instance
                         .collection('maps')
                         .doc(building)
                         .set({
                       "building": building,
-                      'floor plan': '' //imageUri.toString(),
+                      'floor plan': sampleController //imageUri.toString(),
                     });
+
                     // print(imageUri.toString());
                     buildingName.clear();
                     Navigator.push(
@@ -217,33 +230,34 @@ class _addMapState extends State<addMap> {
         ]));
   }
 
-  Future<void> _pickImage() async {
-    if (!kIsWeb) {
-      final ImagePicker _picker = ImagePicker();
-      XFile? image = await _picker.pickImage(source: ImageSource.gallery);
-      if (image != null) {
-        var selected = File(image.path);
-        setState(() {
-          _pickedImage = selected;
-        });
-      } else {
-        print('لم تختر صورة');
-      }
-    } else if (kIsWeb) {
-      final ImagePicker _picker = ImagePicker();
-      XFile? image = await _picker.pickImage(source: ImageSource.gallery);
-      if (image != null) {
-        var f = await image.readAsBytes();
-        setState(() {
-          webImage = f;
-          _pickedImage = File('a');
-        });
-      } else {
-        print('لم تختر صورة');
-      }
-    } else {
-      print('حدث خطأ');
-    }
+  void uploadFile() async {
+    var ref = FirebaseStorage.instance
+        .ref()
+        .child('flutter-tests')
+        .putData(selectedImageInByets!);
+    final snapshot = await ref.whenComplete(() {
+      setState(() {
+        // _isVisible = false;
+        print("kkmmkkm");
+      });
+    });
+    final urlDownload = await snapshot.ref.getDownloadURL();
+    sampleController.text = '$urlDownload';
+
+    // try {
+    //   firabase_storage.UploadTask uploadTask;
+    //   firabase_storage.Reference ref =
+    //       firabase_storage.FirebaseStorage.instance.ref().child("mapImages");
+
+    //   final metadata =
+    //       firabase_storage.SettableMetadata(contentType: 'image/jpeg');
+    //   uploadTask = ref.putData(selectedImageInByets!, metadata);
+
+    //   imageUrl = "await ref.getDownloadURL();";
+    //   print("uploa image   :" + imageUrl);
+    // } catch (e) {
+    //   print(e);
+    // }
   }
 
   Widget dottedBorder({
@@ -271,7 +285,7 @@ class _addMapState extends State<addMap> {
                 ),
                 TextButton(
                     onPressed: (() {
-                      _pickImage();
+                      _selectFile();
                     }),
                     child: Text(
                       "اضغط هنا لإضافة صورة الخريطة",
@@ -282,10 +296,15 @@ class _addMapState extends State<addMap> {
     );
   }
 
-  void _updateLocation(PointerEvent details) {
-    setState(() {
-      x = details.position.dx;
-      y = details.position.dy;
-    });
+  void _selectFile() async {
+    FilePickerResult? fileResult = await FilePicker.platform.pickFiles();
+    if (fileResult != null) {
+      setState(() {
+        selctFile = fileResult.files.first.name;
+        selectedImageInByets = fileResult.files.first.bytes;
+      });
+    }
+    ;
+    print(file!.name);
   }
 }
