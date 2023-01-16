@@ -21,6 +21,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
   TextEditingController? _searchEditingController = TextEditingController();
   void initState() {
     getMap();
+
     super.initState();
   }
 
@@ -77,6 +78,23 @@ class _DashboardScreenState extends State<DashboardScreen> {
         for (var maps in snapshot.docs) {
           setState(() {
             buildingName.add(maps['building']);
+          });
+        }
+    }
+
+    Future getPlaces(mapName) async {
+      setState(() {
+        placeName = [];
+        category = [];
+      });
+      await for (var snapshot in FirebaseFirestore.instance
+          .collection('places')
+          .where('building', isEqualTo: mapName)
+          .snapshots())
+        for (var place in snapshot.docs) {
+          setState(() {
+            placeName.add(place['name']);
+            category.add(place['category']);
           });
         }
     }
@@ -301,6 +319,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                       ))),
                                   DataCell(TextButton(
                                       onPressed: () {
+                                        getPlaces(buildingName[i]);
                                         CoolAlert.show(
                                           context: context,
                                           title: " حذف الخريطة",
@@ -319,30 +338,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                             Navigator.pop(context);
                                           },
                                           onConfirmBtnTap: () async {
-                                            Future getPlaces() async {
-                                              setState(() {
-                                                placeName = [];
-                                                category = [];
-                                              });
-                                              await for (var snapshot
-                                                  in FirebaseFirestore.instance
-                                                      .collection('places')
-                                                      .where('building',
-                                                          isEqualTo:
-                                                              buildingName[i])
-                                                      .snapshots())
-                                                for (var place
-                                                    in snapshot.docs) {
-                                                  setState(() {
-                                                    placeName
-                                                        .add(place['name']);
-                                                    category
-                                                        .add(place['category']);
-                                                  });
-                                                }
-                                            }
-
-// doesn't work
                                             for (var k = 0;
                                                 k < placeName.length;
                                                 k++) {
