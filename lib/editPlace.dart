@@ -265,13 +265,27 @@ class _editPlacesState extends State<editPlaces> {
                                     .collection('places')
                                     .doc(category + '-' + name)
                                     .update({'x': x, "y": y});
-                                _placeNameEditingController.clear();
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => places(
-                                              mapName: Map,
-                                            )));
+                                CoolAlert.show(
+                                  context: context,
+                                  width: size.width * 0.2,
+                                  confirmBtnColor:
+                                      Color.fromARGB(255, 45, 66, 142),
+                                  //cancelBtnColor: Color.fromARGB(144, 64, 6, 87),
+                                  type: CoolAlertType.success,
+                                  backgroundColor:
+                                      Color.fromARGB(255, 45, 66, 142),
+                                  text: "تم تعديل الموقع بنجاح",
+                                  confirmBtnText: 'اغلاق',
+                                  onConfirmBtnTap: () {
+                                    _placeNameEditingController.clear();
+
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                DashboardScreen()));
+                                  },
+                                );
                               },
                               child: Text(
                                 "حفظ",
@@ -293,6 +307,8 @@ class _editPlacesState extends State<editPlaces> {
   }
 
   void _updateLocation(PointerEvent details) {
+    Size size = MediaQuery.of(context).size;
+
     setState(() {
       x = details.position.dx;
       y = details.position.dy;
@@ -316,6 +332,7 @@ class _editPlacesState extends State<editPlaces> {
                       .doc(category + '-' + name)
                       .update({'x': x, "y": y});
                   _placeNameEditingController.clear();
+
                   Navigator.pop(context);
                 }),
             // content: Padding(

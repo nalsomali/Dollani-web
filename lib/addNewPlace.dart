@@ -251,12 +251,27 @@ class _addNewPlacesState extends State<addNewPlace> {
                                   'x': x,
                                   "y": y
                                 });
-                                _placeNameEditingController.clear();
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) =>
-                                            DashboardScreen()));
+                                CoolAlert.show(
+                                  context: context,
+                                  width: size.width * 0.2,
+                                  confirmBtnColor:
+                                      Color.fromARGB(255, 45, 66, 142),
+                                  //cancelBtnColor: Color.fromARGB(144, 64, 6, 87),
+                                  type: CoolAlertType.success,
+                                  backgroundColor:
+                                      Color.fromARGB(255, 45, 66, 142),
+                                  text: "تم حفظ الخريطة بنجاح",
+                                  confirmBtnText: 'اغلاق',
+                                  onConfirmBtnTap: () {
+                                    _placeNameEditingController.clear();
+
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                DashboardScreen()));
+                                  },
+                                );
                               },
                               child: Text(
                                 "حفظ",

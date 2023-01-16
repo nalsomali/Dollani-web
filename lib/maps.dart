@@ -21,7 +21,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
   TextEditingController? _searchEditingController = TextEditingController();
   void initState() {
     getMap();
-
     super.initState();
   }
 
@@ -37,6 +36,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
         });
       }
   }
+
+  var placeName = [];
+  var category = [];
 
   //setting the expansion function for the navigation rail
   bool isExpanded = false;
@@ -317,6 +319,41 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                             Navigator.pop(context);
                                           },
                                           onConfirmBtnTap: () async {
+                                            Future getPlaces() async {
+                                              setState(() {
+                                                placeName = [];
+                                                category = [];
+                                              });
+                                              await for (var snapshot
+                                                  in FirebaseFirestore.instance
+                                                      .collection('places')
+                                                      .where('building',
+                                                          isEqualTo:
+                                                              buildingName[i])
+                                                      .snapshots())
+                                                for (var place
+                                                    in snapshot.docs) {
+                                                  setState(() {
+                                                    placeName
+                                                        .add(place['name']);
+                                                    category
+                                                        .add(place['category']);
+                                                  });
+                                                }
+                                            }
+
+// doesn't work
+                                            for (var k = 0;
+                                                k < placeName.length;
+                                                k++) {
+                                              FirebaseFirestore.instance
+                                                  .collection('places')
+                                                  .doc(category[k] +
+                                                      "-" +
+                                                      placeName[k])
+                                                  .delete();
+                                            }
+
                                             FirebaseFirestore.instance
                                                 .collection('maps')
                                                 .doc(buildingName[i])

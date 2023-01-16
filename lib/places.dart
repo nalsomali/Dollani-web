@@ -339,6 +339,7 @@ class placesScreenState extends State<places> {
                                                 "-" +
                                                 placeName[i])
                                             .delete();
+
                                         Navigator.push(
                                             context,
                                             MaterialPageRoute(
