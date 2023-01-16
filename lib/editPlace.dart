@@ -315,7 +315,7 @@ class _editPlacesState extends State<editPlaces> {
           return AlertDialog(
             scrollable: true,
             title: Text(
-              '  تعديل موقع $mapName',
+              'تعديل موقع $mapName الى نقطه (${x.toStringAsFixed(2)}, ${y.toStringAsFixed(2)})',
               style: TextStyle(color: Color.fromARGB(227, 19, 49, 158)),
             ),
             content: ElevatedButton(

@@ -296,7 +296,7 @@ class _addPlacesState extends State<addPlaces> {
           return AlertDialog(
             scrollable: true,
             title: Text(
-              'اضافة موقع',
+              'اضافة موقع في نقطة (${x.toStringAsFixed(2)}, ${y.toStringAsFixed(2)})',
               style: TextStyle(color: Color.fromARGB(115, 40, 71, 185)),
             ),
             content: Padding(
