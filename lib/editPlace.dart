@@ -13,24 +13,27 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:uuid/uuid.dart';
 //import 'package:firebase_dart/firebase_dart.dart' as fb;
 import 'package:firebase/firebase.dart' as fb;
+import 'package:web/places.dart';
 
 import 'addMap.dart';
 import 'maps.dart';
 
-class addPlaces extends StatefulWidget {
+class editPlaces extends StatefulWidget {
   String mapName;
+  String Map;
   //const addPlaces({Key? key}) : super(key: key);
-  addPlaces({required this.mapName});
+  editPlaces({required this.mapName, required this.Map});
 
   @override
-  State<addPlaces> createState() => _addPlacesState(mapName);
+  State<editPlaces> createState() => _editPlacesState(mapName, Map);
 }
 
 final _firestore = FirebaseFirestore.instance;
 
-class _addPlacesState extends State<addPlaces> {
+class _editPlacesState extends State<editPlaces> {
   String mapName;
-  _addPlacesState(this.mapName);
+  String Map;
+  _editPlacesState(this.mapName, this.Map);
 
   //setting the expansion function for the navigation rail
   bool isExpanded = false;
@@ -48,6 +51,7 @@ class _addPlacesState extends State<addPlaces> {
     // call the methods to fetch the data from the DB
     getCategoryList();
     getMap();
+    getplace();
     super.initState();
   }
 
@@ -66,12 +70,30 @@ class _addPlacesState extends State<addPlaces> {
     await for (var snapshot in FirebaseFirestore.instance
         .collection('maps')
         .where("building",
-            isEqualTo: "كلية العلوم" // we will replacet to mapName
+            isEqualTo: "كلية العلوم" // we will replace it to mapName
             )
         .snapshots())
       for (var map in snapshot.docs) {
         setState(() {
           photo = map['floor plan'].toString();
+        });
+      }
+  }
+
+  String category = "";
+  String name = "";
+  Future getplace() async {
+    await for (var snapshot in FirebaseFirestore.instance
+        .collection('places')
+        .where("building", isEqualTo: Map // we will replace it to mapName
+            )
+        .where("name", isEqualTo: mapName // we will replace it to mapName
+            )
+        .snapshots())
+      for (var map in snapshot.docs) {
+        setState(() {
+          category = map['category'].toString();
+          name = map['name'].toString();
         });
       }
   }
@@ -157,7 +179,7 @@ class _addPlacesState extends State<addPlaces> {
                       icon: Icon(Icons.menu),
                     ),
                     Text(
-                      " تحديد المواقع على خريطة مبنى" + ": " + "$mapName",
+                      " تعديل موقع " + "$mapName" + " على الخريطة ",
                       style: TextStyle(
                           fontSize: 30,
                           //  fontWeight: FontWeight.bold,
@@ -178,14 +200,14 @@ class _addPlacesState extends State<addPlaces> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(
-                          "تعليمات اضافة اماكن من خريطة",
+                          "تعليمات تعديل موقع من خريطة",
                           style: TextStyle(
                               fontSize: 20,
                               fontWeight: FontWeight.bold,
                               color: Color.fromARGB(255, 28, 51, 151)),
                         ),
                         Text(
-                          " ١-لتحديد مكان من الخريطة الرجاء اختيار المكان المحدد اختيارة من صورة الخريطة   ",
+                          " ١-لتحديد موقع من الخريطة الرجاء اختيار المكان المحدد واختياره من صورة الخريطة   ",
                           style: TextStyle(
                               // fontSize: 20,
                               fontWeight: FontWeight.bold,
@@ -193,7 +215,7 @@ class _addPlacesState extends State<addPlaces> {
                           textAlign: TextAlign.right,
                         ),
                         Text(
-                          "٢-عند تحديد المكان سيظهر لك نافذه يتم تحديد فيها اسم المكان ،تصنيفه",
+                          "٢-عند تحديد المكان ستظهر لك نافذه يتم تحديد فيها اسم الموقع و تصنيفه",
                           style: TextStyle(
                               //fontSize: 20,
                               fontWeight: FontWeight.bold,
@@ -237,46 +259,19 @@ class _addPlacesState extends State<addPlaces> {
                                     Color.fromARGB(255, 45, 66, 142),
                               ),
                               onPressed: () async {
+                                FocusScope.of(context).unfocus();
+                                ;
                                 FirebaseFirestore.instance
                                     .collection('places')
-                                    .doc(selectedCat! +
-                                        '-' +
-                                        _placeNameEditingController.text)
-                                    .set({
-                                  "building": mapName,
-                                  "category": selectedCat,
-                                  'name': _placeNameEditingController.text,
-                                  'x': x,
-                                  "y": y
-                                });
-                                // CoolAlert.show(
-                                //   context: context,
-                                //   width: size.width * 0.2,
-                                //   confirmBtnColor:
-                                //       Color.fromARGB(255, 45, 66, 142),
-                                //   //cancelBtnColor: Color.fromARGB(144, 64, 6, 87),
-                                //   type: CoolAlertType.success,
-                                //   backgroundColor:
-                                //       Color.fromARGB(255, 45, 66, 142),
-                                //   text: "تم حفظ الخريطة بنجاح",
-                                //   confirmBtnText: 'اغلاق',
-                                //   onConfirmBtnTap: () {
-                                //     _placeNameEditingController.clear();
-
-                                //     Navigator.push(
-                                //         context,
-                                //         MaterialPageRoute(
-                                //             builder: (context) =>
-                                //                 DashboardScreen()));
-                                //   },
-                                // );
+                                    .doc(category + '-' + name)
+                                    .update({'x': x, "y": y});
                                 _placeNameEditingController.clear();
-
                                 Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                        builder: (context) =>
-                                            DashboardScreen()));
+                                        builder: (context) => places(
+                                              mapName: Map,
+                                            )));
                               },
                               child: Text(
                                 "حفظ",
@@ -308,136 +303,126 @@ class _addPlacesState extends State<addPlaces> {
           return AlertDialog(
             scrollable: true,
             title: Text(
-              'اضافة موقع',
-              style: TextStyle(color: Color.fromARGB(115, 40, 71, 185)),
+              '  تعديل موقع $mapName',
+              style: TextStyle(color: Color.fromARGB(227, 19, 49, 158)),
             ),
-            content: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Form(
-                child: Column(
-                  children: <Widget>[
-                    TextFormField(
-                        maxLength: 20,
-                        decoration: InputDecoration(
-                          hintText: '...5G قاعة',
-                          hintStyle: TextStyle(
-                              fontSize: 16,
-                              color: Color.fromARGB(255, 202, 198, 198)),
-                          label: RichText(
-                            text: TextSpan(
-                                text: 'اسم الموقع',
-                                style: const TextStyle(
-                                    fontSize: 18,
-                                    color: Color.fromARGB(144, 7, 32, 87)),
-                                children: [
-                                  TextSpan(
-                                      text: ' *',
-                                      style: TextStyle(
-                                        color: Colors.red,
-                                      ))
-                                ]),
-                          ),
-                          labelStyle: TextStyle(
-                              fontSize: 18,
-                              color: Color.fromARGB(144, 7, 32, 87)),
-                          border: OutlineInputBorder(
-                            borderSide: BorderSide(
-                              color: Color.fromARGB(144, 64, 7, 87),
-                              width: 2.0,
-                            ),
-                          ),
-                          focusedBorder: OutlineInputBorder(
-                            borderSide: BorderSide(
-                              color: Color.fromARGB(144, 7, 32, 87),
-                              width: 2.0,
-                            ),
-                          ),
-                        ),
-                        controller: _placeNameEditingController,
-                        validator: (value) {
-                          if (value == null ||
-                              value.isEmpty ||
-                              value.trim() == '')
-                            return 'required';
-                          else if (!RegExp(r'^[a-z A-Z . , -]+$')
-                                  .hasMatch(value!) &&
-                              !RegExp(r'^[, . - أ-ي]+$').hasMatch(value!))
-                            return "Only English or Arabic letters";
-                        }),
-                    DropdownButtonFormField(
-                      autovalidateMode: AutovalidateMode.onUserInteraction,
-                      hint: RichText(
-                        text: TextSpan(
-                            text: 'تصنيف الموقع ',
-                            style: const TextStyle(
-                                fontSize: 18,
-                                color: Color.fromARGB(144, 7, 32, 87)),
-                            children: [
-                              TextSpan(
-                                  text: ' *',
-                                  style: TextStyle(
-                                    color: Colors.red,
-                                  ))
-                            ]),
-                      ),
-                      items: options
-                          .map((e) => DropdownMenuItem(
-                                value: e,
-                                child: Text(e),
-                              ))
-                          .toList(),
-                      onChanged: (value) {
-                        setState(() {
-                          selectedCat = value as String?;
-                        });
-                      },
-                      icon: Icon(
-                        Icons.arrow_drop_down_circle,
-                        color: Color.fromARGB(221, 137, 171, 187),
-                      ),
-                      decoration: InputDecoration(
-                        border: OutlineInputBorder(
-                          borderSide: BorderSide(width: 2.0),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
-                            color: Color.fromARGB(144, 7, 32, 87),
-                            width: 2.0,
-                          ),
-                        ),
-                      ),
-                      validator: (value) {
-                        if (value == null || value == "") {
-                          return 'required';
-                        }
-                      },
-                    ),
-                  ],
-                ),
-              ),
-            ),
-            actions: [
-              ElevatedButton(
-                  child: Text("اضافة"),
-                  onPressed: () {
-                    FocusScope.of(context).unfocus();
-                    ;
-                    FirebaseFirestore.instance
-                        .collection('places')
-                        .doc(selectedCat! +
-                            '-' +
-                            _placeNameEditingController.text)
-                        .set({
-                      "building": mapName,
-                      "category": selectedCat,
-                      'name': _placeNameEditingController.text,
-                      'x': x,
-                      "y": y
-                    });
-                    _placeNameEditingController.clear();
-                    Navigator.pop(context);
-                  })
-            ],
+            content: ElevatedButton(
+                child: Text("تعديل"),
+                onPressed: () {
+                  FocusScope.of(context).unfocus();
+                  ;
+                  FirebaseFirestore.instance
+                      .collection('places')
+                      .doc(category + '-' + name)
+                      .update({'x': x, "y": y});
+                  _placeNameEditingController.clear();
+                  Navigator.pop(context);
+                }),
+            // content: Padding(
+            //   padding: const EdgeInsets.all(8.0),
+            // child: Form(
+            //   child: Column(
+            //     children: <Widget>[
+            // TextFormField(
+            //           maxLength: 20,
+            //           decoration: InputDecoration(
+            //             hintText: '...5G قاعة',
+            //             hintStyle: TextStyle(
+            //                 fontSize: 16,
+            //                 color: Color.fromARGB(255, 202, 198, 198)),
+            //             label: RichText(
+            //               text: TextSpan(
+            //                   text: 'اسم الموقع',
+            //                   style: const TextStyle(
+            //                       fontSize: 18,
+            //                       color: Color.fromARGB(144, 7, 32, 87)),
+            //                   children: [
+            //                     TextSpan(
+            //                         text: ' *',
+            //                         style: TextStyle(
+            //                           color: Colors.red,
+            //                         ))
+            //                   ]),
+            //             ),
+            //             labelStyle: TextStyle(
+            //                 fontSize: 18,
+            //                 color: Color.fromARGB(144, 7, 32, 87)),
+            //             border: OutlineInputBorder(
+            //               borderSide: BorderSide(
+            //                 color: Color.fromARGB(144, 64, 7, 87),
+            //                 width: 2.0,
+            //               ),
+            //             ),
+            //             focusedBorder: OutlineInputBorder(
+            //               borderSide: BorderSide(
+            //                 color: Color.fromARGB(144, 7, 32, 87),
+            //                 width: 2.0,
+            //               ),
+            //             ),
+            //           ),
+            //           controller: _placeNameEditingController,
+            //           validator: (value) {
+            //             if (value == null ||
+            //                 value.isEmpty ||
+            //                 value.trim() == '')
+            //               return 'required';
+            //             else if (!RegExp(r'^[a-z A-Z . , -]+$')
+            //                     .hasMatch(value!) &&
+            //                 !RegExp(r'^[, . - أ-ي]+$').hasMatch(value!))
+            //               return "Only English or Arabic letters";
+            //           }),
+            //       DropdownButtonFormField(
+            //         autovalidateMode: AutovalidateMode.onUserInteraction,
+            //         hint: RichText(
+            //           text: TextSpan(
+            //               text: 'تصنيف الموقع ',
+            //               style: const TextStyle(
+            //                   fontSize: 18,
+            //                   color: Color.fromARGB(144, 7, 32, 87)),
+            //               children: [
+            //                 TextSpan(
+            //                     text: ' *',
+            //                     style: TextStyle(
+            //                       color: Colors.red,
+            //                     ))
+            //               ]),
+            //         ),
+            //         items: options
+            //             .map((e) => DropdownMenuItem(
+            //                   value: e,
+            //                   child: Text(e),
+            //                 ))
+            //             .toList(),
+            //         onChanged: (value) {
+            //           setState(() {
+            //             selectedCat = value as String?;
+            //           });
+            //         },
+            //         icon: Icon(
+            //           Icons.arrow_drop_down_circle,
+            //           color: Color.fromARGB(221, 137, 171, 187),
+            //         ),
+            //         decoration: InputDecoration(
+            //           border: OutlineInputBorder(
+            //             borderSide: BorderSide(width: 2.0),
+            //           ),
+            //           focusedBorder: OutlineInputBorder(
+            //             borderSide: BorderSide(
+            //               color: Color.fromARGB(144, 7, 32, 87),
+            //               width: 2.0,
+            //             ),
+            //           ),
+            //         ),
+            //         validator: (value) {
+            //           if (value == null || value == "") {
+            //             return 'required';
+            //           }
+            //         },
+            //       ),
+            //     ],
+            //   ),
+            // ),
+            //   ),
           );
         });
   }

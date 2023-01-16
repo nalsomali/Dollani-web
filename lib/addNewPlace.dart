@@ -17,20 +17,20 @@ import 'package:firebase/firebase.dart' as fb;
 import 'addMap.dart';
 import 'maps.dart';
 
-class addPlaces extends StatefulWidget {
+class addNewPlace extends StatefulWidget {
   String mapName;
   //const addPlaces({Key? key}) : super(key: key);
-  addPlaces({required this.mapName});
+  addNewPlace({required this.mapName});
 
   @override
-  State<addPlaces> createState() => _addPlacesState(mapName);
+  State<addNewPlace> createState() => _addNewPlacesState(mapName);
 }
 
 final _firestore = FirebaseFirestore.instance;
 
-class _addPlacesState extends State<addPlaces> {
+class _addNewPlacesState extends State<addNewPlace> {
   String mapName;
-  _addPlacesState(this.mapName);
+  _addNewPlacesState(this.mapName);
 
   //setting the expansion function for the navigation rail
   bool isExpanded = false;
@@ -157,7 +157,7 @@ class _addPlacesState extends State<addPlaces> {
                       icon: Icon(Icons.menu),
                     ),
                     Text(
-                      " تحديد المواقع على خريطة مبنى" + ": " + "$mapName",
+                      " تحديد موقع جديد على خريطة مبنى" + ": " + "$mapName",
                       style: TextStyle(
                           fontSize: 30,
                           //  fontWeight: FontWeight.bold,
@@ -237,6 +237,8 @@ class _addPlacesState extends State<addPlaces> {
                                     Color.fromARGB(255, 45, 66, 142),
                               ),
                               onPressed: () async {
+                                FocusScope.of(context).unfocus();
+                                ;
                                 FirebaseFirestore.instance
                                     .collection('places')
                                     .doc(selectedCat! +
@@ -249,29 +251,7 @@ class _addPlacesState extends State<addPlaces> {
                                   'x': x,
                                   "y": y
                                 });
-                                // CoolAlert.show(
-                                //   context: context,
-                                //   width: size.width * 0.2,
-                                //   confirmBtnColor:
-                                //       Color.fromARGB(255, 45, 66, 142),
-                                //   //cancelBtnColor: Color.fromARGB(144, 64, 6, 87),
-                                //   type: CoolAlertType.success,
-                                //   backgroundColor:
-                                //       Color.fromARGB(255, 45, 66, 142),
-                                //   text: "تم حفظ الخريطة بنجاح",
-                                //   confirmBtnText: 'اغلاق',
-                                //   onConfirmBtnTap: () {
-                                //     _placeNameEditingController.clear();
-
-                                //     Navigator.push(
-                                //         context,
-                                //         MaterialPageRoute(
-                                //             builder: (context) =>
-                                //                 DashboardScreen()));
-                                //   },
-                                // );
                                 _placeNameEditingController.clear();
-
                                 Navigator.push(
                                     context,
                                     MaterialPageRoute(

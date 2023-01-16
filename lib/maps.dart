@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:web/login.dart';
 import 'package:web/addMap.dart';
+import 'package:web/places.dart';
 
 class DashboardScreen extends StatefulWidget {
   const DashboardScreen({Key? key}) : super(key: key);
@@ -239,7 +240,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                             color: Color.fromARGB(255, 45, 66, 142),
                           ),
                           label: Text(
-                            "هنا قائمة بجمبع الخرائط المضافة",
+                            "هنا قائمة بجميع الخرائط المضافة",
                             style: TextStyle(
                               color: Color.fromARGB(255, 45, 66, 142),
                             ),
@@ -283,10 +284,19 @@ class _DashboardScreenState extends State<DashboardScreen> {
                               for (var i = 0; i < buildingName.length; i++)
                                 DataRow(cells: [
                                   DataCell(Text(buildingName[i])),
-                                  DataCell(Icon(
-                                    Icons.edit,
-                                    color: Color.fromARGB(255, 74, 93, 188),
-                                  )),
+                                  DataCell(IconButton(
+                                      onPressed: () {
+                                        Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) => places(
+                                                      mapName: buildingName[i],
+                                                    )));
+                                      },
+                                      icon: Icon(
+                                        Icons.edit,
+                                        color: Color.fromARGB(255, 74, 93, 188),
+                                      ))),
                                   DataCell(TextButton(
                                       onPressed: () {
                                         CoolAlert.show(

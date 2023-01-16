@@ -15,6 +15,8 @@ import 'package:uuid/uuid.dart';
 import 'package:firebase/firebase.dart' as fb;
 import 'package:web/addPlaces.dart';
 
+import 'maps.dart';
+
 class addMap extends StatefulWidget {
   const addMap({Key? key}) : super(key: key);
 
@@ -75,27 +77,36 @@ class _addMapState extends State<addMap> {
                 color: Color.fromARGB(255, 255, 255, 255),
               ),
               onDestinationSelected: (index) {
-                CoolAlert.show(
-                  context: context,
-                  title: "تسجيل الخروج",
-                  width: size.width * 0.2,
-                  confirmBtnColor: Color.fromARGB(181, 172, 22, 12),
-                  showCancelBtn: false,
-                  //cancelBtnColor: Color.fromARGB(144, 64, 6, 87),
-                  type: CoolAlertType.confirm,
-                  backgroundColor: Color.fromARGB(255, 45, 66, 142),
-                  text: "هل تريد تسجيل الخروج",
-                  confirmBtnText: 'تسجيل الخروج',
-                  cancelBtnText: "إلغاء",
-                  onCancelBtnTap: () {
-                    Navigator.pop(context);
-                  },
-                  onConfirmBtnTap: () async {
-                    await FirebaseAuth.instance.signOut();
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => UserLogin()));
-                  },
-                );
+                if (index == 0)
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => DashboardScreen()));
+                if (index == 1)
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => addMap()));
+                if (index == 2)
+                  CoolAlert.show(
+                    context: context,
+                    title: "تسجيل الخروج",
+                    width: size.width * 0.2,
+                    confirmBtnColor: Color.fromARGB(181, 172, 22, 12),
+                    showCancelBtn: false,
+                    //cancelBtnColor: Color.fromARGB(144, 64, 6, 87),
+                    type: CoolAlertType.confirm,
+                    backgroundColor: Color.fromARGB(255, 45, 66, 142),
+                    text: "هل تريد تسجيل الخروج",
+                    confirmBtnText: 'تسجيل الخروج',
+                    cancelBtnText: "إلغاء",
+                    onCancelBtnTap: () {
+                      Navigator.pop(context);
+                    },
+                    onConfirmBtnTap: () async {
+                      await FirebaseAuth.instance.signOut();
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (context) => UserLogin()));
+                    },
+                  );
               },
               selectedIconTheme:
                   IconThemeData(color: Color.fromARGB(255, 25, 54, 152)),
