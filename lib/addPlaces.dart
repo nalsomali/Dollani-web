@@ -213,9 +213,9 @@ class _addPlacesState extends State<addPlaces> {
                     Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        MouseRegion(
+                        Listener(
                           // cursor: SystemMouseCursors.click,
-                          onHover: _updateLocation,
+                          onPointerMove: _updateLocation,
                           child: Container(
                             width: 400,
                             height: 530,
