@@ -186,20 +186,20 @@ class _addMapState extends State<addMap> {
                 ),
               ),
               SizedBox(height: 10),
-              TextButton(
-                  onPressed: uploadFile,
-                  child: Text(
-                    "رفع صورة الخريطة",
-                    style: TextStyle(
-                      color: Color.fromARGB(255, 141, 17, 17),
-                    ),
-                  )),
+              // TextButton(
+              //     onPressed: uploadFile,
+              //     child: Text(
+              //       "رفع صورة الخريطة",
+              //       style: TextStyle(
+              //         color: Color.fromARGB(255, 141, 17, 17),
+              //       ),
+              //     )),
               TextButton(
                   style: TextButton.styleFrom(
                     backgroundColor: Color.fromARGB(255, 45, 66, 142),
                   ),
                   onPressed: () async {
-                    uploadFile;
+                    //uploadFile;
                     FocusScope.of(context).unfocus();
 
                     FirebaseFirestore.instance
@@ -207,7 +207,8 @@ class _addMapState extends State<addMap> {
                         .doc(building)
                         .set({
                       "building": building,
-                      'floor plan': sampleController //imageUri.toString(),
+                      'floor plan':
+                          " " // sampleController //imageUri.toString(),
                     });
 
                     // print(imageUri.toString());
@@ -230,35 +231,35 @@ class _addMapState extends State<addMap> {
         ]));
   }
 
-  void uploadFile() async {
-    var ref = FirebaseStorage.instance
-        .ref()
-        .child('flutter-tests')
-        .putData(selectedImageInByets!);
-    final snapshot = await ref.whenComplete(() {
-      setState(() {
-        // _isVisible = false;
-        print("kkmmkkm");
-      });
-    });
-    final urlDownload = await snapshot.ref.getDownloadURL();
-    sampleController.text = '$urlDownload';
+  // void uploadFile() async {
+  //   var ref = FirebaseStorage.instance
+  //       .ref()
+  //       .child('flutter-tests')
+  //       .putData(selectedImageInByets!);
+  //   final snapshot = await ref.whenComplete(() {
+  //     setState(() {
+  //       // _isVisible = false;
+  //       print("kkmmkkm");
+  //     });
+  //   });
+  //   final urlDownload = await snapshot.ref.getDownloadURL();
+  //   sampleController.text = '$urlDownload';
 
-    // try {
-    //   firabase_storage.UploadTask uploadTask;
-    //   firabase_storage.Reference ref =
-    //       firabase_storage.FirebaseStorage.instance.ref().child("mapImages");
+  // try {
+  //   firabase_storage.UploadTask uploadTask;
+  //   firabase_storage.Reference ref =
+  //       firabase_storage.FirebaseStorage.instance.ref().child("mapImages");
 
-    //   final metadata =
-    //       firabase_storage.SettableMetadata(contentType: 'image/jpeg');
-    //   uploadTask = ref.putData(selectedImageInByets!, metadata);
+  //   final metadata =
+  //       firabase_storage.SettableMetadata(contentType: 'image/jpeg');
+  //   uploadTask = ref.putData(selectedImageInByets!, metadata);
 
-    //   imageUrl = "await ref.getDownloadURL();";
-    //   print("uploa image   :" + imageUrl);
-    // } catch (e) {
-    //   print(e);
-    // }
-  }
+  //   imageUrl = "await ref.getDownloadURL();";
+  //   print("uploa image   :" + imageUrl);
+  // } catch (e) {
+  //   print(e);
+  // }
+  //}
 
   Widget dottedBorder({
     required Color color,
