@@ -16,6 +16,7 @@ void main() async {
       appId: "1:3404171949:web:8847a21a342bf49d31d424",
       messagingSenderId: "3404171949",
       projectId: "dollani-app",
+      storageBucket: "dollani-app.appspot.com",
     ));
   //
   runApp(const MyApp());
