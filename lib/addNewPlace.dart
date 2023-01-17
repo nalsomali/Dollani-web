@@ -14,7 +14,7 @@ import 'package:uuid/uuid.dart';
 //import 'package:firebase_dart/firebase_dart.dart' as fb;
 import 'package:firebase/firebase.dart' as fb;
 
-import 'addMap.dart';
+import 'addMapsScreen.dart';
 import 'maps.dart';
 
 class addNewPlace extends StatefulWidget {
@@ -100,7 +100,7 @@ class _addNewPlacesState extends State<addNewPlace> {
                           builder: (context) => DashboardScreen()));
                 if (index == 1)
                   Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => addMap()));
+                      MaterialPageRoute(builder: (context) => addMaps()));
                 if (index == 2)
                   CoolAlert.show(
                     context: context,

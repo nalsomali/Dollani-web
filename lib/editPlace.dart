@@ -15,7 +15,7 @@ import 'package:uuid/uuid.dart';
 import 'package:firebase/firebase.dart' as fb;
 import 'package:web/places.dart';
 
-import 'addMap.dart';
+import 'addMapsScreen.dart';
 import 'maps.dart';
 
 class editPlaces extends StatefulWidget {
@@ -122,7 +122,7 @@ class _editPlacesState extends State<editPlaces> {
                           builder: (context) => DashboardScreen()));
                 if (index == 1)
                   Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => addMap()));
+                      MaterialPageRoute(builder: (context) => addMaps()));
                 if (index == 2)
                   CoolAlert.show(
                     context: context,

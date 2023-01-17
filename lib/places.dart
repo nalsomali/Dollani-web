@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:web/editPlace.dart';
 import 'package:web/maps.dart';
 
-import 'addMap.dart';
+import 'addMapsScreen.dart';
 import 'addNewPlace.dart';
 import 'login.dart';
 
@@ -114,7 +114,7 @@ class placesScreenState extends State<places> {
                           builder: (context) => DashboardScreen()));
                 if (index == 1)
                   Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => addMap()));
+                      MaterialPageRoute(builder: (context) => addMaps()));
                 if (index == 2)
                   CoolAlert.show(
                     context: context,

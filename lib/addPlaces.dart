@@ -14,7 +14,7 @@ import 'package:uuid/uuid.dart';
 //import 'package:firebase_dart/firebase_dart.dart' as fb;
 import 'package:firebase/firebase.dart' as fb;
 
-import 'addMap.dart';
+import 'addMapsScreen.dart';
 import 'maps.dart';
 
 class addPlaces extends StatefulWidget {
@@ -65,8 +65,7 @@ class _addPlacesState extends State<addPlaces> {
   Future getMap() async {
     await for (var snapshot in FirebaseFirestore.instance
         .collection('maps')
-        .where("building",
-            isEqualTo: "كلية العلوم" // we will replacet to mapName
+        .where("building", isEqualTo: mapName // we will replacet to mapName
             )
         .snapshots())
       for (var map in snapshot.docs) {
@@ -100,7 +99,7 @@ class _addPlacesState extends State<addPlaces> {
                           builder: (context) => DashboardScreen()));
                 if (index == 1)
                   Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => addMap()));
+                      MaterialPageRoute(builder: (context) => addMaps()));
                 if (index == 2)
                   CoolAlert.show(
                     context: context,

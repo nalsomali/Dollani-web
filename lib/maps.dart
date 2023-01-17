@@ -3,8 +3,9 @@ import 'package:cool_alert/cool_alert.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:web/login.dart';
-import 'package:web/addMap.dart';
 import 'package:web/places.dart';
+
+import 'addMapsScreen.dart';
 
 class DashboardScreen extends StatefulWidget {
   const DashboardScreen({Key? key}) : super(key: key);
@@ -115,7 +116,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
               onDestinationSelected: (index) {
                 if (index == 1)
                   Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => addMap()));
+                      MaterialPageRoute(builder: (context) => addMaps()));
                 if (index == 2)
                   CoolAlert.show(
                     context: context,
@@ -274,7 +275,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                               Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                      builder: (context) => addMap()));
+                                      builder: (context) => addMaps()));
                             },
                             child: Text(
                               "اضافة خريطة جديدة",
