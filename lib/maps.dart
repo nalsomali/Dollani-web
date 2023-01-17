@@ -18,6 +18,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
   @override
   var buildingName = [];
   var floorPlan = [];
+  var buildingArea = [];
 
   TextEditingController? _searchEditingController = TextEditingController();
   void initState() {
@@ -29,12 +30,14 @@ class _DashboardScreenState extends State<DashboardScreen> {
   Future getMap() async {
     setState(() {
       buildingName = [];
+      buildingArea = [];
     });
     await for (var snapshot
         in FirebaseFirestore.instance.collection('maps').snapshots())
       for (var map in snapshot.docs) {
         setState(() {
           buildingName.add(map['building']);
+          buildingArea.add(map['area']);
         });
       }
   }
@@ -70,6 +73,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
       //clear first
       setState(() {
         buildingName = [];
+        buildingArea = [];
       });
 
       await for (var snapshot in FirebaseFirestore.instance
@@ -79,6 +83,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
         for (var maps in snapshot.docs) {
           setState(() {
             buildingName.add(maps['building']);
+            buildingArea.add(maps['area']);
           });
         }
     }
@@ -298,6 +303,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                 (states) => Color.fromARGB(255, 227, 227, 227)),
                             columns: [
                               DataColumn(label: Text("اسم المبنى")),
+                              DataColumn(label: Text("المساحة")),
                               DataColumn(label: Text("تعديل")),
                               DataColumn(label: Text("حذف")),
                             ],
@@ -305,6 +311,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                               for (var i = 0; i < buildingName.length; i++)
                                 DataRow(cells: [
                                   DataCell(Text(buildingName[i])),
+                                  DataCell(Text(buildingArea[i])),
                                   DataCell(IconButton(
                                       onPressed: () {
                                         Navigator.push(

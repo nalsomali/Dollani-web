@@ -69,9 +69,7 @@ class _editPlacesState extends State<editPlaces> {
   Future getMap() async {
     await for (var snapshot in FirebaseFirestore.instance
         .collection('maps')
-        .where("building",
-            isEqualTo: "كلية العلوم" // we will replace it to mapName
-            )
+        .where("building", isEqualTo: Map)
         .snapshots())
       for (var map in snapshot.docs) {
         setState(() {
@@ -315,7 +313,7 @@ class _editPlacesState extends State<editPlaces> {
           return AlertDialog(
             scrollable: true,
             title: Text(
-              'تعديل موقع $mapName الى نقطه (${x.toStringAsFixed(2)}, ${y.toStringAsFixed(2)})',
+              'تعديل موقع $mapName',
               style: TextStyle(color: Color.fromARGB(227, 19, 49, 158)),
             ),
             content: ElevatedButton(

@@ -14,6 +14,7 @@ import 'package:uuid/uuid.dart';
 //import 'package:firebase_dart/firebase_dart.dart' as fb;
 import 'package:firebase/firebase.dart' as fb;
 
+import 'addHallways.dart';
 import 'addMapsScreen.dart';
 import 'maps.dart';
 
@@ -245,7 +246,7 @@ class _addPlacesState extends State<addPlaces> {
                                   type: CoolAlertType.success,
                                   backgroundColor:
                                       Color.fromARGB(255, 45, 66, 142),
-                                  text: "تم حفظ الخريطة بنجاح",
+                                  text: "تم حفظ الاماكن بنجاح",
                                   confirmBtnText: 'اغلاق',
                                   onConfirmBtnTap: () {
                                     _placeNameEditingController.clear();
@@ -253,8 +254,9 @@ class _addPlacesState extends State<addPlaces> {
                                     Navigator.push(
                                         context,
                                         MaterialPageRoute(
-                                            builder: (context) =>
-                                                DashboardScreen()));
+                                            builder: (context) => addHallways(
+                                                  mapName: mapName,
+                                                )));
                                   },
                                 );
                                 // _placeNameEditingController.clear();
@@ -266,7 +268,7 @@ class _addPlacesState extends State<addPlaces> {
                                 //             DashboardScreen()));
                               },
                               child: Text(
-                                "حفظ",
+                                "التالي",
                                 style: TextStyle(
                                   color: Color.fromARGB(255, 255, 255, 255),
                                 ),
@@ -295,7 +297,7 @@ class _addPlacesState extends State<addPlaces> {
           return AlertDialog(
             scrollable: true,
             title: Text(
-              'اضافة موقع في نقطة (${x.toStringAsFixed(2)}, ${y.toStringAsFixed(2)})',
+              'اضافة موقع',
               style: TextStyle(color: Color.fromARGB(115, 40, 71, 185)),
             ),
             content: Padding(

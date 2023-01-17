@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cool_alert/cool_alert.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:web/addHallways.dart';
 import 'package:web/editPlace.dart';
 import 'package:web/maps.dart';
 
@@ -271,6 +272,24 @@ class placesScreenState extends State<places> {
                         },
                         child: Text(
                           "اضافة موقع جديد",
+                          style: TextStyle(
+                            color: Color.fromARGB(255, 255, 255, 255),
+                          ),
+                        )),
+                    TextButton(
+                        style: TextButton.styleFrom(
+                          backgroundColor: Color.fromARGB(255, 45, 66, 142),
+                        ),
+                        onPressed: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => addHallways(
+                                        mapName: mapName,
+                                      )));
+                        },
+                        child: Text(
+                          "اضافة ممر جديدة",
                           style: TextStyle(
                             color: Color.fromARGB(255, 255, 255, 255),
                           ),

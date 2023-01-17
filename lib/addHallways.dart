@@ -17,50 +17,37 @@ import 'package:firebase/firebase.dart' as fb;
 import 'addMapsScreen.dart';
 import 'maps.dart';
 
-class addNewPlace extends StatefulWidget {
+class addHallways extends StatefulWidget {
   String mapName;
   //const addPlaces({Key? key}) : super(key: key);
-  addNewPlace({required this.mapName});
+  addHallways({required this.mapName});
 
   @override
-  State<addNewPlace> createState() => _addNewPlacesState(mapName);
+  State<addHallways> createState() => _addHallwaysState(mapName);
 }
 
 final _firestore = FirebaseFirestore.instance;
 
-class _addNewPlacesState extends State<addNewPlace> {
+class _addHallwaysState extends State<addHallways> {
   String mapName;
-  _addNewPlacesState(this.mapName);
-
-  //setting the expansion function for the navigation rail
+  _addHallwaysState(this.mapName);
   bool isExpanded = false;
   List<String> options = [];
   final TextEditingController _placeNameEditingController =
       TextEditingController();
   final TextEditingController buildingName = TextEditingController();
-  //late String category;
-  late double x;
-  late double y;
-  String? selectedCat;
+  late double xStart;
+  late double yStart;
+  late double xEnd;
+  late double yEnd;
   String photo = '';
 
   void initState() {
-    // call the methods to fetch the data from the DB
-    getCategoryList();
     getMap();
     super.initState();
   }
 
-  void getCategoryList() async {
-    final categories = await _firestore.collection('categories').get();
-    for (var category in categories.docs) {
-      for (var element in category['categoriesP']) {
-        setState(() {
-          options.add(element);
-        });
-      }
-    }
-  }
+  bool isSelected = false;
 
   Future getMap() async {
     await for (var snapshot in FirebaseFirestore.instance
@@ -155,7 +142,7 @@ class _addNewPlacesState extends State<addNewPlace> {
                       icon: Icon(Icons.menu),
                     ),
                     Text(
-                      " تحديد موقع جديد على خريطة مبنى" + ": " + "$mapName",
+                      " تحديد الممرات على خريطة مبنى" + ": " + "$mapName",
                       style: TextStyle(
                           fontSize: 30,
                           //  fontWeight: FontWeight.bold,
@@ -176,14 +163,14 @@ class _addNewPlacesState extends State<addNewPlace> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(
-                          "تعليمات اضافة اماكن من خريطة",
+                          "تعليمات اضافة ممرات على خريطة",
                           style: TextStyle(
                               fontSize: 20,
                               fontWeight: FontWeight.bold,
                               color: Color.fromARGB(255, 28, 51, 151)),
                         ),
                         Text(
-                          " ١-لتحديد مكان من الخريطة الرجاء اختيار المكان المحدد اختيارة من صورة الخريطة   ",
+                          " ١-لتحديد ممر من الخريطة الرجاء اختيار نقطة بداية الممر المحدد اختياره من صورة الخريطة   ",
                           style: TextStyle(
                               // fontSize: 20,
                               fontWeight: FontWeight.bold,
@@ -191,7 +178,7 @@ class _addNewPlacesState extends State<addNewPlace> {
                           textAlign: TextAlign.right,
                         ),
                         Text(
-                          "٢-عند تحديد المكان سيظهر لك نافذه يتم تحديد فيها اسم المكان ،تصنيفه",
+                          "٢-عند تحديد نقطة البداية ستظهر لك نافذه يتم فيها تأكيد النقطة",
                           style: TextStyle(
                               //fontSize: 20,
                               fontWeight: FontWeight.bold,
@@ -199,7 +186,7 @@ class _addNewPlacesState extends State<addNewPlace> {
                           textAlign: TextAlign.right,
                         ),
                         Text(
-                          "٣-الرجاء ادخال البيانات المطلوبة والنقر على اضافة .                            ",
+                          "٣-الرجاء ادخال نقطة النهايه بنفس الطريقة  والنقر على اضافة .                            ",
                           style: TextStyle(
                               //   fontSize: 20,
                               fontWeight: FontWeight.bold,
@@ -213,7 +200,9 @@ class _addNewPlacesState extends State<addNewPlace> {
                       children: [
                         Listener(
                           // cursor: SystemMouseCursors.click,
-                          onPointerMove: _updateLocation,
+                          onPointerMove: isSelected == false
+                              ? _updateLocation
+                              : _updateLocation2,
                           child: Container(
                             width: 400,
                             height: 530,
@@ -235,8 +224,15 @@ class _addNewPlacesState extends State<addNewPlace> {
                                     Color.fromARGB(255, 45, 66, 142),
                               ),
                               onPressed: () async {
-                                FocusScope.of(context).unfocus();
-
+                                FirebaseFirestore.instance
+                                    .collection('hallways')
+                                    .add({
+                                  "building": mapName,
+                                  'xStart': xStart.round(),
+                                  "yStart": yStart.round(),
+                                  'xEnd': xEnd.round(),
+                                  "yEnd": yEnd.round(),
+                                });
                                 CoolAlert.show(
                                   context: context,
                                   width: size.width * 0.2,
@@ -246,7 +242,7 @@ class _addNewPlacesState extends State<addNewPlace> {
                                   type: CoolAlertType.success,
                                   backgroundColor:
                                       Color.fromARGB(255, 45, 66, 142),
-                                  text: "تم حفظ الموقع بنجاح",
+                                  text: "تم حفظ الممر بنجاح",
                                   confirmBtnText: 'اغلاق',
                                   onConfirmBtnTap: () {
                                     _placeNameEditingController.clear();
@@ -273,15 +269,15 @@ class _addNewPlacesState extends State<addNewPlace> {
               ],
             ),
           ),
-
-          //let's add the floating action button
         ]));
   }
 
   void _updateLocation(PointerEvent details) {
+    isSelected = true;
+
     setState(() {
-      x = details.position.dx;
-      y = details.position.dy;
+      xStart = details.position.dx;
+      yStart = details.position.dy;
     });
     showDialog(
         context: context,
@@ -289,133 +285,46 @@ class _addNewPlacesState extends State<addNewPlace> {
           return AlertDialog(
             scrollable: true,
             title: Text(
-              'اضافة موقع',
+              'اضافة نقطة بداية ',
               style: TextStyle(color: Color.fromARGB(115, 40, 71, 185)),
-            ),
-            content: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Form(
-                child: Column(
-                  children: <Widget>[
-                    TextFormField(
-                        maxLength: 20,
-                        decoration: InputDecoration(
-                          hintText: '...5G قاعة',
-                          hintStyle: TextStyle(
-                              fontSize: 16,
-                              color: Color.fromARGB(255, 202, 198, 198)),
-                          label: RichText(
-                            text: TextSpan(
-                                text: 'اسم الموقع',
-                                style: const TextStyle(
-                                    fontSize: 18,
-                                    color: Color.fromARGB(144, 7, 32, 87)),
-                                children: [
-                                  TextSpan(
-                                      text: ' *',
-                                      style: TextStyle(
-                                        color: Colors.red,
-                                      ))
-                                ]),
-                          ),
-                          labelStyle: TextStyle(
-                              fontSize: 18,
-                              color: Color.fromARGB(144, 7, 32, 87)),
-                          border: OutlineInputBorder(
-                            borderSide: BorderSide(
-                              color: Color.fromARGB(144, 64, 7, 87),
-                              width: 2.0,
-                            ),
-                          ),
-                          focusedBorder: OutlineInputBorder(
-                            borderSide: BorderSide(
-                              color: Color.fromARGB(144, 7, 32, 87),
-                              width: 2.0,
-                            ),
-                          ),
-                        ),
-                        controller: _placeNameEditingController,
-                        validator: (value) {
-                          if (value == null ||
-                              value.isEmpty ||
-                              value.trim() == '')
-                            return 'required';
-                          else if (!RegExp(r'^[a-z A-Z . , -]+$')
-                                  .hasMatch(value!) &&
-                              !RegExp(r'^[, . - أ-ي]+$').hasMatch(value!))
-                            return "Only English or Arabic letters";
-                        }),
-                    DropdownButtonFormField(
-                      autovalidateMode: AutovalidateMode.onUserInteraction,
-                      hint: RichText(
-                        text: TextSpan(
-                            text: 'تصنيف الموقع ',
-                            style: const TextStyle(
-                                fontSize: 18,
-                                color: Color.fromARGB(144, 7, 32, 87)),
-                            children: [
-                              TextSpan(
-                                  text: ' *',
-                                  style: TextStyle(
-                                    color: Colors.red,
-                                  ))
-                            ]),
-                      ),
-                      items: options
-                          .map((e) => DropdownMenuItem(
-                                value: e,
-                                child: Text(e),
-                              ))
-                          .toList(),
-                      onChanged: (value) {
-                        setState(() {
-                          selectedCat = value as String?;
-                        });
-                      },
-                      icon: Icon(
-                        Icons.arrow_drop_down_circle,
-                        color: Color.fromARGB(221, 137, 171, 187),
-                      ),
-                      decoration: InputDecoration(
-                        border: OutlineInputBorder(
-                          borderSide: BorderSide(width: 2.0),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
-                            color: Color.fromARGB(144, 7, 32, 87),
-                            width: 2.0,
-                          ),
-                        ),
-                      ),
-                      validator: (value) {
-                        if (value == null || value == "") {
-                          return 'required';
-                        }
-                      },
-                    ),
-                  ],
-                ),
-              ),
             ),
             actions: [
               ElevatedButton(
+                  style: TextButton.styleFrom(
+                    backgroundColor: Color.fromARGB(255, 45, 66, 142),
+                  ),
                   child: Text("اضافة"),
                   onPressed: () {
                     FocusScope.of(context).unfocus();
-                    ;
-                    FirebaseFirestore.instance
-                        .collection('places')
-                        .doc(selectedCat! +
-                            '-' +
-                            _placeNameEditingController.text)
-                        .set({
-                      "building": mapName,
-                      "category": selectedCat,
-                      'name': _placeNameEditingController.text,
-                      'x': x,
-                      "y": y
-                    });
-                    _placeNameEditingController.clear();
+                    Navigator.pop(context);
+                  })
+            ],
+          );
+        });
+  }
+
+  void _updateLocation2(PointerEvent details) {
+    setState(() {
+      xEnd = details.position.dx;
+      yEnd = details.position.dy;
+    });
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            scrollable: true,
+            title: Text(
+              'اضافة نقطة نهاية',
+              style: TextStyle(color: Color.fromARGB(115, 40, 71, 185)),
+            ),
+            actions: [
+              ElevatedButton(
+                  style: TextButton.styleFrom(
+                    backgroundColor: Color.fromARGB(255, 45, 66, 142),
+                  ),
+                  child: Text("اضافة"),
+                  onPressed: () {
+                    FocusScope.of(context).unfocus();
                     Navigator.pop(context);
                   })
             ],

@@ -24,6 +24,7 @@ Uint8List webImage = Uint8List(8);
 class _HomeState extends State<addMaps> {
   final TextEditingController buildingName = TextEditingController();
   late String building;
+  final TextEditingController buildingArea = TextEditingController();
 
   final Future<FirebaseApp> _initialization = Firebase.initializeApp();
   String imgUrl = "";
@@ -52,6 +53,7 @@ class _HomeState extends State<addMaps> {
             FileText = fileURL;
             FirebaseFirestore.instance.collection("maps").doc(building).set({
               "building": building,
+              "area": buildingArea.text,
               "floor plan": FileText,
             });
           });
@@ -178,6 +180,31 @@ class _HomeState extends State<addMaps> {
                               ),
                             ),
                           ),
+                          Center(
+                            child: Container(
+                              width: size.width * 0.25,
+                              child: TextFormField(
+                                autovalidateMode:
+                                    AutovalidateMode.onUserInteraction,
+                                onChanged: (value) {
+                                  buildingArea.text = value;
+                                },
+                                controller: buildingName,
+                                decoration: const InputDecoration(
+                                    labelText: "مساحة المبنى بالمتر المربع",
+                                    hintText: "400",
+                                    hintStyle: TextStyle(
+                                        color:
+                                            Color.fromARGB(255, 202, 198, 198)),
+                                    floatingLabelBehavior:
+                                        FloatingLabelBehavior.always,
+                                    labelStyle: TextStyle(
+                                      fontSize: 25,
+                                      color: Color.fromARGB(255, 45, 66, 142),
+                                    )),
+                              ),
+                            ),
+                          ),
                           SizedBox(
                             height: 40,
                           ),
@@ -214,6 +241,7 @@ class _HomeState extends State<addMaps> {
 
                                 // print(imageUri.toString());
                                 buildingName.clear();
+                                buildingArea.clear();
                                 Navigator.push(
                                     context,
                                     MaterialPageRoute(
