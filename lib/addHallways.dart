@@ -15,6 +15,7 @@ import 'package:uuid/uuid.dart';
 import 'package:firebase/firebase.dart' as fb;
 
 import 'addMapsScreen.dart';
+import 'addPlacesBackground.dart';
 import 'maps.dart';
 
 class addHallways extends StatefulWidget {
@@ -67,209 +68,213 @@ class _addHallwaysState extends State<addHallways> {
 
     return Scaffold(
         backgroundColor: Colors.white,
-        body: Row(children: [
-          //Let's start by adding the Navigation Rail
-          NavigationRail(
-              extended: isExpanded,
-              backgroundColor: Color.fromARGB(193, 49, 82, 192),
-              unselectedIconTheme:
-                  IconThemeData(color: Colors.white, opacity: 1),
-              unselectedLabelTextStyle: TextStyle(
-                color: Color.fromARGB(255, 255, 255, 255),
-              ),
-              onDestinationSelected: (index) {
-                if (index == 0)
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => DashboardScreen()));
-                if (index == 1)
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => addMaps()));
-                if (index == 2)
-                  CoolAlert.show(
-                    context: context,
-                    title: "تسجيل الخروج",
-                    width: size.width * 0.2,
-                    confirmBtnColor: Color.fromARGB(181, 172, 22, 12),
-                    showCancelBtn: false,
-                    //cancelBtnColor: Color.fromARGB(144, 64, 6, 87),
-                    type: CoolAlertType.confirm,
-                    backgroundColor: Color.fromARGB(255, 45, 66, 142),
-                    text: "هل تريد تسجيل الخروج",
-                    confirmBtnText: 'تسجيل الخروج',
-                    cancelBtnText: "إلغاء",
-                    onCancelBtnTap: () {
-                      Navigator.pop(context);
-                    },
-                    onConfirmBtnTap: () async {
-                      await FirebaseAuth.instance.signOut();
-                      Navigator.push(context,
-                          MaterialPageRoute(builder: (context) => UserLogin()));
-                    },
-                  );
-              },
-              selectedIconTheme:
-                  IconThemeData(color: Color.fromARGB(255, 25, 54, 152)),
-              destinations: [
-                NavigationRailDestination(
-                  icon: Icon(Icons.map_outlined),
-                  label: Text("الخرائط"),
+        body: addPlacesBackground(
+          child: Row(children: [
+            //Let's start by adding the Navigation Rail
+            NavigationRail(
+                extended: isExpanded,
+                backgroundColor: Color.fromARGB(193, 49, 82, 192),
+                unselectedIconTheme:
+                    IconThemeData(color: Colors.white, opacity: 1),
+                unselectedLabelTextStyle: TextStyle(
+                  color: Color.fromARGB(255, 255, 255, 255),
                 ),
-                NavigationRailDestination(
-                  icon: Icon(Icons.add_location_alt_outlined),
-                  label: Text("اضافة خريطة جديدة"),
-                ),
-                NavigationRailDestination(
-                  icon: Icon(Icons.logout),
-                  label: Text("تسجيل الخروج"),
-                ),
-              ],
-              selectedIndex: 1),
-          Expanded(
-            child: Column(
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    IconButton(
-                      onPressed: () {
-                        //let's trigger the navigation expansion
-                        setState(() {
-                          isExpanded = !isExpanded;
-                        });
+                onDestinationSelected: (index) {
+                  if (index == 0)
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => DashboardScreen()));
+                  if (index == 1)
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => addMaps()));
+                  if (index == 2)
+                    CoolAlert.show(
+                      context: context,
+                      title: "تسجيل الخروج",
+                      width: size.width * 0.2,
+                      confirmBtnColor: Color.fromARGB(181, 172, 22, 12),
+                      showCancelBtn: false,
+                      //cancelBtnColor: Color.fromARGB(144, 64, 6, 87),
+                      type: CoolAlertType.confirm,
+                      backgroundColor: Color.fromARGB(255, 45, 66, 142),
+                      text: "هل تريد تسجيل الخروج",
+                      confirmBtnText: 'تسجيل الخروج',
+                      cancelBtnText: "إلغاء",
+                      onCancelBtnTap: () {
+                        Navigator.pop(context);
                       },
-                      icon: Icon(Icons.menu),
-                    ),
-                    Text(
-                      " تحديد الممرات على خريطة مبنى" + ": " + "$mapName",
-                      style: TextStyle(
-                          fontSize: 30,
-                          //  fontWeight: FontWeight.bold,
-                          color: Color.fromARGB(255, 23, 39, 112)),
-                    ),
-                    Image.asset(
-                      'assets/images/logo.png',
-                      scale: 7,
-                    ),
-                  ],
-                ),
-                SizedBox(
-                  height: 20.0,
-                ),
-                Row(
-                  children: [
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          "تعليمات اضافة ممرات على خريطة",
-                          style: TextStyle(
-                              fontSize: 20,
-                              fontWeight: FontWeight.bold,
-                              color: Color.fromARGB(255, 28, 51, 151)),
-                        ),
-                        Text(
-                          " ١-لتحديد ممر من الخريطة الرجاء اختيار نقطة بداية الممر المحدد اختياره من صورة الخريطة   ",
-                          style: TextStyle(
-                              // fontSize: 20,
-                              fontWeight: FontWeight.bold,
-                              color: Color.fromARGB(255, 0, 0, 0)),
-                          textAlign: TextAlign.right,
-                        ),
-                        Text(
-                          "٢-عند تحديد نقطة البداية ستظهر لك نافذه يتم فيها تأكيد النقطة",
-                          style: TextStyle(
-                              //fontSize: 20,
-                              fontWeight: FontWeight.bold,
-                              color: Color.fromARGB(255, 0, 0, 0)),
-                          textAlign: TextAlign.right,
-                        ),
-                        Text(
-                          "٣-الرجاء ادخال نقطة النهايه بنفس الطريقة  والنقر على اضافة .                            ",
-                          style: TextStyle(
-                              //   fontSize: 20,
-                              fontWeight: FontWeight.bold,
-                              color: Color.fromARGB(255, 0, 0, 0)),
-                          textAlign: TextAlign.right,
-                        )
-                      ],
-                    ),
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Listener(
-                          // cursor: SystemMouseCursors.click,
-                          onPointerMove: isSelected == false
-                              ? _updateLocation
-                              : _updateLocation2,
-                          child: Container(
-                            width: 400,
-                            height: 530,
-                            decoration: BoxDecoration(
-                              image: DecorationImage(
-                                image: NetworkImage("$photo"),
-                                fit: BoxFit.cover,
+                      onConfirmBtnTap: () async {
+                        await FirebaseAuth.instance.signOut();
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => UserLogin()));
+                      },
+                    );
+                },
+                selectedIconTheme:
+                    IconThemeData(color: Color.fromARGB(255, 25, 54, 152)),
+                destinations: [
+                  NavigationRailDestination(
+                    icon: Icon(Icons.map_outlined),
+                    label: Text("الخرائط"),
+                  ),
+                  NavigationRailDestination(
+                    icon: Icon(Icons.add_location_alt_outlined),
+                    label: Text("اضافة خريطة جديدة"),
+                  ),
+                  NavigationRailDestination(
+                    icon: Icon(Icons.logout),
+                    label: Text("تسجيل الخروج"),
+                  ),
+                ],
+                selectedIndex: 1),
+            Expanded(
+              child: Column(
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      IconButton(
+                        onPressed: () {
+                          //let's trigger the navigation expansion
+                          setState(() {
+                            isExpanded = !isExpanded;
+                          });
+                        },
+                        icon: Icon(Icons.menu),
+                      ),
+                      Text(
+                        " تحديد الممرات على خريطة مبنى" + ": " + "$mapName",
+                        style: TextStyle(
+                            fontSize: 30,
+                            //  fontWeight: FontWeight.bold,
+                            color: Color.fromARGB(255, 23, 39, 112)),
+                      ),
+                      Image.asset(
+                        'assets/images/logo.png',
+                        scale: 7,
+                      ),
+                    ],
+                  ),
+                  SizedBox(
+                    height: 20.0,
+                  ),
+                  Row(
+                    children: [
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            "تعليمات اضافة ممرات على خريطة",
+                            style: TextStyle(
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold,
+                                color: Color.fromARGB(255, 28, 51, 151)),
+                          ),
+                          Text(
+                            " ١-لتحديد ممر من الخريطة الرجاء اختيار نقطة بداية الممر المحدد اختياره من صورة الخريطة   ",
+                            style: TextStyle(
+                                // fontSize: 20,
+                                fontWeight: FontWeight.bold,
+                                color: Color.fromARGB(255, 0, 0, 0)),
+                            textAlign: TextAlign.right,
+                          ),
+                          Text(
+                            "٢-عند تحديد نقطة البداية ستظهر لك نافذه يتم فيها تأكيد النقطة",
+                            style: TextStyle(
+                                //fontSize: 20,
+                                fontWeight: FontWeight.bold,
+                                color: Color.fromARGB(255, 0, 0, 0)),
+                            textAlign: TextAlign.right,
+                          ),
+                          Text(
+                            "٣-الرجاء ادخال نقطة النهايه بنفس الطريقة  والنقر على اضافة .                            ",
+                            style: TextStyle(
+                                //   fontSize: 20,
+                                fontWeight: FontWeight.bold,
+                                color: Color.fromARGB(255, 0, 0, 0)),
+                            textAlign: TextAlign.right,
+                          )
+                        ],
+                      ),
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Listener(
+                            // cursor: SystemMouseCursors.click,
+                            onPointerMove: isSelected == false
+                                ? _updateLocation
+                                : _updateLocation2,
+                            child: Container(
+                              width: 400,
+                              height: 530,
+                              decoration: BoxDecoration(
+                                image: DecorationImage(
+                                  image: NetworkImage("$photo"),
+                                  fit: BoxFit.cover,
+                                ),
                               ),
                             ),
                           ),
-                        ),
-                        SizedBox(height: 30),
-                        Container(
-                          height: 30,
-                          width: 150,
-                          child: TextButton(
-                              style: TextButton.styleFrom(
-                                backgroundColor:
-                                    Color.fromARGB(255, 45, 66, 142),
-                              ),
-                              onPressed: () async {
-                                FirebaseFirestore.instance
-                                    .collection('hallways')
-                                    .add({
-                                  "building": mapName,
-                                  'xStart': xStart.round(),
-                                  "yStart": yStart.round(),
-                                  'xEnd': xEnd.round(),
-                                  "yEnd": yEnd.round(),
-                                });
-                                CoolAlert.show(
-                                  context: context,
-                                  width: size.width * 0.2,
-                                  confirmBtnColor:
-                                      Color.fromARGB(255, 45, 66, 142),
-                                  //cancelBtnColor: Color.fromARGB(144, 64, 6, 87),
-                                  type: CoolAlertType.success,
+                          SizedBox(height: 30),
+                          Container(
+                            height: 30,
+                            width: 150,
+                            child: TextButton(
+                                style: TextButton.styleFrom(
                                   backgroundColor:
                                       Color.fromARGB(255, 45, 66, 142),
-                                  text: "تم حفظ الممر بنجاح",
-                                  confirmBtnText: 'اغلاق',
-                                  onConfirmBtnTap: () {
-                                    _placeNameEditingController.clear();
-
-                                    Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) =>
-                                                DashboardScreen()));
-                                  },
-                                );
-                              },
-                              child: Text(
-                                "حفظ",
-                                style: TextStyle(
-                                  color: Color.fromARGB(255, 255, 255, 255),
                                 ),
-                              )),
-                        )
-                      ],
-                    ),
-                  ],
-                ),
-              ],
+                                onPressed: () async {
+                                  FirebaseFirestore.instance
+                                      .collection('hallways')
+                                      .add({
+                                    "building": mapName,
+                                    'xStart': xStart.round(),
+                                    "yStart": yStart.round(),
+                                    'xEnd': xEnd.round(),
+                                    "yEnd": yEnd.round(),
+                                  });
+                                  CoolAlert.show(
+                                    context: context,
+                                    width: size.width * 0.2,
+                                    confirmBtnColor:
+                                        Color.fromARGB(255, 45, 66, 142),
+                                    //cancelBtnColor: Color.fromARGB(144, 64, 6, 87),
+                                    type: CoolAlertType.success,
+                                    backgroundColor:
+                                        Color.fromARGB(255, 45, 66, 142),
+                                    text: "تم حفظ الممر بنجاح",
+                                    confirmBtnText: 'اغلاق',
+                                    onConfirmBtnTap: () {
+                                      _placeNameEditingController.clear();
+
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  DashboardScreen()));
+                                    },
+                                  );
+                                },
+                                child: Text(
+                                  "حفظ",
+                                  style: TextStyle(
+                                    color: Color.fromARGB(255, 255, 255, 255),
+                                  ),
+                                )),
+                          )
+                        ],
+                      ),
+                    ],
+                  ),
+                ],
+              ),
             ),
-          ),
-        ]));
+          ]),
+        ));
   }
 
   void _updateLocation(PointerEvent details) {
