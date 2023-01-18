@@ -23,9 +23,11 @@ Uint8List webImage = Uint8List(8);
 
 class _HomeState extends State<addMaps> {
   final TextEditingController buildingName = TextEditingController();
-  late String building;
-  final TextEditingController buildingArea = TextEditingController();
+  late String building = "";
+  late String area = "";
 
+  final TextEditingController buildingArea = TextEditingController();
+  bool isExpanded = false;
   final Future<FirebaseApp> _initialization = Firebase.initializeApp();
   String imgUrl = "";
   String FileText = 'test';
@@ -53,7 +55,7 @@ class _HomeState extends State<addMaps> {
             FileText = fileURL;
             FirebaseFirestore.instance.collection("maps").doc(building).set({
               "building": building,
-              "area": buildingArea.text,
+              "area": area,
               "floor plan": FileText,
             });
           });
@@ -80,201 +82,254 @@ class _HomeState extends State<addMaps> {
         }
         if (snapshot.connectionState == ConnectionState.done) {
           return Scaffold(
+              backgroundColor: Colors.white,
               body: BackgroundAddMapp(
-            child: Row(
-              children: [
-                NavigationRail(
-                    extended: true,
-                    backgroundColor: Color.fromARGB(193, 49, 82, 192),
-                    unselectedIconTheme:
-                        IconThemeData(color: Colors.white, opacity: 1),
-                    unselectedLabelTextStyle: TextStyle(
-                      color: Color.fromARGB(255, 255, 255, 255),
-                    ),
-                    onDestinationSelected: (index) {
-                      if (index == 0)
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => DashboardScreen()));
-                      if (index == 1)
-                        Navigator.push(context,
-                            MaterialPageRoute(builder: (context) => addMaps()));
-                      if (index == 2)
-                        CoolAlert.show(
-                          context: context,
-                          title: "تسجيل الخروج",
-                          width: size.width * 0.2,
-                          confirmBtnColor: Color.fromARGB(181, 172, 22, 12),
-                          showCancelBtn: false,
-                          //cancelBtnColor: Color.fromARGB(144, 64, 6, 87),
-                          type: CoolAlertType.confirm,
-                          backgroundColor: Color.fromARGB(255, 45, 66, 142),
-                          text: "هل تريد تسجيل الخروج",
-                          confirmBtnText: 'تسجيل الخروج',
-                          cancelBtnText: "إلغاء",
-                          onCancelBtnTap: () {
-                            Navigator.pop(context);
-                          },
-                          onConfirmBtnTap: () async {
-                            await FirebaseAuth.instance.signOut();
+                child: Row(
+                  children: [
+                    NavigationRail(
+                        extended: isExpanded,
+                        backgroundColor: Color.fromARGB(193, 49, 82, 192),
+                        unselectedIconTheme:
+                            IconThemeData(color: Colors.white, opacity: 1),
+                        unselectedLabelTextStyle: TextStyle(
+                          color: Color.fromARGB(255, 255, 255, 255),
+                        ),
+                        onDestinationSelected: (index) {
+                          if (index == 0)
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) => UserLogin()));
-                          },
-                        );
-                    },
-                    selectedIconTheme:
-                        IconThemeData(color: Color.fromARGB(255, 25, 54, 152)),
-                    destinations: [
-                      NavigationRailDestination(
-                        icon: Icon(Icons.map_outlined),
-                        label: Text("الخرائط"),
-                      ),
-                      NavigationRailDestination(
-                        icon: Icon(Icons.add_location_alt_outlined),
-                        label: Text("اضافة خريطة جديدة"),
-                      ),
-                      NavigationRailDestination(
-                        icon: Icon(Icons.logout),
-                        label: Text("تسجيل الخروج"),
-                      ),
-                    ],
-                    selectedIndex: 1),
-                Row(
-                  children: [
-                    Container(
-                      height: 100,
-                      width: 80,
-                    ),
-                    Container(
-                      child: Column(
-                        children: [
-                          Container(
-                            height: 200,
-                            width: 80,
-                          ),
-                          Text(
-                            "اضافة خريطة جديدة",
-                            textAlign: TextAlign.right,
-                            style: TextStyle(
-                                fontSize: 25,
-                                color: Color.fromARGB(255, 0, 0, 0)),
-                          ),
-                          SizedBox(
-                            height: 50,
-                          ),
-                          Center(
-                            child: Container(
-                              width: size.width * 0.25,
-                              child: TextFormField(
-                                autovalidateMode:
-                                    AutovalidateMode.onUserInteraction,
-                                onChanged: (value) {
-                                  building = value;
-                                },
-                                controller: buildingName,
-                                decoration: const InputDecoration(
-                                    labelText: "اسم الخريطة",
-                                    hintText: "كلية الحقوق",
-                                    hintStyle: TextStyle(
-                                        color:
-                                            Color.fromARGB(255, 202, 198, 198)),
-                                    floatingLabelBehavior:
-                                        FloatingLabelBehavior.always,
-                                    labelStyle: TextStyle(
-                                      fontSize: 25,
-                                      color: Color.fromARGB(255, 45, 66, 142),
-                                    )),
-                              ),
-                            ),
-                          ),
-                          SizedBox(
-                            height: 20,
-                          ),
-                          Center(
-                            child: Container(
-                              width: size.width * 0.25,
-                              child: TextFormField(
-                                autovalidateMode:
-                                    AutovalidateMode.onUserInteraction,
-                                onChanged: (value) {
-                                  buildingArea.text = value;
-                                },
-                                controller: buildingArea,
-                                decoration: const InputDecoration(
-                                    labelText: "مساحة المبنى بالمتر المربع",
-                                    hintText: "400",
-                                    hintStyle: TextStyle(
-                                        color:
-                                            Color.fromARGB(255, 202, 198, 198)),
-                                    floatingLabelBehavior:
-                                        FloatingLabelBehavior.always,
-                                    labelStyle: TextStyle(
-                                      fontSize: 25,
-                                      color: Color.fromARGB(255, 45, 66, 142),
-                                    )),
-                              ),
-                            ),
-                          ),
-                          SizedBox(
-                            height: 40,
-                          ),
-                          Row(
-                            children: [
-                              Icon(
-                                Icons.image,
-                                color: Color.fromARGB(255, 83, 83, 83),
-                              ),
-                              TextButton(
-                                style: TextButton.styleFrom(
-                                  backgroundColor:
-                                      Color.fromARGB(255, 255, 255, 255),
-                                ),
-                                onPressed: () => uploadFileToFirebase(),
-                                child: Text(
-                                  "اضغط هنا لرفع صورة خريطة المبنى                       ",
-                                  style: TextStyle(
-                                      color: Color.fromARGB(255, 45, 66, 142),
-                                      fontSize: 20),
-                                ),
-                              ),
-                            ],
-                          ),
-                          SizedBox(height: 40),
-                          TextButton(
-                              style: TextButton.styleFrom(
-                                backgroundColor:
-                                    Color.fromARGB(255, 45, 66, 142),
-                              ),
-                              onPressed: () async {
-                                //uploadFile;
-                                FocusScope.of(context).unfocus();
-
-                                // print(imageUri.toString());
-                                buildingName.clear();
-                                buildingArea.clear();
+                                    builder: (context) => DashboardScreen()));
+                          if (index == 1)
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => addMaps()));
+                          if (index == 2)
+                            CoolAlert.show(
+                              context: context,
+                              title: "تسجيل الخروج",
+                              width: size.width * 0.2,
+                              confirmBtnColor: Color.fromARGB(181, 172, 22, 12),
+                              showCancelBtn: false,
+                              //cancelBtnColor: Color.fromARGB(144, 64, 6, 87),
+                              type: CoolAlertType.confirm,
+                              backgroundColor: Color.fromARGB(255, 45, 66, 142),
+                              text: "هل تريد تسجيل الخروج",
+                              confirmBtnText: 'تسجيل الخروج',
+                              cancelBtnText: "إلغاء",
+                              onCancelBtnTap: () {
+                                Navigator.pop(context);
+                              },
+                              onConfirmBtnTap: () async {
+                                await FirebaseAuth.instance.signOut();
                                 Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                        builder: (context) =>
-                                            addPlaces(mapName: building)));
+                                        builder: (context) => UserLogin()));
                               },
-                              child: Text(
-                                "التالي",
+                            );
+                        },
+                        selectedIconTheme: IconThemeData(
+                            color: Color.fromARGB(255, 25, 54, 152)),
+                        destinations: [
+                          NavigationRailDestination(
+                            icon: Icon(Icons.map_outlined),
+                            label: Text("الخرائط"),
+                          ),
+                          NavigationRailDestination(
+                            icon: Icon(Icons.add_location_alt_outlined),
+                            label: Text("اضافة خريطة جديدة"),
+                          ),
+                          NavigationRailDestination(
+                            icon: Icon(Icons.logout),
+                            label: Text("تسجيل الخروج"),
+                          ),
+                        ],
+                        selectedIndex: 1),
+                    Expanded(
+                      child: Column(
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              IconButton(
+                                onPressed: () {
+                                  //let's trigger the navigation expansion
+                                  setState(() {
+                                    isExpanded = !isExpanded;
+                                  });
+                                },
+                                icon: Icon(Icons.menu),
+                              ),
+                              Text(
+                                "اضافة خريطة جديدة",
                                 style: TextStyle(
-                                    color: Color.fromARGB(255, 255, 255, 255),
-                                    fontSize: 20),
-                              ))
+                                    fontSize: 30,
+                                    //  fontWeight: FontWeight.bold,
+                                    color: Color.fromARGB(255, 23, 39, 112)),
+                              ),
+                              Image.asset(
+                                'assets/images/logo.png',
+                                scale: 7,
+                              ),
+                            ],
+                          ),
+                          Container(
+                            margin: EdgeInsets.only(left: size.width * 0.65),
+                            child: Column(
+                              children: [
+                                Container(
+                                  height: 200,
+                                  width: 80,
+                                ),
+                                SizedBox(
+                                  height: 50,
+                                ),
+                                Center(
+                                  child: Container(
+                                    width: size.width * 0.25,
+                                    child: TextFormField(
+                                      autovalidateMode:
+                                          AutovalidateMode.onUserInteraction,
+                                      onChanged: (value) {
+                                        building = value;
+                                      },
+                                      controller: buildingName,
+                                      decoration: const InputDecoration(
+                                          labelText: "اسم الخريطة",
+                                          hintText: "كلية الحقوق",
+                                          hintStyle: TextStyle(
+                                              color: Color.fromARGB(
+                                                  255, 202, 198, 198)),
+                                          floatingLabelBehavior:
+                                              FloatingLabelBehavior.always,
+                                          labelStyle: TextStyle(
+                                            fontSize: 25,
+                                            color: Color.fromARGB(
+                                                255, 45, 66, 142),
+                                          )),
+                                    ),
+                                  ),
+                                ),
+                                SizedBox(
+                                  height: 20,
+                                ),
+                                Center(
+                                  child: Container(
+                                    width: size.width * 0.25,
+                                    child: TextFormField(
+                                      autovalidateMode:
+                                          AutovalidateMode.onUserInteraction,
+                                      onChanged: (value) {
+                                        area = value;
+                                      },
+                                      controller: buildingArea,
+                                      decoration: const InputDecoration(
+                                          labelText:
+                                              "مساحة المبنى بالمتر المربع",
+                                          hintText: "400",
+                                          hintStyle: TextStyle(
+                                              color: Color.fromARGB(
+                                                  255, 202, 198, 198)),
+                                          floatingLabelBehavior:
+                                              FloatingLabelBehavior.always,
+                                          labelStyle: TextStyle(
+                                            fontSize: 25,
+                                            color: Color.fromARGB(
+                                                255, 45, 66, 142),
+                                          )),
+                                    ),
+                                  ),
+                                ),
+                                SizedBox(
+                                  height: 40,
+                                ),
+                                Container(
+                                  child: Row(
+                                    children: [
+                                      SizedBox(
+                                        width: 20,
+                                      ),
+                                      Icon(
+                                        Icons.image,
+                                        color: Color.fromARGB(255, 83, 83, 83),
+                                      ),
+                                      TextButton(
+                                        style: TextButton.styleFrom(
+                                          backgroundColor: Color.fromARGB(
+                                              255, 255, 255, 255),
+                                        ),
+                                        onPressed: () => uploadFileToFirebase(),
+                                        child: Text(
+                                          "اضغط هنا لرفع صورة خريطة المبنى                       ",
+                                          style: TextStyle(
+                                              color: Color.fromARGB(
+                                                  255, 45, 66, 142),
+                                              fontSize: 20),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                SizedBox(height: 40),
+                                Container(
+                                  height: 30,
+                                  width: 150,
+                                  child: TextButton(
+                                      style: TextButton.styleFrom(
+                                        backgroundColor:
+                                            Color.fromARGB(255, 45, 66, 142),
+                                      ),
+                                      onPressed: () async {
+                                        //uploadFile;
+                                        FocusScope.of(context).unfocus();
+                                        if (building == "")
+                                          CoolAlert.show(
+                                            context: context,
+                                            width: size.width * 0.2,
+                                            confirmBtnColor: Color.fromARGB(
+                                                255, 45, 66, 142),
+                                            //cancelBtnColor: Color.fromARGB(144, 64, 6, 87),
+                                            type: CoolAlertType.warning,
+                                            backgroundColor: Color.fromARGB(
+                                                255, 45, 66, 142),
+                                            text:
+                                                "الرجاء ادخال كامل معلومات الخريطة",
+                                            confirmBtnText: 'اغلاق',
+                                            onConfirmBtnTap: () {
+                                              Navigator.pop(context);
+                                            },
+                                          );
+                                        else {
+                                          // print(imageUri.toString());
+                                          buildingName.clear();
+                                          buildingArea.clear();
+                                          Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      addPlaces(
+                                                          mapName: building)));
+                                        }
+                                      },
+                                      child: Text(
+                                        "التالي",
+                                        style: TextStyle(
+                                            color: Color.fromARGB(
+                                                255, 255, 255, 255),
+                                            fontSize: 20),
+                                      )),
+                                )
+                              ],
+                            ),
+                          ),
                         ],
                       ),
-                    ),
+                    )
                   ],
                 ),
-              ],
-            ),
-          ));
+              ));
         }
         return Center(
           child: CircularProgressIndicator(),

@@ -19,20 +19,20 @@ import 'addMapsScreen.dart';
 import 'addPlacesBackground.dart';
 import 'maps.dart';
 
-class addHallways extends StatefulWidget {
+class addNewHallways extends StatefulWidget {
   String mapName;
   //const addPlaces({Key? key}) : super(key: key);
-  addHallways({required this.mapName});
+  addNewHallways({required this.mapName});
 
   @override
-  State<addHallways> createState() => _addHallwaysState(mapName);
+  State<addNewHallways> createState() => _addNewHallwaysState(mapName);
 }
 
 final _firestore = FirebaseFirestore.instance;
 
-class _addHallwaysState extends State<addHallways> {
+class _addNewHallwaysState extends State<addNewHallways> {
   String mapName;
-  _addHallwaysState(this.mapName);
+  _addNewHallwaysState(this.mapName);
   bool isExpanded = false;
   List<String> options = [];
   final TextEditingController _placeNameEditingController =
@@ -220,83 +220,53 @@ class _addHallwaysState extends State<addHallways> {
                             ),
                           ),
                           SizedBox(height: 30),
-                          Row(
-                            children: [
-                              Container(
-                                height: 30,
-                                width: 150,
-                                child: TextButton(
-                                    style: TextButton.styleFrom(
-                                      backgroundColor:
-                                          Color.fromARGB(255, 186, 187, 189),
-                                    ),
-                                    onPressed: () async {
+                          Container(
+                            height: 30,
+                            width: 150,
+                            child: TextButton(
+                                style: TextButton.styleFrom(
+                                  backgroundColor:
+                                      Color.fromARGB(255, 45, 66, 142),
+                                ),
+                                onPressed: () async {
+                                  FirebaseFirestore.instance
+                                      .collection('hallways')
+                                      .add({
+                                    "building": mapName,
+                                    'xStart': xStart.round(),
+                                    "yStart": yStart.round(),
+                                    'xEnd': xEnd.round(),
+                                    "yEnd": yEnd.round(),
+                                  });
+                                  CoolAlert.show(
+                                    context: context,
+                                    width: size.width * 0.2,
+                                    confirmBtnColor:
+                                        Color.fromARGB(255, 45, 66, 142),
+                                    //cancelBtnColor: Color.fromARGB(144, 64, 6, 87),
+                                    type: CoolAlertType.success,
+                                    backgroundColor:
+                                        Color.fromARGB(255, 45, 66, 142),
+                                    text: "تم حفظ الممر بنجاح",
+                                    confirmBtnText: 'اغلاق',
+                                    onConfirmBtnTap: () {
+                                      _placeNameEditingController.clear();
+
                                       Navigator.push(
                                           context,
                                           MaterialPageRoute(
-                                              builder: (context) => addPlaces(
-                                                    mapName: mapName,
-                                                  )));
+                                              builder: (context) =>
+                                                  DashboardScreen()));
                                     },
-                                    child: Text(
-                                      "السابق",
-                                      style: TextStyle(
-                                        color: Color.fromARGB(255, 0, 0, 0),
-                                      ),
-                                    )),
-                              ),
-                              SizedBox(width: 30),
-                              Container(
-                                height: 30,
-                                width: 150,
-                                child: TextButton(
-                                    style: TextButton.styleFrom(
-                                      backgroundColor:
-                                          Color.fromARGB(255, 45, 66, 142),
-                                    ),
-                                    onPressed: () async {
-                                      if (isSelected == true)
-                                        FirebaseFirestore.instance
-                                            .collection('hallways')
-                                            .add({
-                                          "building": mapName,
-                                          'xStart': xStart.round(),
-                                          "yStart": yStart.round(),
-                                          'xEnd': xEnd.round(),
-                                          "yEnd": yEnd.round(),
-                                        });
-                                      CoolAlert.show(
-                                        context: context,
-                                        width: size.width * 0.2,
-                                        confirmBtnColor:
-                                            Color.fromARGB(255, 45, 66, 142),
-                                        //cancelBtnColor: Color.fromARGB(144, 64, 6, 87),
-                                        type: CoolAlertType.success,
-                                        backgroundColor:
-                                            Color.fromARGB(255, 45, 66, 142),
-                                        text: "تم حفظ الممر بنجاح",
-                                        confirmBtnText: 'اغلاق',
-                                        onConfirmBtnTap: () {
-                                          _placeNameEditingController.clear();
-
-                                          Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      DashboardScreen()));
-                                        },
-                                      );
-                                    },
-                                    child: Text(
-                                      "حفظ",
-                                      style: TextStyle(
-                                        color:
-                                            Color.fromARGB(255, 255, 255, 255),
-                                      ),
-                                    )),
-                              ),
-                            ],
-                          )
+                                  );
+                                },
+                                child: Text(
+                                  "حفظ",
+                                  style: TextStyle(
+                                    color: Color.fromARGB(255, 255, 255, 255),
+                                  ),
+                                )),
+                          ),
                         ],
                       ),
                     ],

@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cool_alert/cool_alert.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:web/addHallways.dart';
+import 'package:web/addNewHallways.dart';
 import 'package:web/editPlace.dart';
 import 'package:web/maps.dart';
 
@@ -52,11 +52,12 @@ class placesScreenState extends State<places> {
       }
   }
 
+  bool isExpanded = false;
+
   TextEditingController? _searchEditingController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
-    bool isExpanded = false;
     Size size = MediaQuery.of(context).size;
 
     Future getSearch(String search) async {
@@ -160,231 +161,251 @@ class placesScreenState extends State<places> {
                 ],
                 selectedIndex: 0),
             Expanded(
-              child: Column(
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      IconButton(
-                        onPressed: () {
-                          //let's trigger the navigation expansion
-                          setState(() {
-                            isExpanded = !isExpanded;
-                          });
-                        },
-                        icon: Icon(Icons.menu),
-                      ),
-                      Text(
-                        " خريطة $mapName",
-                        style: TextStyle(
-                            fontSize: 30,
-                            //  fontWeight: FontWeight.bold,
-                            color: Color.fromARGB(255, 23, 39, 112)),
-                      ),
-                      Image.asset(
-                        'assets/images/logo.png',
-                        scale: 7,
-                      ),
-                    ],
-                  ),
-                  SizedBox(
-                    height: 20.0,
-                  ),
-                  SizedBox(
-                    height: 30.0,
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Column(
-                        children: [
-                          Text(
-                            "  الأماكن",
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 28.0,
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Column(
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        IconButton(
+                          onPressed: () {
+                            //let's trigger the navigation expansion
+                            setState(() {
+                              isExpanded = !isExpanded;
+                            });
+                          },
+                          icon: Icon(Icons.menu),
+                        ),
+                        Text(
+                          " خريطة $mapName",
+                          style: TextStyle(
+                              fontSize: 30,
+                              //  fontWeight: FontWeight.bold,
+                              color: Color.fromARGB(255, 23, 39, 112)),
+                        ),
+                        Image.asset(
+                          'assets/images/logo.png',
+                          scale: 7,
+                        ),
+                      ],
+                    ),
+                    SizedBox(
+                      height: 20.0,
+                    ),
+                    SizedBox(
+                      height: 30.0,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Column(
+                          children: [
+                            Text(
+                              "  الأماكن",
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 28.0,
+                              ),
                             ),
-                          ),
-                        ],
-                      ),
-                      Container(
-                        width: 300.0,
-                        child: TextField(
-                          controller: _searchEditingController,
-                          decoration: InputDecoration(
-                            hintText: "البحث بإسم الموقع",
-                            icon: IconButton(
-                              icon: Icon(Icons.cancel_presentation),
-                              onPressed: () {
-                                setState(() {
-                                  getPlaces();
-                                  _searchEditingController?.clear();
-                                });
-                              },
-                            ),
-                            prefixIcon: IconButton(
-                              icon: Icon(Icons.search),
-                              onPressed: () {
-                                setState(() {
-                                  getSearch(_searchEditingController!.text);
-                                });
-                              },
-                            ),
-                            border: OutlineInputBorder(
-                              borderSide: BorderSide(
-                                color: Color.fromARGB(66, 0, 0, 0),
+                          ],
+                        ),
+                        Container(
+                          width: 300.0,
+                          child: TextField(
+                            controller: _searchEditingController,
+                            decoration: InputDecoration(
+                              hintText: "البحث بإسم الموقع",
+                              icon: IconButton(
+                                icon: Icon(Icons.cancel_presentation),
+                                onPressed: () {
+                                  setState(() {
+                                    getPlaces();
+                                    _searchEditingController?.clear();
+                                  });
+                                },
+                              ),
+                              prefixIcon: IconButton(
+                                icon: Icon(Icons.search),
+                                onPressed: () {
+                                  setState(() {
+                                    getSearch(_searchEditingController!.text);
+                                  });
+                                },
+                              ),
+                              border: OutlineInputBorder(
+                                borderSide: BorderSide(
+                                  color: Color.fromARGB(66, 0, 0, 0),
+                                ),
                               ),
                             ),
                           ),
                         ),
-                      ),
-                    ],
-                  ),
-                  SizedBox(
-                    height: 40.0,
-                  ),
+                      ],
+                    ),
+                    SizedBox(
+                      height: 40.0,
+                    ),
 
-                  //let's set the filter section
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      TextButton.icon(
-                        onPressed: () {},
-                        icon: Icon(
-                          Icons.arrow_downward,
-                          color: Color.fromARGB(255, 45, 66, 142),
-                        ),
-                        label: Text(
-                          "هنا قائمة بجميع المواقع المضافة بالخريطة",
-                          style: TextStyle(
+                    //let's set the filter section
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        TextButton.icon(
+                          onPressed: () {},
+                          icon: Icon(
+                            Icons.arrow_downward,
                             color: Color.fromARGB(255, 45, 66, 142),
                           ),
+                          label: Text(
+                            "هنا قائمة بجميع المواقع المضافة بالخريطة",
+                            style: TextStyle(
+                              color: Color.fromARGB(255, 45, 66, 142),
+                            ),
+                          ),
                         ),
-                      ),
-                      TextButton(
-                          style: TextButton.styleFrom(
-                            backgroundColor: Color.fromARGB(255, 45, 66, 142),
-                          ),
-                          onPressed: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => addNewPlace(
-                                          mapName: mapName,
-                                        )));
-                          },
-                          child: Text(
-                            "اضافة موقع جديد",
-                            style: TextStyle(
-                              color: Color.fromARGB(255, 255, 255, 255),
+                        Row(
+                          children: [
+                            TextButton(
+                                style: TextButton.styleFrom(
+                                  backgroundColor:
+                                      Color.fromARGB(255, 45, 66, 142),
+                                ),
+                                onPressed: () {
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => addNewPlace(
+                                                mapName: mapName,
+                                              )));
+                                },
+                                child: Text(
+                                  "اضافة موقع جديد",
+                                  style: TextStyle(
+                                    color: Color.fromARGB(255, 255, 255, 255),
+                                  ),
+                                )),
+                            SizedBox(
+                              width: 8.0,
                             ),
-                          )),
-                      TextButton(
-                          style: TextButton.styleFrom(
-                            backgroundColor: Color.fromARGB(255, 45, 66, 142),
-                          ),
-                          onPressed: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => addHallways(
-                                          mapName: mapName,
-                                        )));
-                          },
-                          child: Text(
-                            "اضافة ممر جديدة",
-                            style: TextStyle(
-                              color: Color.fromARGB(255, 255, 255, 255),
-                            ),
-                          ))
-                    ],
-                  ),
-                  SizedBox(
-                    height: 40.0,
-                  ),
-                  //Now let's add the Table
+                            TextButton(
+                                style: TextButton.styleFrom(
+                                  backgroundColor:
+                                      Color.fromARGB(255, 45, 66, 142),
+                                ),
+                                onPressed: () {
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => addNewHallways(
+                                                mapName: mapName,
+                                              )));
+                                },
+                                child: Text(
+                                  "اضافة ممر جديد",
+                                  style: TextStyle(
+                                    color: Color.fromARGB(255, 255, 255, 255),
+                                  ),
+                                )),
+                          ],
+                        )
+                      ],
+                    ),
+                    SizedBox(
+                      height: 40.0,
+                    ),
+                    //Now let's add the Table
 
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [
-                        DataTable(
-                            headingRowColor: MaterialStateProperty.resolveWith(
-                                (states) => Color.fromARGB(255, 227, 227, 227)),
-                            columns: [
-                              DataColumn(label: Text("اسم الموقع")),
-                              DataColumn(label: Text("تصنيف الموقع")),
-                              DataColumn(label: Text("تعديل")),
-                              DataColumn(label: Text("حذف")),
-                            ],
-                            rows: [
-                              for (var i = 0; i < placeName.length; i++)
-                                DataRow(cells: [
-                                  DataCell(Text(placeName[i])),
-                                  DataCell(Text(category[i])),
-                                  DataCell(IconButton(
-                                      onPressed: () {
-                                        Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                                builder: (context) =>
-                                                    editPlaces(
-                                                      mapName: placeName[i],
-                                                      Map: mapName,
-                                                    )));
-                                      },
-                                      icon: Icon(
-                                        Icons.edit,
-                                        color: Color.fromARGB(255, 74, 93, 188),
-                                      ))),
-                                  DataCell(TextButton(
-                                      onPressed: () {
-                                        CoolAlert.show(
-                                          context: context,
-                                          title: " حذف الموقع",
-                                          width: size.width * 0.2,
-                                          confirmBtnColor:
-                                              Color.fromARGB(181, 172, 22, 12),
-                                          showCancelBtn: false,
-                                          //cancelBtnColor: Color.fromARGB(144, 64, 6, 87),
-                                          type: CoolAlertType.confirm,
-                                          backgroundColor:
-                                              Color.fromARGB(255, 45, 66, 142),
-                                          text: "هل تريد حذف الموقع",
-                                          confirmBtnText: 'حذف ',
-                                          cancelBtnText: "إلغاء",
-                                          onCancelBtnTap: () {
-                                            Navigator.pop(context);
-                                          },
-                                          onConfirmBtnTap: () async {
-                                            FirebaseFirestore.instance
-                                                .collection('places')
-                                                .doc(category[i] +
-                                                    "-" +
-                                                    placeName[i])
-                                                .delete();
-
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          Expanded(
+                              child: Scrollbar(
+                            thumbVisibility: true,
+                            child: DataTable(
+                                headingRowColor:
+                                    MaterialStateProperty.resolveWith(
+                                        (states) =>
+                                            Color.fromARGB(255, 227, 227, 227)),
+                                columns: [
+                                  DataColumn(label: Text("اسم الموقع")),
+                                  DataColumn(label: Text("تصنيف الموقع")),
+                                  DataColumn(label: Text("تعديل")),
+                                  DataColumn(label: Text("حذف")),
+                                ],
+                                rows: [
+                                  for (var i = 0; i < placeName.length; i++)
+                                    DataRow(cells: [
+                                      DataCell(Text(placeName[i])),
+                                      DataCell(Text(category[i])),
+                                      DataCell(IconButton(
+                                          onPressed: () {
                                             Navigator.push(
                                                 context,
                                                 MaterialPageRoute(
                                                     builder: (context) =>
-                                                        places(
-                                                          mapName: mapName,
+                                                        editPlaces(
+                                                          mapName: placeName[i],
+                                                          Map: mapName,
                                                         )));
                                           },
-                                        );
-                                      },
-                                      child: Icon(
-                                        Icons.delete,
-                                        color: Color.fromARGB(255, 74, 93, 188),
-                                      )))
+                                          icon: Icon(
+                                            Icons.edit,
+                                            color: Color.fromARGB(
+                                                255, 74, 93, 188),
+                                          ))),
+                                      DataCell(TextButton(
+                                          onPressed: () {
+                                            CoolAlert.show(
+                                              context: context,
+                                              title: " حذف الموقع",
+                                              width: size.width * 0.2,
+                                              confirmBtnColor: Color.fromARGB(
+                                                  181, 172, 22, 12),
+                                              showCancelBtn: false,
+                                              //cancelBtnColor: Color.fromARGB(144, 64, 6, 87),
+                                              type: CoolAlertType.confirm,
+                                              backgroundColor: Color.fromARGB(
+                                                  255, 45, 66, 142),
+                                              text: "هل تريد حذف الموقع",
+                                              confirmBtnText: 'حذف ',
+                                              cancelBtnText: "إلغاء",
+                                              onCancelBtnTap: () {
+                                                Navigator.pop(context);
+                                              },
+                                              onConfirmBtnTap: () async {
+                                                FirebaseFirestore.instance
+                                                    .collection('places')
+                                                    .doc(category[i] +
+                                                        "-" +
+                                                        placeName[i])
+                                                    .delete();
+
+                                                Navigator.push(
+                                                    context,
+                                                    MaterialPageRoute(
+                                                        builder: (context) =>
+                                                            places(
+                                                              mapName: mapName,
+                                                            )));
+                                              },
+                                            );
+                                          },
+                                          child: Icon(
+                                            Icons.delete,
+                                            color: Color.fromARGB(
+                                                255, 74, 93, 188),
+                                          )))
+                                    ]),
                                 ]),
-                            ]),
-                        //Now let's set the pagination
-                      ],
+                          )),
+                          //Now let's set the pagination
+                        ],
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             )
           ]),

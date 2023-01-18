@@ -37,9 +37,13 @@ class _addPlacesState extends State<addPlaces> {
   //setting the expansion function for the navigation rail
   bool isExpanded = false;
   List<String> options = [];
+  List<String> updated = [];
+
   final TextEditingController _placeNameEditingController =
       TextEditingController();
   final TextEditingController buildingName = TextEditingController();
+  final TextEditingController cat = TextEditingController();
+
   //late String category;
   late double x;
   late double y;
@@ -173,9 +177,6 @@ class _addPlacesState extends State<addPlaces> {
                       ),
                     ],
                   ),
-                  SizedBox(
-                    height: 20.0,
-                  ),
                   Row(
                     children: [
                       Column(
@@ -232,51 +233,80 @@ class _addPlacesState extends State<addPlaces> {
                             ),
                           ),
                           SizedBox(height: 30),
-                          Container(
-                            height: 30,
-                            width: 150,
-                            child: TextButton(
-                                style: TextButton.styleFrom(
-                                  backgroundColor:
-                                      Color.fromARGB(255, 45, 66, 142),
-                                ),
-                                onPressed: () async {
-                                  CoolAlert.show(
-                                    context: context,
-                                    width: size.width * 0.2,
-                                    confirmBtnColor:
-                                        Color.fromARGB(255, 45, 66, 142),
-                                    //cancelBtnColor: Color.fromARGB(144, 64, 6, 87),
-                                    type: CoolAlertType.success,
-                                    backgroundColor:
-                                        Color.fromARGB(255, 45, 66, 142),
-                                    text: "تم حفظ الاماكن بنجاح",
-                                    confirmBtnText: 'اغلاق',
-                                    onConfirmBtnTap: () {
-                                      _placeNameEditingController.clear();
-
+                          Row(
+                            children: [
+                              Container(
+                                height: 30,
+                                width: 150,
+                                child: TextButton(
+                                    style: TextButton.styleFrom(
+                                      backgroundColor:
+                                          Color.fromARGB(255, 186, 187, 189),
+                                    ),
+                                    onPressed: () async {
                                       Navigator.push(
                                           context,
                                           MaterialPageRoute(
-                                              builder: (context) => addHallways(
-                                                    mapName: mapName,
-                                                  )));
+                                              builder: (context) => addMaps()));
                                     },
-                                  );
-                                  // _placeNameEditingController.clear();
+                                    child: Text(
+                                      "السابق",
+                                      style: TextStyle(
+                                        color:
+                                            Color.fromARGB(255, 255, 255, 255),
+                                      ),
+                                    )),
+                              ),
+                              SizedBox(width: 30),
+                              Container(
+                                height: 30,
+                                width: 150,
+                                child: TextButton(
+                                    style: TextButton.styleFrom(
+                                      backgroundColor:
+                                          Color.fromARGB(255, 45, 66, 142),
+                                    ),
+                                    onPressed: () async {
+                                      CoolAlert.show(
+                                        context: context,
+                                        width: size.width * 0.2,
+                                        confirmBtnColor:
+                                            Color.fromARGB(255, 45, 66, 142),
+                                        //cancelBtnColor: Color.fromARGB(144, 64, 6, 87),
+                                        type: CoolAlertType.success,
+                                        backgroundColor:
+                                            Color.fromARGB(255, 45, 66, 142),
+                                        text: "تم حفظ الاماكن بنجاح",
+                                        confirmBtnText: 'اغلاق',
+                                        onConfirmBtnTap: () {
+                                          _placeNameEditingController.clear();
 
-                                  // Navigator.push(
-                                  //     context,
-                                  //     MaterialPageRoute(
-                                  //         builder: (context) =>
-                                  //             DashboardScreen()));
-                                },
-                                child: Text(
-                                  "التالي",
-                                  style: TextStyle(
-                                    color: Color.fromARGB(255, 255, 255, 255),
-                                  ),
-                                )),
+                                          Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      addHallways(
+                                                        mapName: mapName,
+                                                      )));
+                                        },
+                                      );
+                                      // _placeNameEditingController.clear();
+
+                                      // Navigator.push(
+                                      //     context,
+                                      //     MaterialPageRoute(
+                                      //         builder: (context) =>
+                                      //             DashboardScreen()));
+                                    },
+                                    child: Text(
+                                      "التالي",
+                                      style: TextStyle(
+                                        color:
+                                            Color.fromARGB(255, 255, 255, 255),
+                                      ),
+                                    )),
+                              ),
+                            ],
                           )
                         ],
                       ),
@@ -406,6 +436,54 @@ class _addPlacesState extends State<addPlaces> {
                         }
                       },
                     ),
+                    SizedBox(
+                      height: 20.0,
+                    ),
+                    TextFormField(
+                        maxLength: 20,
+                        decoration: InputDecoration(
+                          hintText: 'المطاعم، دورات المياه',
+                          hintStyle: TextStyle(
+                              fontSize: 16,
+                              color: Color.fromARGB(255, 202, 198, 198)),
+                          label: RichText(
+                            text: TextSpan(
+                              text:
+                                  'اذ لم تجد التصنيف المناسب الرجاء كتابة التصنيف',
+                              style: const TextStyle(
+                                  fontSize: 18,
+                                  color: Color.fromARGB(144, 7, 32, 87)),
+                            ),
+                          ),
+                          labelStyle: TextStyle(
+                              fontSize: 18,
+                              color: Color.fromARGB(144, 7, 32, 87)),
+                          border: OutlineInputBorder(
+                            borderSide: BorderSide(
+                              color: Color.fromARGB(144, 64, 7, 87),
+                              width: 2.0,
+                            ),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
+                              color: Color.fromARGB(144, 7, 32, 87),
+                              width: 2.0,
+                            ),
+                          ),
+                        ),
+                        controller: cat,
+                        validator: (value) {
+                          if (selectedCat == "اخرى") {
+                            if (value == null ||
+                                value.isEmpty ||
+                                value.trim() == '')
+                              return 'مطلوب';
+                            else if (!RegExp(r'^[a-z A-Z . , -]+$')
+                                    .hasMatch(value!) &&
+                                !RegExp(r'^[, . - أ-ي]+$').hasMatch(value!))
+                              return "حروف فقط";
+                          }
+                        }),
                   ],
                 ),
               ),
@@ -413,12 +491,29 @@ class _addPlacesState extends State<addPlaces> {
             actions: [
               ElevatedButton(
                   style: TextButton.styleFrom(
+                    backgroundColor: Color.fromARGB(255, 175, 177, 180),
+                  ),
+                  child: Text("الغاء"),
+                  onPressed: () {
+                    FocusScope.of(context).unfocus();
+                    Navigator.pop(context);
+                  }),
+              ElevatedButton(
+                  style: TextButton.styleFrom(
                     backgroundColor: Color.fromARGB(255, 45, 66, 142),
                   ),
                   child: Text("اضافة"),
                   onPressed: () {
                     FocusScope.of(context).unfocus();
-                    ;
+                    if (selectedCat == "اخرى") options.add(cat.text);
+                    updated = options;
+                    FirebaseFirestore.instance
+                        .collection('categories')
+                        .doc("MOGMaTOI7KLI4iB45cHb")
+                        .update({
+                      "categoriesP": updated,
+                    });
+
                     FirebaseFirestore.instance
                         .collection('places')
                         .doc(selectedCat! +
