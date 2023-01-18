@@ -12,14 +12,14 @@ class addPlacesBackground extends StatelessWidget {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Container(
-      width: double.infinity,
-      height: size.height,
       child: Stack(
-        alignment: Alignment.topCenter,
+        alignment: Alignment.center,
         children: <Widget>[
-          Positioned(
-            child: Image.asset("assets/images/background_Add.jpg",
-                width: size.width),
+          Positioned.fill(
+            child: Image(
+              image: AssetImage('assets/images/background_Add.jpg'),
+              fit: BoxFit.fill,
+            ),
           ),
           child
         ],
