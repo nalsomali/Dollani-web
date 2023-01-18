@@ -180,6 +180,9 @@ class _HomeState extends State<addMaps> {
                               ),
                             ),
                           ),
+                          SizedBox(
+                            height: 20,
+                          ),
                           Center(
                             child: Container(
                               width: size.width * 0.25,
