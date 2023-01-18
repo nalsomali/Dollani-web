@@ -18,8 +18,7 @@ class BackgroundAddMapp extends StatelessWidget {
         alignment: Alignment.topCenter,
         children: <Widget>[
           Positioned(
-            child: Image.asset("assets/images/background_maps.png",
-                width: size.width),
+            child: Image.asset("assets/images/back_.png", width: size.width),
           ),
           child
         ],
