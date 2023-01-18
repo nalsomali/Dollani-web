@@ -152,8 +152,18 @@ class _HomeState extends State<addMaps> {
                       child: Column(
                         children: [
                           Container(
-                            height: 250,
+                            height: 200,
                             width: 80,
+                          ),
+                          Text(
+                            "اضافة خريطة جديدة",
+                            textAlign: TextAlign.right,
+                            style: TextStyle(
+                                fontSize: 25,
+                                color: Color.fromARGB(255, 0, 0, 0)),
+                          ),
+                          SizedBox(
+                            height: 50,
                           ),
                           Center(
                             child: Container(
@@ -192,7 +202,7 @@ class _HomeState extends State<addMaps> {
                                 onChanged: (value) {
                                   buildingArea.text = value;
                                 },
-                                controller: buildingName,
+                                controller: buildingArea,
                                 decoration: const InputDecoration(
                                     labelText: "مساحة المبنى بالمتر المربع",
                                     hintText: "400",
