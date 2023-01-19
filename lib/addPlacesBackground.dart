@@ -17,7 +17,7 @@ class addPlacesBackground extends StatelessWidget {
         children: <Widget>[
           Positioned.fill(
             child: Image(
-              image: AssetImage('assets/images/background_Add.jpg'),
+              image: AssetImage('assets/images/backgound_Places.png'),
               fit: BoxFit.fill,
             ),
           ),

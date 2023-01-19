@@ -248,9 +248,6 @@ class _HomeState extends State<addMaps> {
                                 Container(
                                   child: Row(
                                     children: [
-                                      SizedBox(
-                                        width: 20,
-                                      ),
                                       Icon(
                                         Icons.image,
                                         color: Color.fromARGB(255, 83, 83, 83),
