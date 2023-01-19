@@ -84,6 +84,7 @@ class _HomeState extends State<addMaps> {
           return Scaffold(
               backgroundColor: Colors.white,
               body: BackgroundAddMapp(
+                  child: Expanded(
                 child: Row(
                   children: [
                     NavigationRail(
@@ -245,88 +246,85 @@ class _HomeState extends State<addMaps> {
                                 SizedBox(
                                   height: 40,
                                 ),
-                                Container(
-                                  child: Row(
-                                    children: [
-                                      Icon(
-                                        Icons.image,
-                                        color: Color.fromARGB(255, 83, 83, 83),
-                                      ),
-                                      TextButton(
-                                        style: TextButton.styleFrom(
-                                          backgroundColor: Color.fromARGB(
-                                              255, 255, 255, 255),
-                                        ),
-                                        onPressed: () => uploadFileToFirebase(),
-                                        child: Text(
-                                          "اضغط هنا لرفع صورة خريطة المبنى                       ",
-                                          style: TextStyle(
-                                              color: Color.fromARGB(
-                                                  255, 45, 66, 142),
-                                              fontSize: 20),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                SizedBox(height: 40),
-                                Container(
-                                  height: 30,
-                                  width: 150,
-                                  child: TextButton(
-                                      style: TextButton.styleFrom(
-                                        backgroundColor:
-                                            Color.fromARGB(255, 45, 66, 142),
-                                      ),
-                                      onPressed: () async {
-                                        //uploadFile;
-                                        FocusScope.of(context).unfocus();
-                                        if (building == "")
-                                          CoolAlert.show(
-                                            context: context,
-                                            width: size.width * 0.2,
-                                            confirmBtnColor: Color.fromARGB(
-                                                255, 45, 66, 142),
-                                            //cancelBtnColor: Color.fromARGB(144, 64, 6, 87),
-                                            type: CoolAlertType.warning,
-                                            backgroundColor: Color.fromARGB(
-                                                255, 45, 66, 142),
-                                            text:
-                                                "الرجاء ادخال كامل معلومات الخريطة",
-                                            confirmBtnText: 'اغلاق',
-                                            onConfirmBtnTap: () {
-                                              Navigator.pop(context);
-                                            },
-                                          );
-                                        else {
-                                          // print(imageUri.toString());
-                                          buildingName.clear();
-                                          buildingArea.clear();
-                                          Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      addPlaces(
-                                                          mapName: building)));
-                                        }
-                                      },
-                                      child: Text(
-                                        "التالي",
-                                        style: TextStyle(
-                                            color: Color.fromARGB(
-                                                255, 255, 255, 255),
-                                            fontSize: 20),
-                                      )),
-                                )
                               ],
                             ),
                           ),
+                          Container(
+                            child: Row(
+                              children: [
+                                Icon(
+                                  Icons.image,
+                                  color: Color.fromARGB(255, 83, 83, 83),
+                                ),
+                                TextButton(
+                                  style: TextButton.styleFrom(
+                                    backgroundColor:
+                                        Color.fromARGB(255, 255, 255, 255),
+                                  ),
+                                  onPressed: () => uploadFileToFirebase(),
+                                  child: Text(
+                                    "اضغط هنا لرفع صورة خريطة المبنى من نوع PNG او JPEG                       ",
+                                    style: TextStyle(
+                                        color: Color.fromARGB(255, 45, 66, 142),
+                                        fontSize: 20),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          SizedBox(height: 40),
+                          Container(
+                            margin: EdgeInsets.only(left: size.width * 0.65),
+                            height: 30,
+                            width: 150,
+                            child: TextButton(
+                                style: TextButton.styleFrom(
+                                  backgroundColor:
+                                      Color.fromARGB(255, 45, 66, 142),
+                                ),
+                                onPressed: () async {
+                                  //uploadFile;
+                                  FocusScope.of(context).unfocus();
+                                  if (building == "" || area == "")
+                                    CoolAlert.show(
+                                      context: context,
+                                      width: size.width * 0.2,
+                                      confirmBtnColor:
+                                          Color.fromARGB(255, 45, 66, 142),
+                                      //cancelBtnColor: Color.fromARGB(144, 64, 6, 87),
+                                      type: CoolAlertType.warning,
+                                      backgroundColor:
+                                          Color.fromARGB(255, 45, 66, 142),
+                                      text: "الرجاء ادخال كامل معلومات الخريطة",
+                                      confirmBtnText: 'اغلاق',
+                                      onConfirmBtnTap: () {
+                                        Navigator.pop(context);
+                                      },
+                                    );
+                                  else {
+                                    // print(imageUri.toString());
+                                    buildingName.clear();
+                                    buildingArea.clear();
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                addPlaces(mapName: building)));
+                                  }
+                                },
+                                child: Text(
+                                  "التالي",
+                                  style: TextStyle(
+                                      color: Color.fromARGB(255, 255, 255, 255),
+                                      fontSize: 20),
+                                )),
+                          )
                         ],
                       ),
                     )
                   ],
                 ),
-              ));
+              )));
         }
         return Center(
           child: CircularProgressIndicator(),

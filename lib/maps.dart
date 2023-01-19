@@ -105,6 +105,23 @@ class _DashboardScreenState extends State<DashboardScreen> {
         }
     }
 
+    var hallwaysName = [];
+
+    Future getHallways(mapName) async {
+      setState(() {
+        hallwaysName = [];
+      });
+      await for (var snapshot in FirebaseFirestore.instance
+          .collection('hallways')
+          .where('building', isEqualTo: mapName)
+          .snapshots())
+        for (var place in snapshot.docs) {
+          setState(() {
+            hallwaysName.add(place['name']);
+          });
+        }
+    }
+
     return Scaffold(
       backgroundColor: Colors.white,
       body: Scrollbar(
@@ -327,6 +344,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                 DataCell(TextButton(
                                     onPressed: () {
                                       getPlaces(buildingName[i]);
+                                      getHallways(buildingName[i]);
                                       CoolAlert.show(
                                         context: context,
                                         title: " حذف الخريطة",
@@ -341,9 +359,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                         text: "هل تريد حذف الخريطة",
                                         confirmBtnText: 'حذف ',
                                         cancelBtnText: "إلغاء",
-                                        onCancelBtnTap: () {
-                                          Navigator.pop(context);
-                                        },
+
                                         onConfirmBtnTap: () async {
                                           for (var k = 0;
                                               k < placeName.length;
@@ -354,7 +370,25 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                                     "-" +
                                                     placeName[k])
                                                 .delete();
+
+                                            // FirebaseFirestore.instance
+                                            //     .collection('hallways')
+                                            //     .doc(buildingName[i] +
+                                            //         "-" +
+                                            //         hallwaysName[k])
+                                            //     .delete();
                                           }
+
+                                          // for (var k = 0;
+                                          //     k < placeName.length;
+                                          //     k++) {
+                                          //   FirebaseFirestore.instance
+                                          //       .collection('hallways')
+                                          //       .doc(buildingName[i] +
+                                          //           "-" +
+                                          //           hallwaysName[k])
+                                          //       .delete();
+                                          // }
 
                                           FirebaseFirestore.instance
                                               .collection('maps')

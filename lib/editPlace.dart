@@ -250,45 +250,79 @@ class _editPlacesState extends State<editPlaces> {
                           ),
                         ),
                         SizedBox(height: 30),
-                        Container(
-                          height: 30,
-                          width: 150,
-                          child: TextButton(
-                              style: TextButton.styleFrom(
-                                backgroundColor:
-                                    Color.fromARGB(255, 45, 66, 142),
-                              ),
-                              onPressed: () async {
-                                FocusScope.of(context).unfocus();
-
-                                CoolAlert.show(
-                                  context: context,
-                                  width: size.width * 0.2,
-                                  confirmBtnColor:
-                                      Color.fromARGB(255, 45, 66, 142),
-                                  //cancelBtnColor: Color.fromARGB(144, 64, 6, 87),
-                                  type: CoolAlertType.success,
-                                  backgroundColor:
-                                      Color.fromARGB(255, 45, 66, 142),
-                                  text: "تم تعديل الموقع بنجاح",
-                                  confirmBtnText: 'اغلاق',
-                                  onConfirmBtnTap: () {
-                                    _placeNameEditingController.clear();
-
+                        Row(
+                          children: [
+                            Container(
+                              height: 30,
+                              width: 150,
+                              child: TextButton(
+                                  style: TextButton.styleFrom(
+                                    backgroundColor:
+                                        Color.fromARGB(255, 186, 187, 189),
+                                  ),
+                                  onPressed: () async {
                                     Navigator.push(
                                         context,
                                         MaterialPageRoute(
-                                            builder: (context) =>
-                                                DashboardScreen()));
+                                            builder: (context) => places(
+                                                  mapName: Map,
+                                                )));
                                   },
-                                );
-                              },
-                              child: Text(
-                                "حفظ",
-                                style: TextStyle(
-                                  color: Color.fromARGB(255, 255, 255, 255),
-                                ),
-                              )),
+                                  child: Text(
+                                    "السابق",
+                                    style: TextStyle(
+                                      color: Color.fromARGB(255, 255, 255, 255),
+                                    ),
+                                  )),
+                            ),
+                            SizedBox(
+                              width: 20,
+                            ),
+                            Container(
+                              height: 30,
+                              width: 150,
+                              child: TextButton(
+                                  style: TextButton.styleFrom(
+                                    backgroundColor:
+                                        Color.fromARGB(255, 45, 66, 142),
+                                  ),
+                                  onPressed: () async {
+                                    FocusScope.of(context).unfocus();
+                                    FirebaseFirestore.instance
+                                        .collection('places')
+                                        .doc(category + '-' + name)
+                                        .update({'x': x, "y": y});
+
+                                    CoolAlert.show(
+                                      context: context,
+                                      width: size.width * 0.2,
+                                      confirmBtnColor:
+                                          Color.fromARGB(255, 45, 66, 142),
+                                      //cancelBtnColor: Color.fromARGB(144, 64, 6, 87),
+                                      type: CoolAlertType.success,
+                                      backgroundColor:
+                                          Color.fromARGB(255, 45, 66, 142),
+                                      text: "تم تعديل الموقع بنجاح",
+                                      confirmBtnText: 'اغلاق',
+                                      onConfirmBtnTap: () {
+                                        _placeNameEditingController.clear();
+
+                                        Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    DashboardScreen()));
+                                      },
+                                    );
+                                  },
+                                  child: Text(
+                                    "حفظ",
+                                    style: TextStyle(
+                                      color: Color.fromARGB(255, 255, 255, 255),
+                                    ),
+                                  )),
+                            ),
+                          ],
                         )
                       ],
                     ),
@@ -333,11 +367,6 @@ class _editPlacesState extends State<editPlaces> {
                     onPressed: () {
                       FocusScope.of(context).unfocus();
                       ;
-                      FirebaseFirestore.instance
-                          .collection('places')
-                          .doc(category + '-' + name)
-                          .update({'x': x, "y": y});
-                      _placeNameEditingController.clear();
 
                       Navigator.pop(context);
                     }),

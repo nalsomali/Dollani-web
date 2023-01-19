@@ -16,13 +16,7 @@ class BackgroundAddPlaces extends StatelessWidget {
       height: size.height,
       child: Stack(
         alignment: Alignment.topCenter,
-        children: <Widget>[
-          Positioned(
-            child: Image.asset("assets/images/backgroundPlaces.png",
-                width: size.width),
-          ),
-          child
-        ],
+        children: <Widget>[child],
       ),
     );
   }
