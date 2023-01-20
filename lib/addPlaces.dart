@@ -315,57 +315,60 @@ class _addPlacesState extends State<addPlaces> {
                 children: [
                   Expanded(
                       child: Scrollbar(
-                    thumbVisibility: true,
-                    child: DataTable(
-                        headingRowColor: MaterialStateProperty.resolveWith(
-                            (states) => Color.fromARGB(255, 227, 227, 227)),
-                        columns: [
-                          DataColumn(label: Text("اسم الموقع")),
-                          DataColumn(label: Text("تصنيف الموقع")),
-                          // DataColumn(label: Text("حذف")),
-                        ],
-                        rows: [
-                          for (var i = 0; i < placeName.length; i++)
-                            DataRow(cells: [
-                              DataCell(Text(placeName[i])),
-                              DataCell(Text(category[i])),
-                              // DataCell(TextButton(
-                              //     onPressed: () {
-                              //       CoolAlert.show(
-                              //         context: context,
-                              //         title: " حذف الموقع",
-                              //         width: size.width * 0.2,
-                              //         confirmBtnColor:
-                              //             Color.fromARGB(181, 172, 22, 12),
-                              //         showCancelBtn: false,
-                              //         //cancelBtnColor: Color.fromARGB(144, 64, 6, 87),
-                              //         type: CoolAlertType.confirm,
-                              //         backgroundColor:
-                              //             Color.fromARGB(255, 45, 66, 142),
-                              //         text: "هل تريد حذف الموقع",
-                              //         confirmBtnText: 'حذف ',
-                              //         cancelBtnText: "إلغاء",
-                              //         onCancelBtnTap: () {
-                              //           Navigator.pop(context);
-                              //         },
-                              //         onConfirmBtnTap: () async {
-                              //           FirebaseFirestore.instance
-                              //               .collection('places')
-                              //               .doc(category[i] +
-                              //                   "-" +
-                              //                   placeName[i])
-                              //               .delete();
+                    trackVisibility: true,
+                    child: SingleChildScrollView(
+                      scrollDirection: Axis.vertical,
+                      child: DataTable(
+                          headingRowColor: MaterialStateProperty.resolveWith(
+                              (states) => Color.fromARGB(255, 227, 227, 227)),
+                          columns: [
+                            DataColumn(label: Text("اسم الموقع")),
+                            DataColumn(label: Text("تصنيف الموقع")),
+                            // DataColumn(label: Text("حذف")),
+                          ],
+                          rows: [
+                            for (var i = 0; i < placeName.length; i++)
+                              DataRow(cells: [
+                                DataCell(Text(placeName[i])),
+                                DataCell(Text(category[i])),
+                                // DataCell(TextButton(
+                                //     onPressed: () {
+                                //       CoolAlert.show(
+                                //         context: context,
+                                //         title: " حذف الموقع",
+                                //         width: size.width * 0.2,
+                                //         confirmBtnColor:
+                                //             Color.fromARGB(181, 172, 22, 12),
+                                //         showCancelBtn: false,
+                                //         //cancelBtnColor: Color.fromARGB(144, 64, 6, 87),
+                                //         type: CoolAlertType.confirm,
+                                //         backgroundColor:
+                                //             Color.fromARGB(255, 45, 66, 142),
+                                //         text: "هل تريد حذف الموقع",
+                                //         confirmBtnText: 'حذف ',
+                                //         cancelBtnText: "إلغاء",
+                                //         onCancelBtnTap: () {
+                                //           Navigator.pop(context);
+                                //         },
+                                //         onConfirmBtnTap: () async {
+                                //           FirebaseFirestore.instance
+                                //               .collection('places')
+                                //               .doc(category[i] +
+                                //                   "-" +
+                                //                   placeName[i])
+                                //               .delete();
 
-                              //           Navigator.pop(context);
-                              //         },
-                              //       );
-                              //     },
-                              //     child: Icon(
-                              //       Icons.delete,
-                              //       color: Color.fromARGB(255, 74, 93, 188),
-                              //     )))
-                            ]),
-                        ]),
+                                //           Navigator.pop(context);
+                                //         },
+                                //       );
+                                //     },
+                                //     child: Icon(
+                                //       Icons.delete,
+                                //       color: Color.fromARGB(255, 74, 93, 188),
+                                //     )))
+                              ]),
+                          ]),
+                    ),
                   )),
                 ],
               ),

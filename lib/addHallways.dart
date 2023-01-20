@@ -297,54 +297,64 @@ class _addHallwaysState extends State<addHallways> {
                 ),
               ),
               Expanded(
-                child: Scrollbar(
-                  thumbVisibility: true,
-                  child: DataTable(
-                      headingRowColor: MaterialStateProperty.resolveWith(
-                          (states) => Color.fromARGB(255, 227, 227, 227)),
-                      columns: [
-                        DataColumn(label: Text("اسم الممر")),
-                        // DataColumn(label: Text("حذف")),
-                      ],
-                      rows: [
-                        for (var i = 0; i < placeName.length; i++)
-                          DataRow(cells: [
-                            DataCell(Text(placeName[i])),
-                            // DataCell(TextButton(
-                            //     onPressed: () {
-                            //       CoolAlert.show(
-                            //         context: context,
-                            //         title: " حذف الممر",
-                            //         width: size.width * 0.2,
-                            //         confirmBtnColor:
-                            //             Color.fromARGB(181, 172, 22, 12),
-                            //         showCancelBtn: false,
-                            //         //cancelBtnColor: Color.fromARGB(144, 64, 6, 87),
-                            //         type: CoolAlertType.confirm,
-                            //         backgroundColor:
-                            //             Color.fromARGB(255, 67, 99, 216),
-                            //         text: "هل تريد حذف الممر",
-                            //         confirmBtnText: 'حذف ',
-                            //         cancelBtnText: "إلغاء",
-                            //         onCancelBtnTap: () {
-                            //           Navigator.pop(context);
-                            //         },
-                            //         onConfirmBtnTap: () async {
-                            //           FirebaseFirestore.instance
-                            //               .collection('hallways')
-                            //               .doc(mapName + "-" + placeName[i])
-                            //               .delete();
+                child: Column(
+                  children: [
+                    Expanded(
+                      child: Scrollbar(
+                        trackVisibility: true,
+                        child: SingleChildScrollView(
+                          scrollDirection: Axis.vertical,
+                          child: DataTable(
+                              headingRowColor:
+                                  MaterialStateProperty.resolveWith((states) =>
+                                      Color.fromARGB(255, 227, 227, 227)),
+                              columns: [
+                                DataColumn(label: Text("اسم الممر")),
+                                // DataColumn(label: Text("حذف")),
+                              ],
+                              rows: [
+                                for (var i = 0; i < placeName.length; i++)
+                                  DataRow(cells: [
+                                    DataCell(Text(placeName[i])),
+                                    // DataCell(TextButton(
+                                    //     onPressed: () {
+                                    //       CoolAlert.show(
+                                    //         context: context,
+                                    //         title: " حذف الممر",
+                                    //         width: size.width * 0.2,
+                                    //         confirmBtnColor:
+                                    //             Color.fromARGB(181, 172, 22, 12),
+                                    //         showCancelBtn: false,
+                                    //         //cancelBtnColor: Color.fromARGB(144, 64, 6, 87),
+                                    //         type: CoolAlertType.confirm,
+                                    //         backgroundColor:
+                                    //             Color.fromARGB(255, 67, 99, 216),
+                                    //         text: "هل تريد حذف الممر",
+                                    //         confirmBtnText: 'حذف ',
+                                    //         cancelBtnText: "إلغاء",
+                                    //         onCancelBtnTap: () {
+                                    //           Navigator.pop(context);
+                                    //         },
+                                    //         onConfirmBtnTap: () async {
+                                    //           FirebaseFirestore.instance
+                                    //               .collection('hallways')
+                                    //               .doc(mapName + "-" + placeName[i])
+                                    //               .delete();
 
-                            //           Navigator.pop(context);
-                            //         },
-                            //       );
-                            //     },
-                            //     child: Icon(
-                            //       Icons.delete,
-                            //       color: Color.fromARGB(255, 74, 93, 188),
-                            //     )))
-                          ]),
-                      ]),
+                                    //           Navigator.pop(context);
+                                    //         },
+                                    //       );
+                                    //     },
+                                    //     child: Icon(
+                                    //       Icons.delete,
+                                    //       color: Color.fromARGB(255, 74, 93, 188),
+                                    //     )))
+                                  ]),
+                              ]),
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ),
             ]),
