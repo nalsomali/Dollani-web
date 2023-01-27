@@ -528,6 +528,10 @@ class _adNewPlacesState extends State<addNewPlace> {
                   ),
                   child: Text("اضافة"),
                   onPressed: () {
+                    setState(() {
+                      placeName = [];
+                      category = [];
+                    });
                     Navigator.pop(context);
 
                     if (_placeNameEditingController.text.isNotEmpty &&
@@ -582,15 +586,16 @@ class _adNewPlacesState extends State<addNewPlace> {
                         "y": y
                       });
                       CoolAlert.show(
-                          context: context,
-                          width: 120,
-                          confirmBtnColor: Color.fromARGB(255, 45, 66, 142),
-                          //cancelBtnColor: Color.fromARGB(144, 64, 6, 87),
-                          type: CoolAlertType.success,
-                          backgroundColor: Color.fromARGB(255, 45, 66, 142),
-                          text: "تم حفظ الاماكن بنجاح",
-                          confirmBtnText: 'اغلاق',
-                          showCancelBtn: false);
+                        context: context,
+                        width: 120,
+                        confirmBtnColor: Color.fromARGB(255, 45, 66, 142),
+                        //cancelBtnColor: Color.fromARGB(144, 64, 6, 87),
+                        type: CoolAlertType.success,
+                        backgroundColor: Color.fromARGB(255, 45, 66, 142),
+                        text: "تم حفظ الاماكن بنجاح",
+                        confirmBtnText: 'اغلاق',
+                        showCancelBtn: false,
+                      );
                     } else {
                       CoolAlert.show(
                         context: context,

@@ -502,6 +502,9 @@ class _addHallwaysState extends State<addHallways> {
                   ),
                   child: Text("اضافة"),
                   onPressed: () {
+                    setState(() {
+                      placeName = [];
+                    });
                     Navigator.pop(
                       context,
                     );

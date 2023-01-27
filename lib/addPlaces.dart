@@ -547,6 +547,10 @@ class _addPlacesState extends State<addPlaces> {
                   ),
                   child: Text("اضافة"),
                   onPressed: () {
+                    setState(() {
+                      placeName = [];
+                      category = [];
+                    });
                     Navigator.pop(context);
 
                     if (_placeNameEditingController.text.isNotEmpty &&
