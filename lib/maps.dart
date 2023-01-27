@@ -387,25 +387,18 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                                           "-" +
                                                           placeName[k])
                                                       .delete();
-
-                                                  // FirebaseFirestore.instance
-                                                  //     .collection('hallways')
-                                                  //     .doc(buildingName[i] +
-                                                  //         "-" +
-                                                  //         hallwaysName[k])
-                                                  //     .delete();
                                                 }
 
-                                                // for (var k = 0;
-                                                //     k < placeName.length;
-                                                //     k++) {
-                                                //   FirebaseFirestore.instance
-                                                //       .collection('hallways')
-                                                //       .doc(buildingName[i] +
-                                                //           "-" +
-                                                //           hallwaysName[k])
-                                                //       .delete();
-                                                // }
+                                                for (var k = 0;
+                                                    k < hallwaysName.length;
+                                                    k++) {
+                                                  FirebaseFirestore.instance
+                                                      .collection('hallways')
+                                                      .doc(buildingName[i] +
+                                                          "-" +
+                                                          hallwaysName[k])
+                                                      .delete();
+                                                }
 
                                                 FirebaseFirestore.instance
                                                     .collection('maps')
