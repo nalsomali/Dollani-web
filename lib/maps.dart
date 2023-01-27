@@ -18,8 +18,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
   @override
   var buildingName = [];
   var floorPlan = [];
-  var buildingArea = [];
-
+  var buildingHeight = [];
+  var buildingwidth = [];
   TextEditingController? _searchEditingController = TextEditingController();
   void initState() {
     getMap();
@@ -30,14 +30,16 @@ class _DashboardScreenState extends State<DashboardScreen> {
   Future getMap() async {
     setState(() {
       buildingName = [];
-      buildingArea = [];
+      buildingHeight = [];
+      buildingwidth = [];
     });
     await for (var snapshot
         in FirebaseFirestore.instance.collection('maps').snapshots())
       for (var map in snapshot.docs) {
         setState(() {
           buildingName.add(map['building']);
-          buildingArea.add(map['area']);
+          buildingHeight.add(map['height']);
+          buildingwidth.add(map['width']);
         });
       }
   }
@@ -73,7 +75,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
       //clear first
       setState(() {
         buildingName = [];
-        buildingArea = [];
+        buildingHeight = [];
+        buildingwidth = [];
       });
 
       await for (var snapshot in FirebaseFirestore.instance
@@ -83,7 +86,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
         for (var maps in snapshot.docs) {
           setState(() {
             buildingName.add(maps['building']);
-            buildingArea.add(maps['area']);
+            buildingHeight.add(maps['height']);
+            buildingwidth.add(maps['width']);
           });
         }
     }
@@ -325,7 +329,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                       Color.fromARGB(255, 227, 227, 227)),
                               columns: [
                                 DataColumn(label: Text("اسم المبنى")),
-                                DataColumn(label: Text("المساحة")),
+                                DataColumn(label: Text("الطول")),
+                                DataColumn(label: Text("العرض")),
                                 DataColumn(label: Text("تعديل")),
                                 DataColumn(label: Text("حذف")),
                               ],
@@ -333,7 +338,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                 for (var i = 0; i < buildingName.length; i++)
                                   DataRow(cells: [
                                     DataCell(Text(buildingName[i])),
-                                    DataCell(Text(buildingArea[i])),
+                                    DataCell(Text(buildingHeight[i])),
+                                    DataCell(Text(buildingwidth[i])),
                                     DataCell(IconButton(
                                         onPressed: () {
                                           Navigator.push(

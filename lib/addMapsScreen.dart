@@ -24,13 +24,17 @@ Uint8List webImage = Uint8List(8);
 class _HomeState extends State<addMaps> {
   final TextEditingController buildingName = TextEditingController();
   late String building = "";
-  late String area = "";
+  late String height = "";
+  late String width = "";
 
-  final TextEditingController buildingArea = TextEditingController();
+  final TextEditingController buildingHeight = TextEditingController();
+  final TextEditingController buildingWidth = TextEditingController();
+
   bool isExpanded = false;
   final Future<FirebaseApp> _initialization = Firebase.initializeApp();
   String imgUrl = "";
   String FileText = 'test';
+  bool check = false;
 
   Future uploadFileToFirebase() async {
     FilePickerResult? result = await FilePicker.platform.pickFiles();
@@ -41,7 +45,6 @@ class _HomeState extends State<addMaps> {
         print(f.extension);
         String fileName = result.files.first.name;
         webImage = result.files.single.bytes!;
-
 // above works
         final storageReference =
             FirebaseStorage.instance.ref().child('maps/$fileName');
@@ -49,13 +52,15 @@ class _HomeState extends State<addMaps> {
         UploadTask uploadTask = storageReference.putData(webImage);
         await uploadTask.whenComplete(() => null);
         print("uploaded");
-
         storageReference.getDownloadURL().then((fileURL) {
           setState(() {
+            check = true;
+
             FileText = fileURL;
             FirebaseFirestore.instance.collection("maps").doc(building).set({
               "building": building,
-              "area": area,
+              "height": height,
+              "width": width,
               "floor plan": FileText,
             });
           });
@@ -213,8 +218,31 @@ class _HomeState extends State<addMaps> {
                                     ),
                                   ),
                                 ),
-                                SizedBox(
-                                  height: 20,
+                                Center(
+                                  child: Container(
+                                    width: size.width * 0.25,
+                                    child: TextFormField(
+                                      autovalidateMode:
+                                          AutovalidateMode.onUserInteraction,
+                                      onChanged: (value) {
+                                        height = value;
+                                      },
+                                      controller: buildingHeight,
+                                      decoration: const InputDecoration(
+                                          labelText: " طول المبنى ",
+                                          hintText: "١٠٠",
+                                          hintStyle: TextStyle(
+                                              color: Color.fromARGB(
+                                                  255, 202, 198, 198)),
+                                          floatingLabelBehavior:
+                                              FloatingLabelBehavior.always,
+                                          labelStyle: TextStyle(
+                                            fontSize: 25,
+                                            color: Color.fromARGB(
+                                                255, 45, 66, 142),
+                                          )),
+                                    ),
+                                  ),
                                 ),
                                 Center(
                                   child: Container(
@@ -223,13 +251,12 @@ class _HomeState extends State<addMaps> {
                                       autovalidateMode:
                                           AutovalidateMode.onUserInteraction,
                                       onChanged: (value) {
-                                        area = value;
+                                        width = value;
                                       },
-                                      controller: buildingArea,
+                                      controller: buildingWidth,
                                       decoration: const InputDecoration(
-                                          labelText:
-                                              "مساحة المبنى بالمتر المربع",
-                                          hintText: "400",
+                                          labelText: " عرض المبنى ",
+                                          hintText: "٢٠٠",
                                           hintStyle: TextStyle(
                                               color: Color.fromARGB(
                                                   255, 202, 198, 198)),
@@ -285,7 +312,9 @@ class _HomeState extends State<addMaps> {
                                 onPressed: () async {
                                   //uploadFile;
                                   FocusScope.of(context).unfocus();
-                                  if (building == "" || area == "")
+                                  if (building == "" ||
+                                      width == "" ||
+                                      height == "")
                                     CoolAlert.show(
                                       context: context,
                                       width: size.width * 0.2,
@@ -301,10 +330,28 @@ class _HomeState extends State<addMaps> {
                                         Navigator.pop(context);
                                       },
                                     );
-                                  else {
+                                  else if (check == false) {
+                                    CoolAlert.show(
+                                      context: context,
+                                      width: size.width * 0.2,
+                                      confirmBtnColor:
+                                          Color.fromARGB(255, 45, 66, 142),
+                                      //cancelBtnColor: Color.fromARGB(144, 64, 6, 87),
+                                      type: CoolAlertType.warning,
+                                      backgroundColor:
+                                          Color.fromARGB(255, 45, 66, 142),
+                                      text: "الرجاء ارفاق صورة الخريطة",
+                                      confirmBtnText: 'اغلاق',
+                                      onConfirmBtnTap: () {
+                                        Navigator.pop(context);
+                                      },
+                                    );
+                                  } else {
                                     // print(imageUri.toString());
                                     buildingName.clear();
-                                    buildingArea.clear();
+                                    buildingHeight.clear();
+                                    buildingWidth.clear();
+
                                     Navigator.push(
                                         context,
                                         MaterialPageRoute(
