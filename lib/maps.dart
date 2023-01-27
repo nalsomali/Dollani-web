@@ -315,122 +315,123 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   ),
                   //Now let's add the Table
 
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      // Expanded(
-                      Scrollbar(
-                        trackVisibility: true,
-                        child: SingleChildScrollView(
-                          scrollDirection: Axis.vertical,
-                          child: DataTable(
-                              headingRowColor:
-                                  MaterialStateProperty.resolveWith((states) =>
-                                      Color.fromARGB(255, 227, 227, 227)),
-                              columns: [
-                                DataColumn(label: Text("اسم المبنى")),
-                                DataColumn(label: Text("الطول")),
-                                DataColumn(label: Text("العرض")),
-                                DataColumn(label: Text("تعديل")),
-                                DataColumn(label: Text("حذف")),
-                              ],
-                              rows: [
-                                for (var i = 0; i < buildingName.length; i++)
-                                  DataRow(cells: [
-                                    DataCell(Text(buildingName[i])),
-                                    DataCell(Text(buildingHeight[i])),
-                                    DataCell(Text(buildingwidth[i])),
-                                    DataCell(IconButton(
-                                        onPressed: () {
-                                          Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                  builder: (context) => places(
-                                                        mapName:
-                                                            buildingName[i],
-                                                      )));
-                                        },
-                                        icon: Icon(
-                                          Icons.edit,
-                                          color:
-                                              Color.fromARGB(255, 74, 93, 188),
-                                        ))),
-                                    DataCell(TextButton(
-                                        onPressed: () {
-                                          getPlaces(buildingName[i]);
-                                          getHallways(buildingName[i]);
-                                          CoolAlert.show(
-                                            context: context,
-                                            title: " حذف الخريطة",
-                                            width: size.width * 0.2,
-                                            confirmBtnColor: Color.fromARGB(
-                                                181, 172, 22, 12),
-                                            showCancelBtn: false,
-                                            //cancelBtnColor: Color.fromARGB(144, 64, 6, 87),
-                                            type: CoolAlertType.confirm,
-                                            backgroundColor: Color.fromARGB(
-                                                255, 45, 66, 142),
-                                            text: "هل تريد حذف الخريطة",
-                                            confirmBtnText: 'حذف ',
-                                            cancelBtnText: "إلغاء",
+                  Expanded(
+                    // Expanded(
+                    child: Scrollbar(
+                      trackVisibility: true,
+                      child: SingleChildScrollView(
+                        scrollDirection: Axis.vertical,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: [
+                            DataTable(
+                                headingRowColor:
+                                    MaterialStateProperty.resolveWith(
+                                        (states) =>
+                                            Color.fromARGB(255, 227, 227, 227)),
+                                columns: [
+                                  DataColumn(label: Text("اسم المبنى")),
+                                  DataColumn(label: Text("الطول")),
+                                  DataColumn(label: Text("العرض")),
+                                  DataColumn(label: Text("تعديل")),
+                                  DataColumn(label: Text("حذف")),
+                                ],
+                                rows: [
+                                  for (var i = 0; i < buildingName.length; i++)
+                                    DataRow(cells: [
+                                      DataCell(Text(buildingName[i])),
+                                      DataCell(Text(buildingHeight[i])),
+                                      DataCell(Text(buildingwidth[i])),
+                                      DataCell(IconButton(
+                                          onPressed: () {
+                                            Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        places(
+                                                          mapName:
+                                                              buildingName[i],
+                                                        )));
+                                          },
+                                          icon: Icon(
+                                            Icons.edit,
+                                            color: Color.fromARGB(
+                                                255, 74, 93, 188),
+                                          ))),
+                                      DataCell(TextButton(
+                                          onPressed: () {
+                                            getPlaces(buildingName[i]);
+                                            getHallways(buildingName[i]);
+                                            CoolAlert.show(
+                                              context: context,
+                                              title: " حذف الخريطة",
+                                              width: size.width * 0.2,
+                                              confirmBtnColor: Color.fromARGB(
+                                                  181, 172, 22, 12),
+                                              showCancelBtn: false,
+                                              //cancelBtnColor: Color.fromARGB(144, 64, 6, 87),
+                                              type: CoolAlertType.confirm,
+                                              backgroundColor: Color.fromARGB(
+                                                  255, 45, 66, 142),
+                                              text: "هل تريد حذف الخريطة",
+                                              confirmBtnText: 'حذف ',
+                                              cancelBtnText: "إلغاء",
 
-                                            onConfirmBtnTap: () async {
-                                              for (var k = 0;
-                                                  k < placeName.length;
-                                                  k++) {
+                                              onConfirmBtnTap: () async {
+                                                for (var k = 0;
+                                                    k < placeName.length;
+                                                    k++) {
+                                                  FirebaseFirestore.instance
+                                                      .collection('places')
+                                                      .doc(category[k] +
+                                                          "-" +
+                                                          placeName[k])
+                                                      .delete();
+
+                                                  // FirebaseFirestore.instance
+                                                  //     .collection('hallways')
+                                                  //     .doc(buildingName[i] +
+                                                  //         "-" +
+                                                  //         hallwaysName[k])
+                                                  //     .delete();
+                                                }
+
+                                                // for (var k = 0;
+                                                //     k < placeName.length;
+                                                //     k++) {
+                                                //   FirebaseFirestore.instance
+                                                //       .collection('hallways')
+                                                //       .doc(buildingName[i] +
+                                                //           "-" +
+                                                //           hallwaysName[k])
+                                                //       .delete();
+                                                // }
+
                                                 FirebaseFirestore.instance
-                                                    .collection('places')
-                                                    .doc(category[k] +
-                                                        "-" +
-                                                        placeName[k])
+                                                    .collection('maps')
+                                                    .doc(buildingName[i])
                                                     .delete();
-
-                                                // FirebaseFirestore.instance
-                                                //     .collection('hallways')
-                                                //     .doc(buildingName[i] +
-                                                //         "-" +
-                                                //         hallwaysName[k])
-                                                //     .delete();
-                                              }
-
-                                              // for (var k = 0;
-                                              //     k < placeName.length;
-                                              //     k++) {
-                                              //   FirebaseFirestore.instance
-                                              //       .collection('hallways')
-                                              //       .doc(buildingName[i] +
-                                              //           "-" +
-                                              //           hallwaysName[k])
-                                              //       .delete();
-                                              // }
-
-                                              FirebaseFirestore.instance
-                                                  .collection('maps')
-                                                  .doc(buildingName[i])
-                                                  .delete();
-                                              Navigator.push(
-                                                  context,
-                                                  MaterialPageRoute(
-                                                      builder: (context) =>
-                                                          DashboardScreen()));
-                                            },
-                                          );
-                                        },
-                                        child: Icon(
-                                          Icons.delete,
-                                          color:
-                                              Color.fromARGB(255, 74, 93, 188),
-                                        )))
-                                  ]),
-                              ]),
-                          // ),
+                                                Navigator.push(
+                                                    context,
+                                                    MaterialPageRoute(
+                                                        builder: (context) =>
+                                                            DashboardScreen()));
+                                              },
+                                            );
+                                          },
+                                          child: Icon(
+                                            Icons.delete,
+                                            color: Color.fromARGB(
+                                                255, 74, 93, 188),
+                                          )))
+                                    ]),
+                                ]),
+                          ],
                         ),
+                        // ),
                       ),
                       //Now let's set the pagination
-                      SizedBox(
-                        height: 40.0,
-                      ),
-                    ],
+                    ),
                   ),
                 ],
               ),
