@@ -57,12 +57,14 @@ class _HomeState extends State<addMaps> {
             check = true;
 
             FileText = fileURL;
-            FirebaseFirestore.instance.collection("maps").doc(building).set({
-              "building": building,
-              "height": height,
-              "width": width,
-              "floor plan": FileText,
-            });
+            if (_formKey.currentState!.validate()) {
+              FirebaseFirestore.instance.collection("maps").doc(building).set({
+                "building": building,
+                "height": height,
+                "width": width,
+                "floor plan": FileText,
+              });
+            }
           });
         });
         print(
@@ -72,6 +74,8 @@ class _HomeState extends State<addMaps> {
       }
     }
   }
+
+  final _formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
@@ -153,220 +157,256 @@ class _HomeState extends State<addMaps> {
                           ),
                         ],
                         selectedIndex: 1),
-                    Expanded(
-                      child: Column(
-                        children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              IconButton(
-                                onPressed: () {
-                                  //let's trigger the navigation expansion
-                                  setState(() {
-                                    isExpanded = !isExpanded;
-                                  });
-                                },
-                                icon: Icon(Icons.menu),
-                              ),
-                              Text(
-                                "اضافة خريطة جديدة",
-                                style: TextStyle(
-                                    fontSize: 30,
-                                    //  fontWeight: FontWeight.bold,
-                                    color: Color.fromARGB(255, 23, 39, 112)),
-                              ),
-                              Image.asset(
-                                'assets/images/logo.png',
-                                scale: 7,
-                              ),
-                            ],
-                          ),
-                          Container(
-                            margin: EdgeInsets.only(left: size.width * 0.65),
-                            child: Column(
+                    Form(
+                      key: _formKey,
+                      child: Expanded(
+                        child: Column(
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Container(
-                                  height: 200,
-                                  width: 80,
+                                IconButton(
+                                  onPressed: () {
+                                    //let's trigger the navigation expansion
+                                    setState(() {
+                                      isExpanded = !isExpanded;
+                                    });
+                                  },
+                                  icon: Icon(Icons.menu),
                                 ),
-                                SizedBox(
-                                  height: 50,
+                                Text(
+                                  "اضافة خريطة جديدة",
+                                  style: TextStyle(
+                                      fontSize: 30,
+                                      //  fontWeight: FontWeight.bold,
+                                      color: Color.fromARGB(255, 23, 39, 112)),
                                 ),
-                                Center(
-                                  child: Container(
-                                    width: size.width * 0.25,
-                                    child: TextFormField(
-                                      autovalidateMode:
-                                          AutovalidateMode.onUserInteraction,
-                                      onChanged: (value) {
-                                        building = value;
-                                      },
-                                      controller: buildingName,
-                                      decoration: const InputDecoration(
-                                          labelText: "اسم الخريطة",
-                                          hintText: "كلية الحقوق",
-                                          hintStyle: TextStyle(
-                                              color: Color.fromARGB(
-                                                  255, 202, 198, 198)),
-                                          floatingLabelBehavior:
-                                              FloatingLabelBehavior.always,
-                                          labelStyle: TextStyle(
-                                            fontSize: 25,
-                                            color: Color.fromARGB(
-                                                255, 45, 66, 142),
-                                          )),
-                                    ),
-                                  ),
-                                ),
-                                Center(
-                                  child: Container(
-                                    width: size.width * 0.25,
-                                    child: TextFormField(
-                                      autovalidateMode:
-                                          AutovalidateMode.onUserInteraction,
-                                      onChanged: (value) {
-                                        height = value;
-                                      },
-                                      controller: buildingHeight,
-                                      decoration: const InputDecoration(
-                                          labelText: " طول المبنى ",
-                                          hintText: "١٠٠",
-                                          hintStyle: TextStyle(
-                                              color: Color.fromARGB(
-                                                  255, 202, 198, 198)),
-                                          floatingLabelBehavior:
-                                              FloatingLabelBehavior.always,
-                                          labelStyle: TextStyle(
-                                            fontSize: 25,
-                                            color: Color.fromARGB(
-                                                255, 45, 66, 142),
-                                          )),
-                                    ),
-                                  ),
-                                ),
-                                Center(
-                                  child: Container(
-                                    width: size.width * 0.25,
-                                    child: TextFormField(
-                                      autovalidateMode:
-                                          AutovalidateMode.onUserInteraction,
-                                      onChanged: (value) {
-                                        width = value;
-                                      },
-                                      controller: buildingWidth,
-                                      decoration: const InputDecoration(
-                                          labelText: " عرض المبنى ",
-                                          hintText: "٢٠٠",
-                                          hintStyle: TextStyle(
-                                              color: Color.fromARGB(
-                                                  255, 202, 198, 198)),
-                                          floatingLabelBehavior:
-                                              FloatingLabelBehavior.always,
-                                          labelStyle: TextStyle(
-                                            fontSize: 25,
-                                            color: Color.fromARGB(
-                                                255, 45, 66, 142),
-                                          )),
-                                    ),
-                                  ),
-                                ),
-                                SizedBox(
-                                  height: 40,
+                                Image.asset(
+                                  'assets/images/logo.png',
+                                  scale: 7,
                                 ),
                               ],
                             ),
-                          ),
-                          Container(
-                            child: Row(
-                              children: [
-                                Icon(
-                                  Icons.image,
-                                  color: Color.fromARGB(255, 83, 83, 83),
-                                ),
-                                TextButton(
+                            Container(
+                              margin: EdgeInsets.only(left: size.width * 0.65),
+                              child: Column(
+                                children: [
+                                  Container(
+                                    height: 200,
+                                    width: 80,
+                                  ),
+                                  SizedBox(
+                                    height: 50,
+                                  ),
+                                  Center(
+                                    child: Container(
+                                      width: size.width * 0.25,
+                                      child: TextFormField(
+                                        autovalidateMode:
+                                            AutovalidateMode.onUserInteraction,
+                                        onChanged: (value) {
+                                          building = value;
+                                        },
+                                        controller: buildingName,
+                                        decoration: const InputDecoration(
+                                            labelText: "اسم المبنى",
+                                            hintText: "كلية الحقوق",
+                                            hintStyle: TextStyle(
+                                                color: Color.fromARGB(
+                                                    255, 202, 198, 198)),
+                                            floatingLabelBehavior:
+                                                FloatingLabelBehavior.always,
+                                            labelStyle: TextStyle(
+                                              fontSize: 25,
+                                              color: Color.fromARGB(
+                                                  255, 45, 66, 142),
+                                            )),
+                                        validator: (value) {
+                                          if (value == null || value.isEmpty) {
+                                            return 'الرجاء ادخال اسم المبنى';
+                                          }
+                                          return null;
+                                        },
+                                      ),
+                                    ),
+                                  ),
+                                  Center(
+                                    child: Container(
+                                      width: size.width * 0.25,
+                                      child: TextFormField(
+                                        autovalidateMode:
+                                            AutovalidateMode.onUserInteraction,
+                                        onChanged: (value) {
+                                          height = value;
+                                        },
+                                        controller: buildingHeight,
+                                        decoration: const InputDecoration(
+                                            labelText: " طول المبنى ",
+                                            hintText: "١٠٠",
+                                            hintStyle: TextStyle(
+                                                color: Color.fromARGB(
+                                                    255, 202, 198, 198)),
+                                            floatingLabelBehavior:
+                                                FloatingLabelBehavior.always,
+                                            labelStyle: TextStyle(
+                                              fontSize: 25,
+                                              color: Color.fromARGB(
+                                                  255, 45, 66, 142),
+                                            )),
+                                        validator: (value) {
+                                          if (value == null || value.isEmpty) {
+                                            return 'الرجاء ادخال الطول ';
+                                          } else if (!RegExp(r'[0-9]')
+                                                  .hasMatch(value) &&
+                                              !RegExp(r'[٠-٩]')
+                                                  .hasMatch(value)) {
+                                            return 'الرجاء ادخال رقم صحيح ';
+                                          }
+                                          //return null;
+                                        },
+                                      ),
+                                    ),
+                                  ),
+                                  Center(
+                                    child: Container(
+                                      width: size.width * 0.25,
+                                      child: TextFormField(
+                                        autovalidateMode:
+                                            AutovalidateMode.onUserInteraction,
+                                        onChanged: (value) {
+                                          width = value;
+                                        },
+                                        controller: buildingWidth,
+                                        decoration: const InputDecoration(
+                                            labelText: " عرض المبنى ",
+                                            hintText: "٢٠٠",
+                                            hintStyle: TextStyle(
+                                                color: Color.fromARGB(
+                                                    255, 202, 198, 198)),
+                                            floatingLabelBehavior:
+                                                FloatingLabelBehavior.always,
+                                            labelStyle: TextStyle(
+                                              fontSize: 25,
+                                              color: Color.fromARGB(
+                                                  255, 45, 66, 142),
+                                            )),
+                                        validator: (value) {
+                                          if (value == null || value.isEmpty) {
+                                            return 'الرجاء ادخال العرض ';
+                                          } else if (!RegExp(r'[0-9]')
+                                                  .hasMatch(value) &&
+                                              !RegExp(r'[٠-٩]')
+                                                  .hasMatch(value)) {
+                                            return 'الرجاء ادخال رقم صحيح ';
+                                          }
+                                          //return null;
+                                        },
+                                      ),
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    height: 40,
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Container(
+                              child: Row(
+                                children: [
+                                  Icon(
+                                    Icons.image,
+                                    color: Color.fromARGB(255, 83, 83, 83),
+                                  ),
+                                  TextButton(
+                                    style: TextButton.styleFrom(
+                                      backgroundColor:
+                                          Color.fromARGB(255, 255, 255, 255),
+                                    ),
+                                    onPressed: () => uploadFileToFirebase(),
+                                    child: Text(
+                                      "اضغط هنا لرفع صورة خريطة المبنى من نوع PNG او JPEG                       ",
+                                      style: TextStyle(
+                                          color:
+                                              Color.fromARGB(255, 45, 66, 142),
+                                          fontSize: 20),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            SizedBox(height: 40),
+                            Container(
+                              margin: EdgeInsets.only(left: size.width * 0.65),
+                              height: 30,
+                              width: 150,
+                              child: TextButton(
                                   style: TextButton.styleFrom(
                                     backgroundColor:
-                                        Color.fromARGB(255, 255, 255, 255),
+                                        Color.fromARGB(255, 45, 66, 142),
                                   ),
-                                  onPressed: () => uploadFileToFirebase(),
-                                  child: Text(
-                                    "اضغط هنا لرفع صورة خريطة المبنى من نوع PNG او JPEG                       ",
-                                    style: TextStyle(
-                                        color: Color.fromARGB(255, 45, 66, 142),
-                                        fontSize: 20),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                          SizedBox(height: 40),
-                          Container(
-                            margin: EdgeInsets.only(left: size.width * 0.65),
-                            height: 30,
-                            width: 150,
-                            child: TextButton(
-                                style: TextButton.styleFrom(
-                                  backgroundColor:
-                                      Color.fromARGB(255, 45, 66, 142),
-                                ),
-                                onPressed: () async {
-                                  //uploadFile;
-                                  FocusScope.of(context).unfocus();
-                                  if (building == "" ||
-                                      width == "" ||
-                                      height == "")
-                                    CoolAlert.show(
-                                      context: context,
-                                      width: size.width * 0.2,
-                                      confirmBtnColor:
-                                          Color.fromARGB(255, 45, 66, 142),
-                                      //cancelBtnColor: Color.fromARGB(144, 64, 6, 87),
-                                      type: CoolAlertType.warning,
-                                      backgroundColor:
-                                          Color.fromARGB(255, 45, 66, 142),
-                                      text: "الرجاء ادخال كامل معلومات الخريطة",
-                                      confirmBtnText: 'اغلاق',
-                                      onConfirmBtnTap: () {
-                                        Navigator.pop(context);
-                                      },
-                                    );
-                                  else if (check == false) {
-                                    CoolAlert.show(
-                                      context: context,
-                                      width: size.width * 0.2,
-                                      confirmBtnColor:
-                                          Color.fromARGB(255, 45, 66, 142),
-                                      //cancelBtnColor: Color.fromARGB(144, 64, 6, 87),
-                                      type: CoolAlertType.warning,
-                                      backgroundColor:
-                                          Color.fromARGB(255, 45, 66, 142),
-                                      text: "الرجاء ارفاق صورة الخريطة",
-                                      confirmBtnText: 'اغلاق',
-                                      onConfirmBtnTap: () {
-                                        Navigator.pop(context);
-                                      },
-                                    );
-                                  } else {
-                                    // print(imageUri.toString());
-                                    buildingName.clear();
-                                    buildingHeight.clear();
-                                    buildingWidth.clear();
+                                  onPressed: () async {
+                                    //uploadFile;
+                                    if (_formKey.currentState!.validate()) {
+                                      FocusScope.of(context).unfocus();
+                                      if (building == "" ||
+                                          width == "" ||
+                                          height == "")
+                                        CoolAlert.show(
+                                          context: context,
+                                          width: size.width * 0.2,
+                                          confirmBtnColor:
+                                              Color.fromARGB(255, 45, 66, 142),
+                                          //cancelBtnColor: Color.fromARGB(144, 64, 6, 87),
+                                          type: CoolAlertType.warning,
+                                          backgroundColor:
+                                              Color.fromARGB(255, 45, 66, 142),
+                                          text:
+                                              "الرجاء ادخال كامل معلومات الخريطة",
+                                          confirmBtnText: 'اغلاق',
+                                          onConfirmBtnTap: () {
+                                            Navigator.pop(context);
+                                          },
+                                        );
+                                      else if (check == false) {
+                                        CoolAlert.show(
+                                          context: context,
+                                          width: size.width * 0.2,
+                                          confirmBtnColor:
+                                              Color.fromARGB(255, 45, 66, 142),
+                                          //cancelBtnColor: Color.fromARGB(144, 64, 6, 87),
+                                          type: CoolAlertType.warning,
+                                          backgroundColor:
+                                              Color.fromARGB(255, 45, 66, 142),
+                                          text: "الرجاء ارفاق صورة الخريطة",
+                                          confirmBtnText: 'اغلاق',
+                                          onConfirmBtnTap: () {
+                                            Navigator.pop(context);
+                                          },
+                                        );
+                                      } else {
+                                        // print(imageUri.toString());
+                                        buildingName.clear();
+                                        buildingHeight.clear();
+                                        buildingWidth.clear();
 
-                                    Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) =>
-                                                addPlaces(mapName: building)));
-                                  }
-                                },
-                                child: Text(
-                                  "التالي",
-                                  style: TextStyle(
-                                      color: Color.fromARGB(255, 255, 255, 255),
-                                      fontSize: 20),
-                                )),
-                          )
-                        ],
+                                        Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) => addPlaces(
+                                                    mapName: building)));
+                                      }
+                                    }
+                                  },
+                                  child: Text(
+                                    "التالي",
+                                    style: TextStyle(
+                                        color:
+                                            Color.fromARGB(255, 255, 255, 255),
+                                        fontSize: 20),
+                                  )),
+                            )
+                          ],
+                        ),
                       ),
                     )
                   ],
