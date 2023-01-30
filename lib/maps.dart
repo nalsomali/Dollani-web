@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:web/login.dart';
 import 'package:web/places.dart';
 
+import 'Origin.dart';
 import 'addMapsScreen.dart';
 
 class DashboardScreen extends StatefulWidget {
@@ -300,7 +301,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) => addMaps()));
+                                    builder: (context) => ImagePage()));
                           },
                           child: Text(
                             "اضافة خريطة جديدة",
