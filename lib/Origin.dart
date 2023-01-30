@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cool_alert/cool_alert.dart';
+import 'package:web/maps.dart';
 
 import 'addMapsScreen.dart';
 import 'login.dart';
@@ -43,6 +44,12 @@ class _ImagePageState extends State<ImagePage> {
                   color: Color.fromARGB(255, 255, 255, 255),
                 ),
                 onDestinationSelected: (index) {
+                  if (index == 0)
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => DashboardScreen()));
+
                   if (index == 1)
                     Navigator.push(context,
                         MaterialPageRoute(builder: (context) => addMaps()));
