@@ -112,6 +112,14 @@ class _addPlacesState extends State<addPlaces> {
       }
   }
 
+  Offset _tapPosition = Offset.zero;
+
+  void _handleTap(TapDownDetails details) {
+    setState(() {
+      _tapPosition = details.localPosition;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -240,19 +248,62 @@ class _addPlacesState extends State<addPlaces> {
                         color: Color.fromARGB(255, 0, 0, 0)),
                     textAlign: TextAlign.right,
                   ),
-                  Listener(
-                    // cursor: SystemMouseCursors.click,
-                    onPointerMove: _updateLocation,
-                    child: Container(
-                      width: 400,
-                      height: 530,
-                      decoration: BoxDecoration(
-                        image: DecorationImage(
-                          image: NetworkImage("$photo"),
-                          fit: BoxFit.cover,
+                  // Listener(
+                  //   // cursor: SystemMouseCursors.click,
+                  //   onPointerMove: _updateLocation,
+                  //   child: Container(
+                  //     width: 400,
+                  //     height: 530,
+                  //     decoration: BoxDecoration(
+                  //       image: DecorationImage(
+                  //         image: NetworkImage("$photo"),
+                  //         fit: BoxFit.cover,
+                  //       ),
+                  //     ),
+                  //   ),
+                  // ),
+
+                  CustomPaint(
+                    painter: ImagePainter(_tapPosition, photo),
+                    child: GestureDetector(
+                      onTapDown: _handleTap,
+                      onTapUp: (TapUpDetails details) =>
+                          _tapPosition = details.localPosition,
+                      child: Container(
+                        width: 400,
+                        height: 530,
+                        decoration: BoxDecoration(
+                          image: DecorationImage(
+                            image: NetworkImage(photo),
+                            fit: BoxFit.cover,
+                          ),
                         ),
                       ),
                     ),
+                  ),
+                  TextButton(
+                      onPressed: () {
+                        FirebaseFirestore.instance
+                            .collection('places')
+                            .doc(cat.text +
+                                '-' +
+                                _placeNameEditingController.text)
+                            .set({
+                          "building": mapName,
+                          "category": "12",
+                          'name': "test",
+                          'x': _tapPosition.dx.round(),
+                          "y": _tapPosition.dy.round()
+                        });
+                      },
+                      child: Text("حفظ النقطة")),
+                  Container(
+                    height: 50,
+                    child: _tapPosition == Offset.zero
+                        ? Text('No point selected')
+                        : Text(
+                            'x: ${_tapPosition.dx.round()}, y: ${_tapPosition.dy.round()}'),
+                    padding: EdgeInsets.all(16),
                   ),
                   SizedBox(height: 30),
                   Container(
@@ -380,8 +431,8 @@ class _addPlacesState extends State<addPlaces> {
 
   void _updateLocation(PointerEvent details) {
     setState(() {
-      x = details.position.dx;
-      y = details.position.dy;
+      x = details.localPosition.dx;
+      y = details.localPosition.dy;
     });
     showDialog(
         context: context,
@@ -565,8 +616,8 @@ class _addPlacesState extends State<addPlaces> {
                         "building": mapName,
                         "category": selectedCat,
                         'name': _placeNameEditingController.text,
-                        'x': x,
-                        "y": y
+                        'x': _tapPosition.dx.round(),
+                        "y": _tapPosition.dy.round()
                       });
 
                       _placeNameEditingController.clear();
@@ -632,4 +683,22 @@ class _addPlacesState extends State<addPlaces> {
           );
         });
   }
+}
+
+class ImagePainter extends CustomPainter {
+  final Offset tapPosition;
+  final String img;
+
+  ImagePainter(this.tapPosition, this.img);
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    if (tapPosition != null && tapPosition != Offset.zero) {
+      canvas.drawCircle(tapPosition, 8, Paint()..color = Colors.red);
+    }
+  }
+
+  @override
+  bool shouldRepaint(ImagePainter oldDelegate) =>
+      tapPosition != oldDelegate.tapPosition;
 }
