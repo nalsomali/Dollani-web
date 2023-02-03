@@ -225,6 +225,10 @@ class _HomeState extends State<addMaps> {
                                           if (value == null || value.isEmpty) {
                                             return 'الرجاء ادخال اسم المبنى';
                                           }
+                                          if (value.length >= 3 &&
+                                              value.length <= 20) {
+                                            return 'الرجاء ادخال اسم المبنى';
+                                          }
                                           return null;
                                         },
                                       ),
@@ -262,6 +266,7 @@ class _HomeState extends State<addMaps> {
                                                   .hasMatch(value)) {
                                             return 'الرجاء ادخال رقم صحيح ';
                                           }
+
                                           //return null;
                                         },
                                       ),
