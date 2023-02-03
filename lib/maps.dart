@@ -301,7 +301,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) => ImagePage()));
+                                    builder: (context) => addMaps()));
                           },
                           child: Text(
                             "اضافة خريطة جديدة",
