@@ -41,7 +41,7 @@ String ValidateHeight(String value) {
 
 String ValidateWidth(String value) {
   if (value == null || value.isEmpty) {
-    return 'الرجاء ادخال الطول ';
+    return 'الرجاء ادخال العرض ';
   } else if (!RegExp(r'[0-9]').hasMatch(value) &&
       !RegExp(r'[٠-٩]').hasMatch(value)) {
     return 'الرجاء ادخال رقم صحيح ';

@@ -29,9 +29,9 @@ void main() {
     expect(actual, 'الرجاء ادخال رقم صحيح ');
   });
 
-  test("Validate invalid height", () {
-    String height = "20#";
-    String actual = ValidateHeight(height);
+  test("Validate invalid width", () {
+    String width = "20#";
+    String actual = ValidateWidth(width);
     expect(actual, 'الرجاء ادخال رقم صحيح ');
   });
 
@@ -43,6 +43,11 @@ void main() {
   test("Validate invalid Width(", () {
     String width = "";
     String actual = ValidateWidth(width);
-    expect(actual, 'الرجاء ادخال الطول ');
+    expect(actual, 'الرجاء ادخال العرض ');
+  });
+  test("Validate invalid Width(", () {
+    String width = "";
+    String actual = ValidateWidth(width);
+    expect(actual, 'الرجاء ادخال العرض ');
   });
 }
