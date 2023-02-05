@@ -1,4 +1,3 @@
-import 'dart:html';
 import 'package:cool_alert/cool_alert.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -17,6 +16,37 @@ import 'maps.dart';
 class addMaps extends StatefulWidget {
   @override
   _HomeState createState() => _HomeState();
+}
+
+String ValidateName(String value) {
+  if (value == null || value.isEmpty) {
+    return 'الرجاء ادخال اسم المبنى';
+  } else if (value.length < 3) {
+    return 'يجب ان يحتوي اسم المبنى على ٣ حروف على الاقل';
+  } else if (value.length > 20) {
+    return 'يجب ان لا يتجاوز اسم المبنى  ٢٠ حرف  ';
+  }
+  return "تم الادخال بنجاح";
+}
+
+String ValidateHeight(String value) {
+  if (value == null || value.isEmpty) {
+    return 'الرجاء ادخال الطول ';
+  } else if (!RegExp(r'[0-9]').hasMatch(value) &&
+      !RegExp(r'[٠-٩]').hasMatch(value)) {
+    return 'الرجاء ادخال رقم صحيح ';
+  }
+  return "تم الادخال بنجاح";
+}
+
+String ValidateWidth(String value) {
+  if (value == null || value.isEmpty) {
+    return 'الرجاء ادخال الطول ';
+  } else if (!RegExp(r'[0-9]').hasMatch(value) &&
+      !RegExp(r'[٠-٩]').hasMatch(value)) {
+    return 'الرجاء ادخال رقم صحيح ';
+  }
+  return "تم الادخال بنجاح";
 }
 
 Uint8List webImage = Uint8List(8);
@@ -224,10 +254,10 @@ class _HomeState extends State<addMaps> {
                                         validator: (value) {
                                           if (value == null || value.isEmpty) {
                                             return 'الرجاء ادخال اسم المبنى';
-                                          }
-                                          if (value.length >= 3 &&
-                                              value.length <= 20) {
-                                            return 'الرجاء ادخال اسم المبنى';
+                                          } else if (value.length < 3) {
+                                            return 'يجب ان يحتوي اسم المبنى على ٣ حروف على الاقل';
+                                          } else if (value.length > 20) {
+                                            return 'يجب ان لا يتجاوز اسم المبنى  ٢٠ حرف  ';
                                           }
                                           return null;
                                         },
