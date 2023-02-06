@@ -277,7 +277,7 @@ class _addPlacesState extends State<addPlaces> {
                   ),
                   SizedBox(height: 30),
                   Container(
-                    margin: EdgeInsets.only(right: 123),
+                    margin: EdgeInsets.only(right: 200),
                     child: Row(children: [
                       Container(
                         height: 30,
