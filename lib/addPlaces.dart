@@ -233,9 +233,9 @@ class _addPlacesState extends State<addPlaces> {
                     textAlign: TextAlign.center,
                   ),
                   Text(
-                    "٢-بعد ذلك سيُطلب منك ادخال معلومات المكان" "(" +
+                    "٢-بعد ذلك سيُطلب منك ادخال معلومات المكان" ")" +
                         " الاسم / التصنيف" +
-                        ")",
+                        "(",
                     style: TextStyle(
                         //fontSize: 20,
                         fontWeight: FontWeight.bold,
@@ -243,7 +243,7 @@ class _addPlacesState extends State<addPlaces> {
                     textAlign: TextAlign.center,
                   ),
                   Text(
-                    "٣-قم بتعبئة المعلومات وانقر على زر" + " (" + "إضافة" + ")",
+                    "٣-قم بتعبئة المعلومات وانقر على زر" + " )" + "إضافة" + "(",
                     style: TextStyle(
                         //   fontSize: 20,
                         fontWeight: FontWeight.bold,
@@ -263,7 +263,7 @@ class _addPlacesState extends State<addPlaces> {
                   ),
                   Listener(
                     // cursor: SystemMouseCursors.click,
-                    onPointerMove: _updateLocation,
+                    onPointerUp: _updateLocation,
                     child: Container(
                       width: 400,
                       height: 530,

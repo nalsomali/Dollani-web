@@ -267,7 +267,7 @@ class _adNewPlacesState extends State<addNewPlace> {
                   ),
                   Listener(
                     // cursor: SystemMouseCursors.click,
-                    onPointerMove: _updateLocation,
+                    onPointerUp: _updateLocation,
                     child: Container(
                       width: 400,
                       height: 530,

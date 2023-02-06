@@ -223,7 +223,7 @@ class _addHallwaysState extends State<addHallways> {
                       children: [
                         Listener(
                           // cursor: SystemMouseCursors.click,
-                          onPointerMove: isSelected == false
+                          onPointerUp: isSelected == false
                               ? _updateLocation
                               : _updateLocation2,
                           child: Container(
