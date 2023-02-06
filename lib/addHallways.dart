@@ -193,7 +193,7 @@ class _addHallwaysState extends State<addHallways> {
                               color: Color.fromARGB(255, 28, 51, 151)),
                         ),
                         Text(
-                          " ١-لتحديد ممر من الخريطة الرجاء اختيار نقطة بداية الممر المحدد اختياره من صورة الخريطة   ",
+                          " ١-لتحديد ممر من الخريطة الرجاء اختيار نقطة بداية الممر من صورةالمبنى   ",
                           style: TextStyle(
                               // fontSize: 20,
                               fontWeight: FontWeight.bold,
@@ -247,30 +247,6 @@ class _addHallwaysState extends State<addHallways> {
                                 child: TextButton(
                                     style: TextButton.styleFrom(
                                       backgroundColor:
-                                          Color.fromARGB(255, 186, 187, 189),
-                                    ),
-                                    onPressed: () async {
-                                      Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (context) => addPlaces(
-                                                    mapName: mapName,
-                                                  )));
-                                    },
-                                    child: Text(
-                                      "السابق",
-                                      style: TextStyle(
-                                        color: Color.fromARGB(255, 0, 0, 0),
-                                      ),
-                                    )),
-                              ),
-                              SizedBox(width: 30),
-                              Container(
-                                height: 30,
-                                width: 150,
-                                child: TextButton(
-                                    style: TextButton.styleFrom(
-                                      backgroundColor:
                                           Color.fromARGB(255, 45, 66, 142),
                                     ),
                                     onPressed: () async {
@@ -285,6 +261,30 @@ class _addHallwaysState extends State<addHallways> {
                                       style: TextStyle(
                                         color:
                                             Color.fromARGB(255, 255, 255, 255),
+                                      ),
+                                    )),
+                              ),
+                              SizedBox(width: 30),
+                              Container(
+                                height: 30,
+                                width: 150,
+                                child: TextButton(
+                                    style: TextButton.styleFrom(
+                                      backgroundColor:
+                                          Color.fromARGB(255, 186, 187, 189),
+                                    ),
+                                    onPressed: () async {
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) => addPlaces(
+                                                    mapName: mapName,
+                                                  )));
+                                    },
+                                    child: Text(
+                                      "السابق",
+                                      style: TextStyle(
+                                        color: Color.fromARGB(255, 0, 0, 0),
                                       ),
                                     )),
                               ),
@@ -433,15 +433,6 @@ class _addHallwaysState extends State<addHallways> {
             actions: [
               ElevatedButton(
                   style: TextButton.styleFrom(
-                    backgroundColor: Color.fromARGB(255, 175, 177, 180),
-                  ),
-                  child: Text("الغاء"),
-                  onPressed: () {
-                    FocusScope.of(context).unfocus();
-                    Navigator.pop(context);
-                  }),
-              ElevatedButton(
-                  style: TextButton.styleFrom(
                     backgroundColor: Color.fromARGB(255, 45, 66, 142),
                   ),
                   child: Text("اضافة"),
@@ -483,7 +474,16 @@ class _addHallwaysState extends State<addHallways> {
                         },
                       );
                     }
-                  })
+                  }),
+              ElevatedButton(
+                  style: TextButton.styleFrom(
+                    backgroundColor: Color.fromARGB(255, 175, 177, 180),
+                  ),
+                  child: Text("الغاء"),
+                  onPressed: () {
+                    FocusScope.of(context).unfocus();
+                    Navigator.pop(context);
+                  }),
             ],
           );
         });
