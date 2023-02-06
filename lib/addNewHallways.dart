@@ -193,7 +193,7 @@ class _addNewHallwaysState extends State<addNewHallways> {
                             color: Color.fromARGB(255, 28, 51, 151)),
                       ),
                       Text(
-                        " ١-لتحديد ممر من الخريطة الرجاء اختيار نقطة بداية الممر المحدد اختياره من صورة الخريطة   ",
+                        " ١-لتحديد ممر من الخريطة الرجاء اختيار نقطة بداية الممر من صورة الخريطة   ",
                         style: TextStyle(
                             // fontSize: 20,
                             fontWeight: FontWeight.bold,
@@ -402,60 +402,68 @@ class _addNewHallwaysState extends State<addNewHallways> {
               ),
             ),
             actions: [
-              ElevatedButton(
-                  style: TextButton.styleFrom(
-                    backgroundColor: Color.fromARGB(255, 175, 177, 180),
-                  ),
-                  child: Text("الغاء"),
-                  onPressed: () {
-                    isSelected = false;
-                    FocusScope.of(context).unfocus();
-                    Navigator.pop(context);
-                  }),
-              ElevatedButton(
-                  style: TextButton.styleFrom(
-                    backgroundColor: Color.fromARGB(255, 45, 66, 142),
-                  ),
-                  child: Text("اضافة"),
-                  onPressed: () {
-                    Navigator.pop(context);
-                    if (_placeNameEditingController.text != "") {
-                      setState(() {
-                        isSelected = true;
-                      });
-                      FocusScope.of(context).unfocus();
-                      CoolAlert.show(
-                        context: context,
-                        width: 120,
-                        confirmBtnColor: Color.fromARGB(255, 45, 66, 142),
-                        //cancelBtnColor: Color.fromARGB(144, 64, 6, 87),
-                        type: CoolAlertType.success,
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  ElevatedButton(
+                      style: TextButton.styleFrom(
                         backgroundColor: Color.fromARGB(255, 45, 66, 142),
-                        text: "تم تحديد نقطة البداية بنجاح ",
-                        confirmBtnText: 'اغلاق',
-                        onCancelBtnTap: () {
-                          Navigator.pop(context);
-                        },
-                      );
-                    } else {
-                      setState(() {
+                      ),
+                      child: Text("اضافة"),
+                      onPressed: () {
+                        Navigator.pop(context);
+                        if (_placeNameEditingController.text != "") {
+                          setState(() {
+                            isSelected = true;
+                          });
+                          FocusScope.of(context).unfocus();
+                          CoolAlert.show(
+                            context: context,
+                            width: 120,
+                            confirmBtnColor: Color.fromARGB(255, 45, 66, 142),
+                            //cancelBtnColor: Color.fromARGB(144, 64, 6, 87),
+                            type: CoolAlertType.success,
+                            backgroundColor: Color.fromARGB(255, 45, 66, 142),
+                            text: "تم تحديد نقطة البداية بنجاح ",
+                            confirmBtnText: 'اغلاق',
+                            onCancelBtnTap: () {
+                              Navigator.pop(context);
+                            },
+                          );
+                        } else {
+                          setState(() {
+                            isSelected = false;
+                          });
+                          CoolAlert.show(
+                            context: context,
+                            width: 130,
+                            confirmBtnColor: Color.fromARGB(255, 45, 66, 142),
+                            //cancelBtnColor: Color.fromARGB(144, 64, 6, 87),
+                            type: CoolAlertType.error,
+                            backgroundColor: Color.fromARGB(255, 45, 66, 142),
+                            text: "الرجاء ادخال اسم الممر",
+                            confirmBtnText: 'اغلاق',
+                            onConfirmBtnTap: () {
+                              Navigator.pop(context);
+                            },
+                          );
+                        }
+                      }),
+                  SizedBox(
+                    width: 10,
+                  ),
+                  ElevatedButton(
+                      style: TextButton.styleFrom(
+                        backgroundColor: Color.fromARGB(255, 175, 177, 180),
+                      ),
+                      child: Text("الغاء"),
+                      onPressed: () {
                         isSelected = false;
-                      });
-                      CoolAlert.show(
-                        context: context,
-                        width: 130,
-                        confirmBtnColor: Color.fromARGB(255, 45, 66, 142),
-                        //cancelBtnColor: Color.fromARGB(144, 64, 6, 87),
-                        type: CoolAlertType.error,
-                        backgroundColor: Color.fromARGB(255, 45, 66, 142),
-                        text: "الرجاء ادخال اسم الممر",
-                        confirmBtnText: 'اغلاق',
-                        onConfirmBtnTap: () {
-                          Navigator.pop(context);
-                        },
-                      );
-                    }
-                  })
+                        FocusScope.of(context).unfocus();
+                        Navigator.pop(context);
+                      }),
+                ],
+              )
             ],
           );
         });

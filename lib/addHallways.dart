@@ -284,7 +284,8 @@ class _addHallwaysState extends State<addHallways> {
                                     child: Text(
                                       "السابق",
                                       style: TextStyle(
-                                        color: Color.fromARGB(255, 0, 0, 0),
+                                        color:
+                                            Color.fromARGB(255, 255, 255, 255),
                                       ),
                                     )),
                               ),
@@ -431,59 +432,67 @@ class _addHallwaysState extends State<addHallways> {
               ),
             ),
             actions: [
-              ElevatedButton(
-                  style: TextButton.styleFrom(
-                    backgroundColor: Color.fromARGB(255, 45, 66, 142),
-                  ),
-                  child: Text("اضافة"),
-                  onPressed: () {
-                    Navigator.pop(context);
-                    if (_placeNameEditingController.text != "") {
-                      setState(() {
-                        isSelected = true;
-                      });
-                      FocusScope.of(context).unfocus();
-                      CoolAlert.show(
-                        context: context,
-                        width: 120,
-                        confirmBtnColor: Color.fromARGB(255, 45, 66, 142),
-                        //cancelBtnColor: Color.fromARGB(144, 64, 6, 87),
-                        type: CoolAlertType.success,
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  ElevatedButton(
+                      style: TextButton.styleFrom(
                         backgroundColor: Color.fromARGB(255, 45, 66, 142),
-                        text: "تم تحديد نقطة البداية بنجاح ",
-                        confirmBtnText: 'اغلاق',
-                        onCancelBtnTap: () {
-                          Navigator.pop(context);
-                        },
-                      );
-                    } else {
-                      setState(() {
-                        isSelected = false;
-                      });
-                      CoolAlert.show(
-                        context: context,
-                        width: 130,
-                        confirmBtnColor: Color.fromARGB(255, 45, 66, 142),
-                        //cancelBtnColor: Color.fromARGB(144, 64, 6, 87),
-                        type: CoolAlertType.error,
-                        backgroundColor: Color.fromARGB(255, 45, 66, 142),
-                        text: "الرجاء ادخال اسم الممر",
-                        confirmBtnText: 'اغلاق',
-                        onConfirmBtnTap: () {
-                          Navigator.pop(context);
-                        },
-                      );
-                    }
-                  }),
-              ElevatedButton(
-                  style: TextButton.styleFrom(
-                    backgroundColor: Color.fromARGB(255, 175, 177, 180),
+                      ),
+                      child: Text("اضافة"),
+                      onPressed: () {
+                        Navigator.pop(context);
+                        if (_placeNameEditingController.text != "") {
+                          setState(() {
+                            isSelected = true;
+                          });
+                          FocusScope.of(context).unfocus();
+                          CoolAlert.show(
+                            context: context,
+                            width: 120,
+                            confirmBtnColor: Color.fromARGB(255, 45, 66, 142),
+                            //cancelBtnColor: Color.fromARGB(144, 64, 6, 87),
+                            type: CoolAlertType.success,
+                            backgroundColor: Color.fromARGB(255, 45, 66, 142),
+                            text: "تم تحديد نقطة البداية بنجاح ",
+                            confirmBtnText: 'اغلاق',
+                            onCancelBtnTap: () {
+                              Navigator.pop(context);
+                            },
+                          );
+                        } else {
+                          setState(() {
+                            isSelected = false;
+                          });
+                          CoolAlert.show(
+                            context: context,
+                            width: 130,
+                            confirmBtnColor: Color.fromARGB(255, 45, 66, 142),
+                            //cancelBtnColor: Color.fromARGB(144, 64, 6, 87),
+                            type: CoolAlertType.error,
+                            backgroundColor: Color.fromARGB(255, 45, 66, 142),
+                            text: "الرجاء ادخال اسم الممر",
+                            confirmBtnText: 'اغلاق',
+                            onConfirmBtnTap: () {
+                              Navigator.pop(context);
+                            },
+                          );
+                        }
+                      }),
+                  SizedBox(
+                    width: 10,
                   ),
-                  child: Text("الغاء"),
-                  onPressed: () {
-                    FocusScope.of(context).unfocus();
-                    Navigator.pop(context);
-                  }),
+                  ElevatedButton(
+                      style: TextButton.styleFrom(
+                        backgroundColor: Color.fromARGB(255, 175, 177, 180),
+                      ),
+                      child: Text("الغاء"),
+                      onPressed: () {
+                        FocusScope.of(context).unfocus();
+                        Navigator.pop(context);
+                      }),
+                ],
+              )
             ],
           );
         });

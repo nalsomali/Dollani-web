@@ -203,49 +203,67 @@ class _adNewPlacesState extends State<addNewPlace> {
                   Text(
                     " تحديد المواقع على خريطة مبنى" + ": " + "$mapName",
                     style: TextStyle(
-                        fontSize: 30,
-                        //  fontWeight: FontWeight.bold,
-                        color: Color.fromARGB(255, 23, 39, 112)),
+                        fontSize: 22,
+                        fontWeight: FontWeight.bold,
+                        color: Color.fromARGB(255, 28, 51, 151)),
                   ),
-                  Image.asset(
-                    'assets/images/logo.png',
-                    scale: 7,
-                  ),
+                  SizedBox(
+                    width: 20,
+                  )
                 ],
               ),
               Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
+                  SizedBox(
+                    height: 20,
+                  ),
                   Text(
-                    "تعليمات اضافة اماكن من خريطة",
+                    " لإضافة اماكن على الخريطة الرجاء اتباع التعليمات التالية ",
                     style: TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
-                        color: Color.fromARGB(255, 28, 51, 151)),
+                        color: Color.fromARGB(255, 23, 39, 112)),
+                  ),
+                  SizedBox(
+                    height: 10,
                   ),
                   Text(
-                    " ١-لتحديد مكان من الخريطة الرجاء اختيار المكان المحدد اختيارة من صورة الخريطة   ",
+                    "١- الرجاء النقر على المكان المراد تحديدة من صورة المبنى ",
                     style: TextStyle(
                         // fontSize: 20,
                         fontWeight: FontWeight.bold,
                         color: Color.fromARGB(255, 0, 0, 0)),
-                    textAlign: TextAlign.right,
+                    textAlign: TextAlign.center,
                   ),
                   Text(
-                    "٢-عند تحديد المكان سيظهر لك نافذه يتم تحديد فيها اسم المكان ،تصنيفه",
+                    "٢-بعد ذلك سيُطلب منك ادخال معلومات المكان" "(" +
+                        " الاسم / التصنيف" +
+                        ")",
                     style: TextStyle(
                         //fontSize: 20,
                         fontWeight: FontWeight.bold,
                         color: Color.fromARGB(255, 0, 0, 0)),
-                    textAlign: TextAlign.right,
+                    textAlign: TextAlign.center,
                   ),
                   Text(
-                    "٣-الرجاء ادخال البيانات المطلوبة والنقر على اضافة .                            ",
+                    "٣-قم بتعبئة المعلومات وانقر على زر" + " (" + "إضافة" + ")",
                     style: TextStyle(
                         //   fontSize: 20,
                         fontWeight: FontWeight.bold,
                         color: Color.fromARGB(255, 0, 0, 0)),
-                    textAlign: TextAlign.right,
+                    textAlign: TextAlign.center,
+                  ),
+                  Text(
+                    "٤-بعد اضافة المكان سيتم عرضه في القائمة المجاورة                          ",
+                    style: TextStyle(
+                        //   fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                        color: Color.fromARGB(255, 0, 0, 0)),
+                    textAlign: TextAlign.center,
+                  ),
+                  SizedBox(
+                    height: 20,
                   ),
                   Listener(
                     // cursor: SystemMouseCursors.click,
@@ -513,103 +531,113 @@ class _adNewPlacesState extends State<addNewPlace> {
               ),
             ),
             actions: [
-              ElevatedButton(
-                  style: TextButton.styleFrom(
-                    backgroundColor: Color.fromARGB(255, 175, 177, 180),
-                  ),
-                  child: Text("الغاء"),
-                  onPressed: () {
-                    FocusScope.of(context).unfocus();
-                    Navigator.pop(context);
-                  }),
-              ElevatedButton(
-                  style: TextButton.styleFrom(
-                    backgroundColor: Color.fromARGB(255, 45, 66, 142),
-                  ),
-                  child: Text("اضافة"),
-                  onPressed: () {
-                    setState(() {
-                      placeName = [];
-                      category = [];
-                    });
-                    Navigator.pop(context);
-
-                    if (_placeNameEditingController.text.isNotEmpty &&
-                        selectedCat != null &&
-                        selectedCat != "اخرى") {
-                      FirebaseFirestore.instance
-                          .collection('places')
-                          .doc(selectedCat! +
-                              '-' +
-                              _placeNameEditingController.text)
-                          .set({
-                        "building": mapName,
-                        "category": selectedCat,
-                        'name': _placeNameEditingController.text,
-                        'x': x,
-                        "y": y
-                      });
-
-                      _placeNameEditingController.clear();
-                      cat.clear();
-                      CoolAlert.show(
-                          context: context,
-                          width: 120,
-                          confirmBtnColor: Color.fromARGB(255, 45, 66, 142),
-                          //cancelBtnColor: Color.fromARGB(144, 64, 6, 87),
-                          type: CoolAlertType.success,
-                          backgroundColor: Color.fromARGB(255, 45, 66, 142),
-                          text: "تم حفظ الاماكن بنجاح",
-                          confirmBtnText: 'اغلاق',
-                          showCancelBtn: false);
-                    } else if (selectedCat == "اخرى" &&
-                        _placeNameEditingController.text.isNotEmpty &&
-                        cat.text.isNotEmpty &&
-                        selectedCat != null) {
-                      options.add(cat.text);
-                      updated = options;
-                      FirebaseFirestore.instance
-                          .collection('categories')
-                          .doc("MOGMaTOI7KLI4iB45cHb")
-                          .update({
-                        "categoriesP": updated,
-                      });
-                      FirebaseFirestore.instance
-                          .collection('places')
-                          .doc(
-                              cat.text + '-' + _placeNameEditingController.text)
-                          .set({
-                        "building": mapName,
-                        "category": cat.text,
-                        'name': _placeNameEditingController.text,
-                        'x': x,
-                        "y": y
-                      });
-                      CoolAlert.show(
-                        context: context,
-                        width: 120,
-                        confirmBtnColor: Color.fromARGB(255, 45, 66, 142),
-                        //cancelBtnColor: Color.fromARGB(144, 64, 6, 87),
-                        type: CoolAlertType.success,
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  ElevatedButton(
+                      style: TextButton.styleFrom(
                         backgroundColor: Color.fromARGB(255, 45, 66, 142),
-                        text: "تم حفظ الاماكن بنجاح",
-                        confirmBtnText: 'اغلاق',
-                        showCancelBtn: false,
-                      );
-                    } else {
-                      CoolAlert.show(
-                        context: context,
-                        width: 130,
-                        confirmBtnColor: Color.fromARGB(255, 45, 66, 142),
-                        //cancelBtnColor: Color.fromARGB(144, 64, 6, 87),
-                        type: CoolAlertType.error,
-                        backgroundColor: Color.fromARGB(255, 45, 66, 142),
-                        text: "الرجاء ادخال جميع المعلومات المطلوبة عن الموقع",
-                        confirmBtnText: 'اغلاق',
-                        showCancelBtn: false,
-                      );
-                    }
-                  })
+                      ),
+                      child: Text("اضافة"),
+                      onPressed: () {
+                        setState(() {
+                          placeName = [];
+                          category = [];
+                        });
+                        Navigator.pop(context);
+
+                        if (_placeNameEditingController.text.isNotEmpty &&
+                            selectedCat != null &&
+                            selectedCat != "اخرى") {
+                          FirebaseFirestore.instance
+                              .collection('places')
+                              .doc(selectedCat! +
+                                  '-' +
+                                  _placeNameEditingController.text)
+                              .set({
+                            "building": mapName,
+                            "category": selectedCat,
+                            'name': _placeNameEditingController.text,
+                            'x': x,
+                            "y": y
+                          });
+
+                          _placeNameEditingController.clear();
+                          cat.clear();
+                          CoolAlert.show(
+                              context: context,
+                              width: 120,
+                              confirmBtnColor: Color.fromARGB(255, 45, 66, 142),
+                              //cancelBtnColor: Color.fromARGB(144, 64, 6, 87),
+                              type: CoolAlertType.success,
+                              backgroundColor: Color.fromARGB(255, 45, 66, 142),
+                              text: "تم حفظ الاماكن بنجاح",
+                              confirmBtnText: 'اغلاق',
+                              showCancelBtn: false);
+                        } else if (selectedCat == "اخرى" &&
+                            _placeNameEditingController.text.isNotEmpty &&
+                            cat.text.isNotEmpty &&
+                            selectedCat != null) {
+                          options.add(cat.text);
+                          updated = options;
+                          FirebaseFirestore.instance
+                              .collection('categories')
+                              .doc("MOGMaTOI7KLI4iB45cHb")
+                              .update({
+                            "categoriesP": updated,
+                          });
+                          FirebaseFirestore.instance
+                              .collection('places')
+                              .doc(cat.text +
+                                  '-' +
+                                  _placeNameEditingController.text)
+                              .set({
+                            "building": mapName,
+                            "category": cat.text,
+                            'name': _placeNameEditingController.text,
+                            'x': x,
+                            "y": y
+                          });
+                          CoolAlert.show(
+                            context: context,
+                            width: 120,
+                            confirmBtnColor: Color.fromARGB(255, 45, 66, 142),
+                            //cancelBtnColor: Color.fromARGB(144, 64, 6, 87),
+                            type: CoolAlertType.success,
+                            backgroundColor: Color.fromARGB(255, 45, 66, 142),
+                            text: "تم حفظ الاماكن بنجاح",
+                            confirmBtnText: 'اغلاق',
+                            showCancelBtn: false,
+                          );
+                        } else {
+                          CoolAlert.show(
+                            context: context,
+                            width: 130,
+                            confirmBtnColor: Color.fromARGB(255, 45, 66, 142),
+                            //cancelBtnColor: Color.fromARGB(144, 64, 6, 87),
+                            type: CoolAlertType.error,
+                            backgroundColor: Color.fromARGB(255, 45, 66, 142),
+                            text:
+                                "الرجاء ادخال جميع المعلومات المطلوبة عن الموقع",
+                            confirmBtnText: 'اغلاق',
+                            showCancelBtn: false,
+                          );
+                        }
+                      }),
+                  SizedBox(
+                    width: 10,
+                  ),
+                  ElevatedButton(
+                      style: TextButton.styleFrom(
+                        backgroundColor: Color.fromARGB(255, 175, 177, 180),
+                      ),
+                      child: Text("الغاء"),
+                      onPressed: () {
+                        FocusScope.of(context).unfocus();
+                        Navigator.pop(context);
+                      }),
+                ],
+              )
             ],
           );
         });
