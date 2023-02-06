@@ -363,8 +363,6 @@ class _addHallwaysState extends State<addHallways> {
   }
 
   void _updateLocation(PointerEvent details) {
-    isSelected = true;
-
     setState(() {
       xStart = details.position.dx;
       yStart = details.position.dy;
@@ -439,7 +437,6 @@ class _addHallwaysState extends State<addHallways> {
                   ),
                   child: Text("الغاء"),
                   onPressed: () {
-                    isSelected = false;
                     FocusScope.of(context).unfocus();
                     Navigator.pop(context);
                   }),
@@ -449,10 +446,29 @@ class _addHallwaysState extends State<addHallways> {
                   ),
                   child: Text("اضافة"),
                   onPressed: () {
-                    if (_placeNameEditingController.text.isNotEmpty) {
+                    Navigator.pop(context);
+                    if (_placeNameEditingController.text != "") {
+                      setState(() {
+                        isSelected = true;
+                      });
                       FocusScope.of(context).unfocus();
-                      Navigator.pop(context);
-                    } else
+                      CoolAlert.show(
+                        context: context,
+                        width: 120,
+                        confirmBtnColor: Color.fromARGB(255, 45, 66, 142),
+                        //cancelBtnColor: Color.fromARGB(144, 64, 6, 87),
+                        type: CoolAlertType.success,
+                        backgroundColor: Color.fromARGB(255, 45, 66, 142),
+                        text: "تم تحديد نقطة البداية بنجاح ",
+                        confirmBtnText: 'اغلاق',
+                        onCancelBtnTap: () {
+                          Navigator.pop(context);
+                        },
+                      );
+                    } else {
+                      setState(() {
+                        isSelected = false;
+                      });
                       CoolAlert.show(
                         context: context,
                         width: 130,
@@ -466,6 +482,7 @@ class _addHallwaysState extends State<addHallways> {
                           Navigator.pop(context);
                         },
                       );
+                    }
                   })
             ],
           );

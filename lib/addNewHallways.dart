@@ -418,10 +418,29 @@ class _addNewHallwaysState extends State<addNewHallways> {
                   ),
                   child: Text("اضافة"),
                   onPressed: () {
-                    if (_placeNameEditingController.text.isNotEmpty) {
+                    Navigator.pop(context);
+                    if (_placeNameEditingController.text != "") {
+                      setState(() {
+                        isSelected = true;
+                      });
                       FocusScope.of(context).unfocus();
-                      Navigator.pop(context, true);
-                    } else
+                      CoolAlert.show(
+                        context: context,
+                        width: 120,
+                        confirmBtnColor: Color.fromARGB(255, 45, 66, 142),
+                        //cancelBtnColor: Color.fromARGB(144, 64, 6, 87),
+                        type: CoolAlertType.success,
+                        backgroundColor: Color.fromARGB(255, 45, 66, 142),
+                        text: "تم تحديد نقطة البداية بنجاح ",
+                        confirmBtnText: 'اغلاق',
+                        onCancelBtnTap: () {
+                          Navigator.pop(context);
+                        },
+                      );
+                    } else {
+                      setState(() {
+                        isSelected = false;
+                      });
                       CoolAlert.show(
                         context: context,
                         width: 130,
@@ -435,6 +454,7 @@ class _addNewHallwaysState extends State<addNewHallways> {
                           Navigator.pop(context);
                         },
                       );
+                    }
                   })
             ],
           );

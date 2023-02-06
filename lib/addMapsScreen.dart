@@ -82,7 +82,22 @@ class _HomeState extends State<addMaps> {
         UploadTask uploadTask = storageReference.putData(webImage);
         await uploadTask.whenComplete(() => null);
         print("uploaded");
+
         storageReference.getDownloadURL().then((fileURL) {
+          CoolAlert.show(
+            context: context,
+            width: 120,
+            confirmBtnColor: Color.fromARGB(255, 45, 66, 142),
+            //cancelBtnColor: Color.fromARGB(144, 64, 6, 87),
+            type: CoolAlertType.success,
+            backgroundColor: Color.fromARGB(255, 45, 66, 142),
+            text: "تم ارفاق صورة الخريطة بنجاح ",
+            confirmBtnText: 'اغلاق',
+            onConfirmBtnTap: () {
+              Navigator.pop(context);
+            },
+          );
+
           setState(() {
             check = true;
 
