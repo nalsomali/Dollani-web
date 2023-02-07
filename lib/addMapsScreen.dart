@@ -91,6 +91,7 @@ class _HomeState extends State<addMaps> {
             //cancelBtnColor: Color.fromARGB(144, 64, 6, 87),
             type: CoolAlertType.success,
             backgroundColor: Color.fromARGB(255, 45, 66, 142),
+            title: 'test',
             text: "تم ارفاق صورة الخريطة بنجاح ",
             confirmBtnText: 'اغلاق',
             onConfirmBtnTap: () {

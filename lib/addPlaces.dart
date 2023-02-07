@@ -46,6 +46,8 @@ class _addPlacesState extends State<addPlaces> {
 
   final TextEditingController _placeNameEditingController =
       TextEditingController();
+       final TextEditingController _placeBeaconEditingController =
+      TextEditingController();
   final _formKey = GlobalKey<FormState>();
 
   final TextEditingController buildingName = TextEditingController();
@@ -547,7 +549,52 @@ class _addPlacesState extends State<addPlaces> {
                       ),
                       // validator: MultiValidator(
                       //     [RequiredValidator(errorText: 'مطلوب')])),
-                    )
+                    ),
+                      SizedBox(
+                      height: 20.0,
+                    ),
+                    TextFormField(
+                      autovalidateMode: AutovalidateMode.onUserInteraction,
+                      controller: _placeBeaconEditingController,
+                      keyboardType: TextInputType.emailAddress,
+                      decoration: InputDecoration(
+                        hintText: '... بيكن ٢',
+                        hintStyle: TextStyle(
+                            fontSize: 16,
+                            color: Color.fromARGB(255, 202, 198, 198)),
+                        label: RichText(
+                          text: TextSpan(
+                              text: ' معرّف البيكن',
+                              style: const TextStyle(
+                                  fontSize: 18,
+                                  color: Color.fromARGB(144, 7, 32, 87)),
+                              children: [
+                                TextSpan(
+                                    text: ' *',
+                                    style: TextStyle(
+                                      color: Colors.red,
+                                    ))
+                              ]),
+                        ),
+                        labelStyle: TextStyle(
+                            fontSize: 18,
+                            color: Color.fromARGB(144, 7, 32, 87)),
+                        border: OutlineInputBorder(
+                          borderSide: BorderSide(
+                            color: Color.fromARGB(144, 64, 7, 87),
+                            width: 2.0,
+                          ),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(
+                            color: Color.fromARGB(144, 7, 32, 87),
+                            width: 2.0,
+                          ),
+                        ),
+                      ),
+                      validator: MultiValidator(
+                          [RequiredValidator(errorText: 'مطلوب')]),
+                    ),
                   ],
                 ),
               ),
@@ -581,7 +628,9 @@ class _addPlacesState extends State<addPlaces> {
                             "category": selectedCat,
                             'name': _placeNameEditingController.text,
                             'x': x,
-                            "y": y
+                            "y": y,
+                                                        "beacon":_placeBeaconEditingController.text
+
                           });
 
                           _placeNameEditingController.clear();
@@ -604,7 +653,7 @@ class _addPlacesState extends State<addPlaces> {
                           updated = options;
                           FirebaseFirestore.instance
                               .collection('categories')
-                              .doc("MOGMaTOI7KLI4iB45cHb")
+                              .doc(mapName)
                               .update({
                             "categoriesP": updated,
                           });
@@ -618,7 +667,8 @@ class _addPlacesState extends State<addPlaces> {
                             "category": cat.text,
                             'name': _placeNameEditingController.text,
                             'x': x,
-                            "y": y
+                            "y": y,
+                            "beacon":_placeBeaconEditingController.text
                           });
                           CoolAlert.show(
                               context: context,
