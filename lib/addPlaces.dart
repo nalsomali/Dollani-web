@@ -110,6 +110,14 @@ class _addPlacesState extends State<addPlaces> {
     }
   }
 
+  Offset _tapPosition = Offset.zero;
+
+  void _handleTap(TapDownDetails details) {
+    setState(() {
+      _tapPosition = details.localPosition;
+    });
+  }
+
   Future getMap() async {
     await for (var snapshot in FirebaseFirestore.instance
         .collection('maps')
@@ -272,20 +280,38 @@ class _addPlacesState extends State<addPlaces> {
                   SizedBox(
                     height: 20,
                   ),
-                  Listener(
-                    // cursor: SystemMouseCursors.click,
-                    onPointerUp: _updateLocation,
-                    child: Container(
-                      width: 400,
-                      height: 530,
-                      decoration: BoxDecoration(
-                        image: DecorationImage(
-                          image: NetworkImage("$photo"),
-                          fit: BoxFit.cover,
+                  CustomPaint(
+                    child: GestureDetector(
+                      onTapDown: _handleTap,
+                      onTapUp: (TapUpDetails details) {
+                        _updateLocation(details);
+                      },
+                      child: Container(
+                        width: 400,
+                        height: 530,
+                        decoration: BoxDecoration(
+                          image: DecorationImage(
+                            image: NetworkImage(photo),
+                            fit: BoxFit.cover,
+                          ),
                         ),
                       ),
                     ),
                   ),
+                  // Listener(
+                  //   // cursor: SystemMouseCursors.click,
+                  //   onPointerUp: _updateLocation,
+                  //   child: Container(
+                  //     width: 400,
+                  //     height: 530,
+                  //     decoration: BoxDecoration(
+                  //       image: DecorationImage(
+                  //         image: NetworkImage("$photo"),
+                  //         fit: BoxFit.cover,
+                  //       ),
+                  //     ),
+                  //   ),
+                  // ),
                   SizedBox(height: 30),
                   Container(
                     margin: EdgeInsets.only(right: 200),
@@ -416,10 +442,10 @@ class _addPlacesState extends State<addPlaces> {
         ));
   }
 
-  void _updateLocation(PointerEvent details) {
+  void _updateLocation(TapUpDetails details) {
     setState(() {
-      x = details.position.dx.round() as double;
-      y = details.position.dy.round() as double;
+      x = details.localPosition.dx.round() as double;
+      y = details.localPosition.dy.round() as double;
     });
     showDialog(
         context: context,

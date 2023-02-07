@@ -98,7 +98,7 @@ class placesScreenState extends State<places> {
       });
       await for (var snapshot in FirebaseFirestore.instance
           .collection('places')
-          .where('building', isEqualTo: mapName)
+          .where('name', isEqualTo: search)
           .snapshots())
         for (var place in snapshot.docs) {
           setState(() {

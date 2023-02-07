@@ -56,6 +56,14 @@ class _editPlacesState extends State<editPlaces> {
     super.initState();
   }
 
+  Offset _tapPosition = Offset.zero;
+
+  void _handleTap(TapDownDetails details) {
+    setState(() {
+      _tapPosition = details.localPosition;
+    });
+  }
+
   void getCategoryList() async {
     final categories = await _firestore.collection('categories').get();
     for (var category in categories.docs) {
@@ -207,7 +215,7 @@ class _editPlacesState extends State<editPlaces> {
                               color: Color.fromARGB(255, 28, 51, 151)),
                         ),
                         Text(
-                          " ١-لتحديد موقع من الخريطة الرجاء اختيار المكان المحدد واختياره من صورة الخريطة   ",
+                          " ١-لتعديل موقع على الخريطة الرجاء اختيار الموقع الجديد من  الخريطة   ",
                           style: TextStyle(
                               // fontSize: 20,
                               fontWeight: FontWeight.bold,
@@ -215,7 +223,7 @@ class _editPlacesState extends State<editPlaces> {
                           textAlign: TextAlign.right,
                         ),
                         Text(
-                          "٢-عند تحديد المكان ستظهر لك نافذه يتم تحديد فيها اسم الموقع و تصنيفه",
+                          "٢-عند تحديد المكان ستظهر لك نافذه يتم فيها تأكيد التغيير",
                           style: TextStyle(
                               //fontSize: 20,
                               fontWeight: FontWeight.bold,
@@ -223,7 +231,7 @@ class _editPlacesState extends State<editPlaces> {
                           textAlign: TextAlign.right,
                         ),
                         Text(
-                          "٣-الرجاء ادخال البيانات المطلوبة والنقر على اضافة .                            ",
+                          "٣-عند التأكيد الرجاء الضغط على زر اضافة .                            ",
                           style: TextStyle(
                               //   fontSize: 20,
                               fontWeight: FontWeight.bold,
@@ -235,16 +243,34 @@ class _editPlacesState extends State<editPlaces> {
                     Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Listener(
-                          // cursor: SystemMouseCursors.click,
-                          onPointerMove: _updateLocation,
-                          child: Container(
-                            width: 400,
-                            height: 530,
-                            decoration: BoxDecoration(
-                              image: DecorationImage(
-                                image: NetworkImage("$photo"),
-                                fit: BoxFit.cover,
+                        // Listener(
+                        //   // cursor: SystemMouseCursors.click,
+                        //   onPointerMove: _updateLocation,
+                        //   child: Container(
+                        //     width: 400,
+                        //     height: 530,
+                        //     decoration: BoxDecoration(
+                        //       image: DecorationImage(
+                        //         image: NetworkImage("$photo"),
+                        //         fit: BoxFit.cover,
+                        //       ),
+                        //     ),
+                        //   ),
+                        // ),
+                        CustomPaint(
+                          child: GestureDetector(
+                            onTapDown: _handleTap,
+                            onTapUp: (TapUpDetails details) {
+                              _updateLocation(details);
+                            },
+                            child: Container(
+                              width: 400,
+                              height: 530,
+                              decoration: BoxDecoration(
+                                image: DecorationImage(
+                                  image: NetworkImage(photo),
+                                  fit: BoxFit.cover,
+                                ),
                               ),
                             ),
                           ),
@@ -252,6 +278,55 @@ class _editPlacesState extends State<editPlaces> {
                         SizedBox(height: 30),
                         Row(
                           children: [
+                            Container(
+                              height: 30,
+                              width: 150,
+                              child: TextButton(
+                                  style: TextButton.styleFrom(
+                                    backgroundColor:
+                                        Color.fromARGB(255, 45, 66, 142),
+                                  ),
+                                  onPressed: () async {
+                                    FocusScope.of(context).unfocus();
+                                    FirebaseFirestore.instance
+                                        .collection('places')
+                                        .doc(category + '-' + name)
+                                        .update({'x': "$x", "y": "$y"});
+
+                                    CoolAlert.show(
+                                      title: " تعديل الموقع",
+                                      context: context,
+                                      width: size.width * 0.2,
+                                      confirmBtnColor:
+                                          Color.fromARGB(255, 45, 66, 142),
+                                      //cancelBtnColor: Color.fromARGB(144, 64, 6, 87),
+                                      type: CoolAlertType.success,
+                                      backgroundColor:
+                                          Color.fromARGB(255, 45, 66, 142),
+                                      text: "تم تعديل الموقع بنجاح",
+                                      confirmBtnText: 'اغلاق',
+                                      onConfirmBtnTap: () {
+                                        _placeNameEditingController.clear();
+
+                                        Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) => places(
+                                                      mapName: Map,
+                                                    )));
+                                      },
+                                    );
+                                  },
+                                  child: Text(
+                                    "حفظ",
+                                    style: TextStyle(
+                                      color: Color.fromARGB(255, 255, 255, 255),
+                                    ),
+                                  )),
+                            ),
+                            SizedBox(
+                              width: 20,
+                            ),
                             Container(
                               height: 30,
                               width: 150,
@@ -275,54 +350,6 @@ class _editPlacesState extends State<editPlaces> {
                                     ),
                                   )),
                             ),
-                            SizedBox(
-                              width: 20,
-                            ),
-                            Container(
-                              height: 30,
-                              width: 150,
-                              child: TextButton(
-                                  style: TextButton.styleFrom(
-                                    backgroundColor:
-                                        Color.fromARGB(255, 45, 66, 142),
-                                  ),
-                                  onPressed: () async {
-                                    FocusScope.of(context).unfocus();
-                                    FirebaseFirestore.instance
-                                        .collection('places')
-                                        .doc(category + '-' + name)
-                                        .update({'x': x, "y": y});
-
-                                    CoolAlert.show(
-                                      title: " تعديل الموقع",
-                                      context: context,
-                                      width: size.width * 0.2,
-                                      confirmBtnColor:
-                                          Color.fromARGB(255, 45, 66, 142),
-                                      //cancelBtnColor: Color.fromARGB(144, 64, 6, 87),
-                                      type: CoolAlertType.success,
-                                      backgroundColor:
-                                          Color.fromARGB(255, 45, 66, 142),
-                                      text: "تم تعديل الموقع بنجاح",
-                                      confirmBtnText: 'اغلاق',
-                                      onConfirmBtnTap: () {
-                                        _placeNameEditingController.clear();
-
-                                        Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                                builder: (context) =>
-                                                    DashboardScreen()));
-                                      },
-                                    );
-                                  },
-                                  child: Text(
-                                    "حفظ",
-                                    style: TextStyle(
-                                      color: Color.fromARGB(255, 255, 255, 255),
-                                    ),
-                                  )),
-                            ),
                           ],
                         )
                       ],
@@ -337,12 +364,12 @@ class _editPlacesState extends State<editPlaces> {
         ])));
   }
 
-  void _updateLocation(PointerEvent details) {
+  void _updateLocation(TapUpDetails details) {
     Size size = MediaQuery.of(context).size;
 
     setState(() {
-      x = details.position.dx;
-      y = details.position.dy;
+      x = details.localPosition.dx.round() as double;
+      y = details.localPosition.dy.round() as double;
     });
     showDialog(
         context: context,
@@ -355,20 +382,20 @@ class _editPlacesState extends State<editPlaces> {
               ),
               actions: [
                 ElevatedButton(
+                    child: Text("تعديل"),
+                    onPressed: () {
+                      FocusScope.of(context).unfocus();
+                      ;
+
+                      Navigator.pop(context);
+                    }),
+                ElevatedButton(
                     style: TextButton.styleFrom(
                       backgroundColor: Color.fromARGB(255, 175, 177, 180),
                     ),
                     child: Text("الغاء"),
                     onPressed: () {
                       FocusScope.of(context).unfocus();
-                      Navigator.pop(context);
-                    }),
-                ElevatedButton(
-                    child: Text("تعديل"),
-                    onPressed: () {
-                      FocusScope.of(context).unfocus();
-                      ;
-
                       Navigator.pop(context);
                     }),
               ]

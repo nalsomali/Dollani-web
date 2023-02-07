@@ -85,7 +85,7 @@ class _HomeState extends State<addMaps> {
 
         storageReference.getDownloadURL().then((fileURL) {
           CoolAlert.show(
-                                          title: "حفظ الصورة",
+            title: "حفظ الصورة",
 
             context: context,
             width: 120,
@@ -404,7 +404,7 @@ class _HomeState extends State<addMaps> {
                                           width == "" ||
                                           height == "")
                                         CoolAlert.show(
-                                                                        title: "تنبيه",
+                                          title: "تنبيه",
 
                                           context: context,
                                           width: size.width * 0.2,
@@ -422,9 +422,8 @@ class _HomeState extends State<addMaps> {
                                           },
                                         );
                                       else if (check == false) {
-                                                                      title: "تنبيه",
-
                                         CoolAlert.show(
+                                          title: "تنبيه",
                                           context: context,
                                           width: size.width * 0.2,
                                           confirmBtnColor:

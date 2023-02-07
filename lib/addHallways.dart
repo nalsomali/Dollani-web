@@ -46,6 +46,14 @@ class _addHallwaysState extends State<addHallways> {
   late double yEnd;
   String photo = '';
 
+  Offset _tapPosition = Offset.zero;
+
+  void _handleTap(TapDownDetails details) {
+    setState(() {
+      _tapPosition = details.localPosition;
+    });
+  }
+
   void initState() {
     getMap();
     getPlaces();
@@ -238,22 +246,42 @@ class _addHallwaysState extends State<addHallways> {
                     Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Listener(
-                          // cursor: SystemMouseCursors.click,
-                          onPointerUp: isSelected == false
-                              ? _updateLocation
-                              : _updateLocation2,
-                          child: Container(
-                            width: 400,
-                            height: 530,
-                            decoration: BoxDecoration(
-                              image: DecorationImage(
-                                image: NetworkImage("$photo"),
-                                fit: BoxFit.cover,
+                        CustomPaint(
+                          child: GestureDetector(
+                            onTapDown: _handleTap,
+                            onTapUp: (TapUpDetails details) {
+                              isSelected == false
+                                  ? _updateLocation(details)
+                                  : _updateLocation2(details);
+                            },
+                            child: Container(
+                              width: 400,
+                              height: 530,
+                              decoration: BoxDecoration(
+                                image: DecorationImage(
+                                  image: NetworkImage(photo),
+                                  fit: BoxFit.cover,
+                                ),
                               ),
                             ),
                           ),
                         ),
+                        // Listener(
+                        //   // cursor: SystemMouseCursors.click,
+                        //   onPointerUp: isSelected == false
+                        //       ? _updateLocation
+                        //       : _updateLocation2,
+                        //   child: Container(
+                        //     width: 400,
+                        //     height: 530,
+                        //     decoration: BoxDecoration(
+                        //       image: DecorationImage(
+                        //         image: NetworkImage("$photo"),
+                        //         fit: BoxFit.cover,
+                        //       ),
+                        //     ),
+                        //   ),
+                        // ),
                         Container(
                           margin: EdgeInsets.only(right: 123),
                           child: Row(
@@ -397,10 +425,10 @@ class _addHallwaysState extends State<addHallways> {
         ));
   }
 
-  void _updateLocation(PointerEvent details) {
+  void _updateLocation(TapUpDetails details) {
     setState(() {
-      xStart = details.position.dx.round() as double;
-      yStart = details.position.dy.round() as double;
+      xStart = details.localPosition.dx.round() as double;
+      yStart = details.localPosition.dy.round() as double;
     });
     showDialog(
         context: context,
@@ -513,6 +541,19 @@ class _addHallwaysState extends State<addHallways> {
                 children: [
                   ElevatedButton(
                       style: TextButton.styleFrom(
+                        backgroundColor: Color.fromARGB(255, 175, 177, 180),
+                      ),
+                      child: Text("الغاء"),
+                      onPressed: () {
+                        isSelected = false;
+                        FocusScope.of(context).unfocus();
+                        Navigator.pop(context);
+                      }),
+                  SizedBox(
+                    width: 10,
+                  ),
+                  ElevatedButton(
+                      style: TextButton.styleFrom(
                         backgroundColor: Color.fromARGB(255, 45, 66, 142),
                       ),
                       child: Text("اضافة"),
@@ -557,18 +598,6 @@ class _addHallwaysState extends State<addHallways> {
                               });
                         }
                       }),
-                  SizedBox(
-                    width: 10,
-                  ),
-                  ElevatedButton(
-                      style: TextButton.styleFrom(
-                        backgroundColor: Color.fromARGB(255, 175, 177, 180),
-                      ),
-                      child: Text("الغاء"),
-                      onPressed: () {
-                        FocusScope.of(context).unfocus();
-                        Navigator.pop(context);
-                      }),
                 ],
               )
             ],
@@ -576,10 +605,10 @@ class _addHallwaysState extends State<addHallways> {
         });
   }
 
-  void _updateLocation2(PointerEvent details) {
+  void _updateLocation2(TapUpDetails details) {
     setState(() {
-      xEnd = details.position.dx.round() as double;
-      yEnd = details.position.dy.round() as double;
+      xEnd = details.localPosition.dx.round() as double;
+      yEnd = details.localPosition.dy.round() as double;
     });
     showDialog(
         context: context,
