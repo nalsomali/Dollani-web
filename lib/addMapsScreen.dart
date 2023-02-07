@@ -85,13 +85,14 @@ class _HomeState extends State<addMaps> {
 
         storageReference.getDownloadURL().then((fileURL) {
           CoolAlert.show(
+                                          title: "حفظ الصورة",
+
             context: context,
             width: 120,
             confirmBtnColor: Color.fromARGB(255, 45, 66, 142),
             //cancelBtnColor: Color.fromARGB(144, 64, 6, 87),
             type: CoolAlertType.success,
             backgroundColor: Color.fromARGB(255, 45, 66, 142),
-            title: 'test',
             text: "تم ارفاق صورة الخريطة بنجاح ",
             confirmBtnText: 'اغلاق',
             onConfirmBtnTap: () {
@@ -403,6 +404,8 @@ class _HomeState extends State<addMaps> {
                                           width == "" ||
                                           height == "")
                                         CoolAlert.show(
+                                                                        title: "تنبيه",
+
                                           context: context,
                                           width: size.width * 0.2,
                                           confirmBtnColor:
@@ -419,6 +422,8 @@ class _HomeState extends State<addMaps> {
                                           },
                                         );
                                       else if (check == false) {
+                                                                      title: "تنبيه",
+
                                         CoolAlert.show(
                                           context: context,
                                           width: size.width * 0.2,

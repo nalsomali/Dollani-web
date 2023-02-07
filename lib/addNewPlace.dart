@@ -632,6 +632,7 @@ class _adNewPlacesState extends State<addNewPlace> {
                           // _placeBeaconEditingController.clear()
                           cat.clear();
                           CoolAlert.show(
+                              title: "حفظ الاماكن",
                               context: context,
                               width: 120,
                               confirmBtnColor: Color.fromARGB(255, 45, 66, 142),
@@ -667,6 +668,8 @@ class _adNewPlacesState extends State<addNewPlace> {
                             "beacon": _placeBeaconEditingController.text
                           });
                           CoolAlert.show(
+                            title: "حفظ الاماكن",
+
                             context: context,
                             width: 120,
                             confirmBtnColor: Color.fromARGB(255, 45, 66, 142),
@@ -679,11 +682,13 @@ class _adNewPlacesState extends State<addNewPlace> {
                           );
                         } else {
                           CoolAlert.show(
+                            title: "تنبيه",
+
                             context: context,
                             width: 130,
                             confirmBtnColor: Color.fromARGB(255, 45, 66, 142),
                             //cancelBtnColor: Color.fromARGB(144, 64, 6, 87),
-                            type: CoolAlertType.error,
+                            type: CoolAlertType.warning,
                             backgroundColor: Color.fromARGB(255, 45, 66, 142),
                             text:
                                 "الرجاء ادخال جميع المعلومات المطلوبة عن الموقع",

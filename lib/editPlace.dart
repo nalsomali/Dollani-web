@@ -294,6 +294,7 @@ class _editPlacesState extends State<editPlaces> {
                                         .update({'x': x, "y": y});
 
                                     CoolAlert.show(
+                                      title: " تعديل الموقع",
                                       context: context,
                                       width: size.width * 0.2,
                                       confirmBtnColor:

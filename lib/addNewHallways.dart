@@ -494,6 +494,8 @@ class _addNewHallwaysState extends State<addNewHallways> {
                           FocusScope.of(context).unfocus();
                           CoolAlert.show(
                             context: context,
+                            title: "حفظ نقطة البداية",
+
                             width: 120,
                             confirmBtnColor: Color.fromARGB(255, 45, 66, 142),
                             //cancelBtnColor: Color.fromARGB(144, 64, 6, 87),
@@ -510,15 +512,16 @@ class _addNewHallwaysState extends State<addNewHallways> {
                             isSelected = false;
                           });
                           CoolAlert.show(
+                            title: "تنبيه",
                             context: context,
                             width: 130,
                             confirmBtnColor: Color.fromARGB(255, 45, 66, 142),
                             //cancelBtnColor: Color.fromARGB(144, 64, 6, 87),
-                            type: CoolAlertType.error,
+                            type: CoolAlertType.warning,
                             backgroundColor: Color.fromARGB(255, 45, 66, 142),
                             text: "الرجاء ادخال اسم الممر",
                             confirmBtnText: 'اغلاق',
-                            onConfirmBtnTap: () {
+                            onCancelBtnTap: () {
                               Navigator.pop(context);
                             },
                           );
@@ -604,6 +607,7 @@ class _addNewHallwaysState extends State<addNewHallways> {
                       isSelected = false;
 
                       CoolAlert.show(
+                        title: "حفظ الممر",
                         context: context,
                         width: 120,
                         confirmBtnColor: Color.fromARGB(255, 45, 66, 142),

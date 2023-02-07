@@ -364,7 +364,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                             getHallways(buildingName[i]);
 
                                             getPlaces(buildingName[i]);
-                                            getHallways(buildingName[i]);
                                             CoolAlert.show(
                                               context: context,
                                               title: " حذف الخريطة",
