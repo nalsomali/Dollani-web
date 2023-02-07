@@ -541,19 +541,6 @@ class _addHallwaysState extends State<addHallways> {
                 children: [
                   ElevatedButton(
                       style: TextButton.styleFrom(
-                        backgroundColor: Color.fromARGB(255, 175, 177, 180),
-                      ),
-                      child: Text("الغاء"),
-                      onPressed: () {
-                        isSelected = false;
-                        FocusScope.of(context).unfocus();
-                        Navigator.pop(context);
-                      }),
-                  SizedBox(
-                    width: 10,
-                  ),
-                  ElevatedButton(
-                      style: TextButton.styleFrom(
                         backgroundColor: Color.fromARGB(255, 45, 66, 142),
                       ),
                       child: Text("اضافة"),
@@ -598,6 +585,19 @@ class _addHallwaysState extends State<addHallways> {
                               });
                         }
                       }),
+                  SizedBox(
+                    width: 10,
+                  ),
+                  ElevatedButton(
+                      style: TextButton.styleFrom(
+                        backgroundColor: Color.fromARGB(255, 175, 177, 180),
+                      ),
+                      child: Text("الغاء"),
+                      onPressed: () {
+                        isSelected = false;
+                        FocusScope.of(context).unfocus();
+                        Navigator.pop(context);
+                      }),
                 ],
               )
             ],
@@ -620,15 +620,6 @@ class _addHallwaysState extends State<addHallways> {
               style: TextStyle(color: Color.fromARGB(115, 40, 71, 185)),
             ),
             actions: [
-              ElevatedButton(
-                  style: TextButton.styleFrom(
-                    backgroundColor: Color.fromARGB(255, 175, 177, 180),
-                  ),
-                  child: Text("الغاء"),
-                  onPressed: () {
-                    FocusScope.of(context).unfocus();
-                    Navigator.pop(context);
-                  }),
               ElevatedButton(
                   style: TextButton.styleFrom(
                     backgroundColor: Color.fromARGB(255, 45, 66, 142),
@@ -674,7 +665,17 @@ class _addHallwaysState extends State<addHallways> {
                         confirmBtnText: 'اغلاق',
                       );
                     }
-                  })
+                  }),
+              ElevatedButton(
+                  style: TextButton.styleFrom(
+                    backgroundColor: Color.fromARGB(255, 175, 177, 180),
+                  ),
+                  child: Text("الغاء"),
+                  onPressed: () {
+                    isSelected = false;
+                    FocusScope.of(context).unfocus();
+                    Navigator.pop(context);
+                  }),
             ],
           );
         });
