@@ -460,6 +460,48 @@ class _addHallwaysState extends State<addHallways> {
                     SizedBox(
                       height: 20.0,
                     ),
+                    TextFormField(
+                      autovalidateMode: AutovalidateMode.onUserInteraction,
+                      controller: _placeBeaconEditingController,
+                      keyboardType: TextInputType.emailAddress,
+                      decoration: InputDecoration(
+                        hintText: '... بيكن ٢',
+                        hintStyle: TextStyle(
+                            fontSize: 16,
+                            color: Color.fromARGB(255, 202, 198, 198)),
+                        label: RichText(
+                          text: TextSpan(
+                              text: ' معرّف البيكن',
+                              style: const TextStyle(
+                                  fontSize: 18,
+                                  color: Color.fromARGB(144, 7, 32, 87)),
+                              children: [
+                                TextSpan(
+                                    text: ' *',
+                                    style: TextStyle(
+                                      color: Colors.red,
+                                    ))
+                              ]),
+                        ),
+                        labelStyle: TextStyle(
+                            fontSize: 18,
+                            color: Color.fromARGB(144, 7, 32, 87)),
+                        border: OutlineInputBorder(
+                          borderSide: BorderSide(
+                            color: Color.fromARGB(144, 64, 7, 87),
+                            width: 2.0,
+                          ),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(
+                            color: Color.fromARGB(144, 7, 32, 87),
+                            width: 2.0,
+                          ),
+                        ),
+                      ),
+                      validator: MultiValidator(
+                          [RequiredValidator(errorText: 'مطلوب')]),
+                    ),
                   ],
                 ),
               ),
