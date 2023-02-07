@@ -494,23 +494,17 @@ class _addHallwaysState extends State<addHallways> {
                       controller: _placeBeaconEditingController,
                       keyboardType: TextInputType.emailAddress,
                       decoration: InputDecoration(
-                        hintText: '... بيكن ٢',
+                        hintText: '... بيكون ٢',
                         hintStyle: TextStyle(
                             fontSize: 16,
                             color: Color.fromARGB(255, 202, 198, 198)),
                         label: RichText(
                           text: TextSpan(
-                              text: ' معرّف البيكن',
-                              style: const TextStyle(
-                                  fontSize: 18,
-                                  color: Color.fromARGB(144, 7, 32, 87)),
-                              children: [
-                                TextSpan(
-                                    text: ' *',
-                                    style: TextStyle(
-                                      color: Colors.red,
-                                    ))
-                              ]),
+                            text: ' معرّف البيكون',
+                            style: const TextStyle(
+                                fontSize: 18,
+                                color: Color.fromARGB(144, 7, 32, 87)),
+                          ),
                         ),
                         labelStyle: TextStyle(
                             fontSize: 18,
@@ -528,8 +522,8 @@ class _addHallwaysState extends State<addHallways> {
                           ),
                         ),
                       ),
-                      validator: MultiValidator(
-                          [RequiredValidator(errorText: 'مطلوب')]),
+                      // validator: MultiValidator(
+                      //     [RequiredValidator(errorText: 'مطلوب')]),
                     ),
                   ],
                 ),

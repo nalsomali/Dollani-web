@@ -358,7 +358,7 @@ class _adNewPlacesState extends State<addNewPlace> {
                           columns: [
                             DataColumn(label: Text("اسم الموقع")),
                             DataColumn(label: Text("تصنيف الموقع")),
-                            DataColumn(label: Text("معرف البيكون")),
+                            DataColumn(label: Text("معرّف البيكون")),
                             DataColumn(label: Text("نقاط الموقع")),
                             // DataColumn(label: Text("حذف")),
                           ],
@@ -577,23 +577,17 @@ class _adNewPlacesState extends State<addNewPlace> {
                       controller: _placeBeaconEditingController,
                       keyboardType: TextInputType.emailAddress,
                       decoration: InputDecoration(
-                        hintText: '... بيكن ٢',
+                        hintText: '... بيكون ٢',
                         hintStyle: TextStyle(
                             fontSize: 16,
                             color: Color.fromARGB(255, 202, 198, 198)),
                         label: RichText(
                           text: TextSpan(
-                              text: ' معرّف البيكن',
-                              style: const TextStyle(
-                                  fontSize: 18,
-                                  color: Color.fromARGB(144, 7, 32, 87)),
-                              children: [
-                                TextSpan(
-                                    text: ' *',
-                                    style: TextStyle(
-                                      color: Colors.red,
-                                    ))
-                              ]),
+                            text: ' معرّف البيكون',
+                            style: const TextStyle(
+                                fontSize: 18,
+                                color: Color.fromARGB(144, 7, 32, 87)),
+                          ),
                         ),
                         labelStyle: TextStyle(
                             fontSize: 18,
@@ -611,8 +605,8 @@ class _adNewPlacesState extends State<addNewPlace> {
                           ),
                         ),
                       ),
-                      validator: MultiValidator(
-                          [RequiredValidator(errorText: 'مطلوب')]),
+                      // validator: MultiValidator(
+                      //     [RequiredValidator(errorText: 'مطلوب')]),
                     ),
                   ],
                 ),
