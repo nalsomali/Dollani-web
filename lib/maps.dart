@@ -361,6 +361,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                           ))),
                                       DataCell(TextButton(
                                           onPressed: () {
+                                            getHallways(buildingName[i]);
+
                                             getPlaces(buildingName[i]);
                                             getHallways(buildingName[i]);
                                             CoolAlert.show(
@@ -390,14 +392,14 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                                       .delete();
                                                 }
 
-                                                for (var k = 0;
-                                                    k < hallwaysName.length;
-                                                    k++) {
+                                                for (var j = 0;
+                                                    j < hallwaysName.length;
+                                                    j++) {
                                                   FirebaseFirestore.instance
                                                       .collection('hallways')
                                                       .doc(buildingName[i] +
                                                           "-" +
-                                                          hallwaysName[k])
+                                                          hallwaysName[j])
                                                       .delete();
                                                 }
 

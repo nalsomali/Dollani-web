@@ -316,6 +316,7 @@ class _addHallwaysState extends State<addHallways> {
               ),
               Expanded(
                 child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
                     Expanded(
                       child: Scrollbar(
@@ -625,7 +626,7 @@ class _addHallwaysState extends State<addHallways> {
                         "yStart": "$yStart",
                         'xEnd': "$xEnd",
                         "yEnd": "$yEnd",
-                        "beacon": _placeBeaconEditingController,
+                        "beacon": _placeBeaconEditingController.text,
                       });
                       _placeNameEditingController.clear();
                       _placeBeaconEditingController.clear();

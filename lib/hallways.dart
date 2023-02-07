@@ -5,26 +5,26 @@ import 'package:flutter/material.dart';
 import 'package:web/addNewHallways.dart';
 import 'package:web/editPlace.dart';
 import 'package:web/maps.dart';
+import 'package:web/places.dart';
 
 import 'addMapsScreen.dart';
 import 'addNewPlace.dart';
-import 'hallways.dart';
 import 'login.dart';
 
-class places extends StatefulWidget {
+class hallways extends StatefulWidget {
   String mapName;
 
-  places({
+  hallways({
     required this.mapName,
   });
 
   @override
-  State<places> createState() => placesScreenState(mapName);
+  State<hallways> createState() => hallwaysScreenState(mapName);
 }
 
-class placesScreenState extends State<places> {
+class hallwaysScreenState extends State<hallways> {
   String mapName;
-  placesScreenState(this.mapName);
+  hallwaysScreenState(this.mapName);
 
   @override
   void initState() {
@@ -34,28 +34,32 @@ class placesScreenState extends State<places> {
   }
 
   var placeName = [];
-  var category = [];
-  var xI = [];
-  var yI = [];
+  var yStartI = [];
+  var xStartI = [];
+  var yEndI = [];
+  var xEndI = [];
   var beaconI = [];
+
   Future getPlaces() async {
     setState(() {
       placeName = [];
-      category = [];
-      xI = [];
-      yI = [];
+      yStartI = [];
+      xStartI = [];
+      yEndI = [];
+      xEndI = [];
       beaconI = [];
     });
     await for (var snapshot in FirebaseFirestore.instance
-        .collection('places')
+        .collection('hallways')
         .where('building', isEqualTo: mapName)
         .snapshots())
       for (var place in snapshot.docs) {
         setState(() {
           placeName.add(place['name']);
-          category.add(place['category']);
-          yI.add(place['x']);
-          xI.add(place['y']);
+          yStartI.add(place['yStart']);
+          xStartI.add(place['xStart']);
+          yEndI.add(place['yEnd']);
+          xEndI.add(place['xEnd']);
           beaconI.add(place['beacon']);
         });
       }
@@ -91,21 +95,23 @@ class placesScreenState extends State<places> {
       //clear first
       setState(() {
         placeName = [];
-        category = [];
-        xI = [];
-        yI = [];
+        yStartI = [];
+        xStartI = [];
+        yEndI = [];
+        xEndI = [];
         beaconI = [];
       });
       await for (var snapshot in FirebaseFirestore.instance
-          .collection('places')
-          .where('building', isEqualTo: mapName)
+          .collection('hallways')
+          .where('name', isEqualTo: search)
           .snapshots())
         for (var place in snapshot.docs) {
           setState(() {
             placeName.add(place['name']);
-            category.add(place['category']);
-            yI.add(place['x']);
-            xI.add(place['y']);
+            yStartI.add(place['yStart']);
+            xStartI.add(place['xStart']);
+            yEndI.add(place['yEnd']);
+            xEndI.add(place['xEnd']);
             beaconI.add(place['beacon']);
           });
         }
@@ -216,7 +222,7 @@ class placesScreenState extends State<places> {
                         Column(
                           children: [
                             Text(
-                              "  الأماكن",
+                              "  الممرات",
                               style: TextStyle(
                                 fontWeight: FontWeight.bold,
                                 fontSize: 28.0,
@@ -229,7 +235,7 @@ class placesScreenState extends State<places> {
                           child: TextField(
                             controller: _searchEditingController,
                             decoration: InputDecoration(
-                              hintText: "البحث بإسم الموقع",
+                              hintText: "البحث بإسم الممر",
                               icon: IconButton(
                                 icon: Icon(Icons.cancel_presentation),
                                 onPressed: () {
@@ -272,7 +278,7 @@ class placesScreenState extends State<places> {
                             color: Color.fromARGB(255, 45, 66, 142),
                           ),
                           label: Text(
-                            "هنا قائمة بجميع المواقع المضافة بالخريطة",
+                            "هنا قائمة بجميع الممرات المضافة بالخريطة",
                             style: TextStyle(
                               color: Color.fromARGB(255, 45, 66, 142),
                             ),
@@ -289,12 +295,12 @@ class placesScreenState extends State<places> {
                                   Navigator.push(
                                       context,
                                       MaterialPageRoute(
-                                          builder: (context) => hallways(
+                                          builder: (context) => places(
                                                 mapName: mapName,
                                               )));
                                 },
                                 child: Text(
-                                  "قائمة الممرات ",
+                                  "قائمة الاماكن ",
                                   style: TextStyle(
                                     color: Color.fromARGB(255, 255, 255, 255),
                                   ),
@@ -311,19 +317,16 @@ class placesScreenState extends State<places> {
                                   Navigator.push(
                                       context,
                                       MaterialPageRoute(
-                                          builder: (context) => addNewPlace(
+                                          builder: (context) => addNewHallways(
                                                 mapName: mapName,
                                               )));
                                 },
                                 child: Text(
-                                  "اضافة موقع جديد",
+                                  "اضافة ممر جديد",
                                   style: TextStyle(
                                     color: Color.fromARGB(255, 255, 255, 255),
                                   ),
                                 )),
-                            SizedBox(
-                              width: 8.0,
-                            ),
                           ],
                         )
                       ],
@@ -347,43 +350,31 @@ class placesScreenState extends State<places> {
                                       .resolveWith((states) =>
                                           Color.fromARGB(255, 227, 227, 227)),
                                   columns: [
-                                    DataColumn(label: Text("اسم الموقع")),
-                                    DataColumn(label: Text("تصنيف الموقع")),
-                                    DataColumn(label: Text("معرف البيكون")),
-                                    DataColumn(label: Text("نقاط الموقع")),
-                                    DataColumn(label: Text("تعديل")),
+                                    DataColumn(label: Text("اسم الممر")),
+                                    DataColumn(label: Text("معرّف البيكون")),
+                                    DataColumn(label: Text("نقاط الممر")),
                                     DataColumn(label: Text("حذف")),
                                   ],
                                   rows: [
                                     for (var i = 0; i < placeName.length; i++)
                                       DataRow(cells: [
                                         DataCell(Text(placeName[i])),
-                                        DataCell(Text(category[i])),
                                         DataCell(Text(beaconI[i])),
-                                        DataCell(Text(
-                                            "(" + xI[i] + "," + yI[i] + ")")),
-                                        DataCell(IconButton(
-                                            onPressed: () {
-                                              Navigator.push(
-                                                  context,
-                                                  MaterialPageRoute(
-                                                      builder: (context) =>
-                                                          editPlaces(
-                                                            mapName:
-                                                                placeName[i],
-                                                            Map: mapName,
-                                                          )));
-                                            },
-                                            icon: Icon(
-                                              Icons.edit,
-                                              color: Color.fromARGB(
-                                                  255, 74, 93, 188),
-                                            ))),
+                                        DataCell(Text(" نقطة البداية (" +
+                                            xStartI[i] +
+                                            "," +
+                                            yStartI[i] +
+                                            ")" +
+                                            " نقطة النهاية (" +
+                                            xEndI[i] +
+                                            "," +
+                                            yEndI[i] +
+                                            ")")),
                                         DataCell(TextButton(
                                             onPressed: () {
                                               CoolAlert.show(
                                                 context: context,
-                                                title: " حذف الموقع",
+                                                title: " حذف لممر",
                                                 width: size.width * 0.2,
                                                 confirmBtnColor: Color.fromARGB(
                                                     181, 172, 22, 12),
@@ -392,7 +383,7 @@ class placesScreenState extends State<places> {
                                                 type: CoolAlertType.confirm,
                                                 backgroundColor: Color.fromARGB(
                                                     255, 45, 66, 142),
-                                                text: "هل تريد حذف الموقع",
+                                                text: "هل تريد حذف الممر",
                                                 confirmBtnText: 'حذف ',
                                                 cancelBtnText: "إلغاء",
                                                 onCancelBtnTap: () {
@@ -400,9 +391,9 @@ class placesScreenState extends State<places> {
                                                 },
                                                 onConfirmBtnTap: () async {
                                                   FirebaseFirestore.instance
-                                                      .collection('places')
-                                                      .doc(category[i] +
-                                                          "-" +
+                                                      .collection('hallways')
+                                                      .doc(mapName +
+                                                          "_" +
                                                           placeName[i])
                                                       .delete();
 
@@ -410,7 +401,7 @@ class placesScreenState extends State<places> {
                                                       context,
                                                       MaterialPageRoute(
                                                           builder: (context) =>
-                                                              places(
+                                                              hallways(
                                                                 mapName:
                                                                     mapName,
                                                               )));

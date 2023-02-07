@@ -285,6 +285,7 @@ class _addNewHallwaysState extends State<addNewHallways> {
             ),
             Expanded(
               child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   Expanded(
                     child: Scrollbar(
@@ -583,7 +584,8 @@ class _addNewHallwaysState extends State<addNewHallways> {
                       xEndI = [];
                       beaconI = [];
                     });
-                    print(isSelected);
+                    print("before?");
+
                     if (isSelected == true) {
                       FirebaseFirestore.instance
                           .collection('hallways')
@@ -595,7 +597,7 @@ class _addNewHallwaysState extends State<addNewHallways> {
                         "yStart": "$yStart",
                         'xEnd': "$xEnd",
                         "yEnd": "$yEnd",
-                        "beacon": _placeBeaconEditingController,
+                        "beacon": _placeBeaconEditingController.text,
                       });
                       _placeNameEditingController.clear();
                       _placeBeaconEditingController.clear();
