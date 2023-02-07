@@ -34,11 +34,16 @@ class placesScreenState extends State<places> {
 
   var placeName = [];
   var category = [];
-
+  var xI = [];
+  var yI = [];
+  var beaconI = [];
   Future getPlaces() async {
     setState(() {
       placeName = [];
       category = [];
+      xI = [];
+      yI = [];
+      beaconI = [];
     });
     await for (var snapshot in FirebaseFirestore.instance
         .collection('places')
@@ -48,6 +53,9 @@ class placesScreenState extends State<places> {
         setState(() {
           placeName.add(place['name']);
           category.add(place['category']);
+          yI.add(place['x']);
+          xI.add(place['y']);
+          beaconI.add(place['beacon']);
         });
       }
   }
@@ -83,16 +91,21 @@ class placesScreenState extends State<places> {
       setState(() {
         placeName = [];
         category = [];
+        xI = [];
+        yI = [];
+        beaconI = [];
       });
-
       await for (var snapshot in FirebaseFirestore.instance
           .collection('places')
-          .where('name', isEqualTo: search)
+          .where('building', isEqualTo: mapName)
           .snapshots())
         for (var place in snapshot.docs) {
           setState(() {
             placeName.add(place['name']);
             category.add(place['category']);
+            yI.add(place['x']);
+            xI.add(place['y']);
+            beaconI.add(place['beacon']);
           });
         }
     }
@@ -332,6 +345,8 @@ class placesScreenState extends State<places> {
                                   columns: [
                                     DataColumn(label: Text("اسم الموقع")),
                                     DataColumn(label: Text("تصنيف الموقع")),
+                                    DataColumn(label: Text("معرف البيكون")),
+                                    DataColumn(label: Text("نقاط الموقع")),
                                     DataColumn(label: Text("تعديل")),
                                     DataColumn(label: Text("حذف")),
                                   ],
@@ -340,6 +355,9 @@ class placesScreenState extends State<places> {
                                       DataRow(cells: [
                                         DataCell(Text(placeName[i])),
                                         DataCell(Text(category[i])),
+                                        DataCell(Text(beaconI[i])),
+                                        DataCell(Text(
+                                            "(" + xI[i] + "," + yI[i] + ")")),
                                         DataCell(IconButton(
                                             onPressed: () {
                                               Navigator.push(

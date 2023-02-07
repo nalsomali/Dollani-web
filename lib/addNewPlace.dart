@@ -45,7 +45,8 @@ class _adNewPlacesState extends State<addNewPlace> {
 
   final TextEditingController _placeNameEditingController =
       TextEditingController();
-
+  final TextEditingController _placeBeaconEditingController =
+      TextEditingController();
   final TextEditingController buildingName = TextEditingController();
   final TextEditingController cat = TextEditingController();
 
@@ -66,11 +67,16 @@ class _adNewPlacesState extends State<addNewPlace> {
 
   var placeName = [];
   var category = [];
-
+  var xI = [];
+  var yI = [];
+  var beaconI = [];
   Future getPlaces() async {
     setState(() {
       placeName = [];
       category = [];
+      xI = [];
+      yI = [];
+      beaconI = [];
     });
     await for (var snapshot in FirebaseFirestore.instance
         .collection('places')
@@ -80,6 +86,9 @@ class _adNewPlacesState extends State<addNewPlace> {
         setState(() {
           placeName.add(place['name']);
           category.add(place['category']);
+          yI.add(place['x']);
+          xI.add(place['y']);
+          beaconI.add(place['beacon']);
         });
       }
   }
@@ -323,6 +332,8 @@ class _adNewPlacesState extends State<addNewPlace> {
                           columns: [
                             DataColumn(label: Text("اسم الموقع")),
                             DataColumn(label: Text("تصنيف الموقع")),
+                            DataColumn(label: Text("معرف البيكون")),
+                            DataColumn(label: Text("نقاط الموقع")),
                             // DataColumn(label: Text("حذف")),
                           ],
                           rows: [
@@ -330,7 +341,13 @@ class _adNewPlacesState extends State<addNewPlace> {
                               DataRow(cells: [
                                 DataCell(Text(placeName[i])),
                                 DataCell(Text(category[i])),
-                                // DataCell(TextButton(
+                                DataCell(Text(beaconI[i])),
+
+                                DataCell(Text("(" +
+                                    xI[i] +
+                                    "," +
+                                    yI[i] +
+                                    ")")), // DataCell(TextButton(
                                 //     onPressed: () {
                                 //       CoolAlert.show(
                                 //         context: context,
@@ -379,8 +396,8 @@ class _adNewPlacesState extends State<addNewPlace> {
 
   void _updateLocation(PointerEvent details) {
     setState(() {
-      x = details.position.dx;
-      y = details.position.dy;
+      x = details.position.dx.round() as double;
+      y = details.position.dy.round() as double;
     });
     showDialog(
         context: context,
@@ -525,7 +542,52 @@ class _adNewPlacesState extends State<addNewPlace> {
                       ),
                       // validator: MultiValidator(
                       //     [RequiredValidator(errorText: 'مطلوب')])),
-                    )
+                    ),
+                    SizedBox(
+                      height: 20.0,
+                    ),
+                    TextFormField(
+                      autovalidateMode: AutovalidateMode.onUserInteraction,
+                      controller: _placeBeaconEditingController,
+                      keyboardType: TextInputType.emailAddress,
+                      decoration: InputDecoration(
+                        hintText: '... بيكن ٢',
+                        hintStyle: TextStyle(
+                            fontSize: 16,
+                            color: Color.fromARGB(255, 202, 198, 198)),
+                        label: RichText(
+                          text: TextSpan(
+                              text: ' معرّف البيكن',
+                              style: const TextStyle(
+                                  fontSize: 18,
+                                  color: Color.fromARGB(144, 7, 32, 87)),
+                              children: [
+                                TextSpan(
+                                    text: ' *',
+                                    style: TextStyle(
+                                      color: Colors.red,
+                                    ))
+                              ]),
+                        ),
+                        labelStyle: TextStyle(
+                            fontSize: 18,
+                            color: Color.fromARGB(144, 7, 32, 87)),
+                        border: OutlineInputBorder(
+                          borderSide: BorderSide(
+                            color: Color.fromARGB(144, 64, 7, 87),
+                            width: 2.0,
+                          ),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(
+                            color: Color.fromARGB(144, 7, 32, 87),
+                            width: 2.0,
+                          ),
+                        ),
+                      ),
+                      validator: MultiValidator(
+                          [RequiredValidator(errorText: 'مطلوب')]),
+                    ),
                   ],
                 ),
               ),
@@ -543,6 +605,9 @@ class _adNewPlacesState extends State<addNewPlace> {
                         setState(() {
                           placeName = [];
                           category = [];
+                          xI = [];
+                          yI = [];
+                          beaconI = [];
                         });
                         Navigator.pop(context);
 
@@ -558,11 +623,13 @@ class _adNewPlacesState extends State<addNewPlace> {
                             "building": mapName,
                             "category": selectedCat,
                             'name': _placeNameEditingController.text,
-                            'x': x,
-                            "y": y
+                            'x': "$x",
+                            "y": "$y",
+                            "beacon": _placeBeaconEditingController.text
                           });
 
                           _placeNameEditingController.clear();
+                          // _placeBeaconEditingController.clear()
                           cat.clear();
                           CoolAlert.show(
                               context: context,
@@ -595,8 +662,9 @@ class _adNewPlacesState extends State<addNewPlace> {
                             "building": mapName,
                             "category": cat.text,
                             'name': _placeNameEditingController.text,
-                            'x': x,
-                            "y": y
+                            'x': "$x",
+                            "y": "$y",
+                            "beacon": _placeBeaconEditingController.text
                           });
                           CoolAlert.show(
                             context: context,

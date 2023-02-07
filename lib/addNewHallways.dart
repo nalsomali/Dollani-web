@@ -55,10 +55,22 @@ class _addNewHallwaysState extends State<addNewHallways> {
 
   bool isSelected = false;
   var placeName = [];
+  var yStartI = [];
+  var xStartI = [];
+  var yEndI = [];
+  var beaconI = [];
 
+  var xEndI = [];
+  final TextEditingController _placeBeaconEditingController =
+      TextEditingController();
   Future getPlaces() async {
     setState(() {
       placeName = [];
+      yStartI = [];
+      xStartI = [];
+      yEndI = [];
+      xEndI = [];
+      beaconI = [];
     });
     await for (var snapshot in FirebaseFirestore.instance
         .collection('hallways')
@@ -67,6 +79,11 @@ class _addNewHallwaysState extends State<addNewHallways> {
       for (var place in snapshot.docs) {
         setState(() {
           placeName.add(place['name']);
+          yStartI.add(place['yStart']);
+          xStartI.add(place['xStart']);
+          yEndI.add(place['yEnd']);
+          xEndI.add(place['xEnd']);
+          beaconI.add(place['beacon']);
         });
       }
   }
@@ -279,12 +296,27 @@ class _addNewHallwaysState extends State<addNewHallways> {
                                 (states) => Color.fromARGB(255, 227, 227, 227)),
                             columns: [
                               DataColumn(label: Text("اسم الممر")),
+                              DataColumn(label: Text("معرّف البيكون")),
+                              DataColumn(label: Text("نقاط الممر")),
+
                               // DataColumn(label: Text("حذف")),
                             ],
                             rows: [
                               for (var i = 0; i < placeName.length; i++)
                                 DataRow(cells: [
                                   DataCell(Text(placeName[i])),
+                                  DataCell(Text(beaconI[i])),
+
+                                  DataCell(Text(" نقطة البداية (" +
+                                      xStartI[i] +
+                                      "," +
+                                      yStartI[i] +
+                                      ")" +
+                                      " نقطة النهاية (" +
+                                      xEndI[i] +
+                                      "," +
+                                      yEndI[i] +
+                                      ")")),
                                   // DataCell(TextButton(
                                   //     onPressed: () {
                                   //       CoolAlert.show(
@@ -335,8 +367,8 @@ class _addNewHallwaysState extends State<addNewHallways> {
     isSelected = true;
 
     setState(() {
-      xStart = details.position.dx;
-      yStart = details.position.dy;
+      xStart = details.position.dx.round() as double;
+      yStart = details.position.dy.round() as double;
     });
     showDialog(
         context: context,
@@ -396,6 +428,48 @@ class _addNewHallwaysState extends State<addNewHallways> {
                     ),
                     SizedBox(
                       height: 20.0,
+                    ),
+                    TextFormField(
+                      autovalidateMode: AutovalidateMode.onUserInteraction,
+                      controller: _placeBeaconEditingController,
+                      keyboardType: TextInputType.emailAddress,
+                      decoration: InputDecoration(
+                        hintText: '... بيكن ٢',
+                        hintStyle: TextStyle(
+                            fontSize: 16,
+                            color: Color.fromARGB(255, 202, 198, 198)),
+                        label: RichText(
+                          text: TextSpan(
+                              text: ' معرّف البيكن',
+                              style: const TextStyle(
+                                  fontSize: 18,
+                                  color: Color.fromARGB(144, 7, 32, 87)),
+                              children: [
+                                TextSpan(
+                                    text: ' *',
+                                    style: TextStyle(
+                                      color: Colors.red,
+                                    ))
+                              ]),
+                        ),
+                        labelStyle: TextStyle(
+                            fontSize: 18,
+                            color: Color.fromARGB(144, 7, 32, 87)),
+                        border: OutlineInputBorder(
+                          borderSide: BorderSide(
+                            color: Color.fromARGB(144, 64, 7, 87),
+                            width: 2.0,
+                          ),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(
+                            color: Color.fromARGB(144, 7, 32, 87),
+                            width: 2.0,
+                          ),
+                        ),
+                      ),
+                      validator: MultiValidator(
+                          [RequiredValidator(errorText: 'مطلوب')]),
                     ),
                   ],
                 ),
@@ -471,8 +545,8 @@ class _addNewHallwaysState extends State<addNewHallways> {
 
   void _updateLocation2(PointerEvent details) {
     setState(() {
-      xEnd = details.position.dx;
-      yEnd = details.position.dy;
+      xEnd = details.position.dx.round() as double;
+      yEnd = details.position.dy.round() as double;
     });
     showDialog(
         context: context,
@@ -499,12 +573,17 @@ class _addNewHallwaysState extends State<addNewHallways> {
                   ),
                   child: Text("اضافة"),
                   onPressed: () {
+                    Navigator.pop(context);
+
                     setState(() {
                       placeName = [];
+                      yStartI = [];
+                      xStartI = [];
+                      yEndI = [];
+                      xEndI = [];
+                      beaconI = [];
                     });
-                    Navigator.pop(
-                      context,
-                    );
+                    print(isSelected);
                     if (isSelected == true) {
                       FirebaseFirestore.instance
                           .collection('hallways')
@@ -512,12 +591,14 @@ class _addNewHallwaysState extends State<addNewHallways> {
                           .set({
                         "building": mapName,
                         "name": _placeNameEditingController.text,
-                        'xStart': xStart.round(),
-                        "yStart": yStart.round(),
-                        'xEnd': xEnd.round(),
-                        "yEnd": yEnd.round(),
+                        'xStart': "$xStart",
+                        "yStart": "$yStart",
+                        'xEnd': "$xEnd",
+                        "yEnd": "$yEnd",
+                        "beacon": _placeBeaconEditingController,
                       });
                       _placeNameEditingController.clear();
+                      _placeBeaconEditingController.clear();
                       isSelected = false;
 
                       CoolAlert.show(
