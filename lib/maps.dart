@@ -430,12 +430,17 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                 )),
                                 Link(
                                     target: LinkTarget.blank,
-                                    uri: Uri.parse("https://estimote.com"),
+                                    uri: Uri.parse(
+                                        "https://cloud.estimote.com/#/login"),
                                     builder: (context, followLink) => Expanded(
                                           child: ElevatedButton(
                                               onPressed: followLink,
+                                              style: ElevatedButton.styleFrom(
+                                                primary: Color.fromARGB(
+                                                    255, 45, 66, 142),
+                                              ),
                                               child: Text(
-                                                "Estimote Beacon",
+                                                " Estimote cloud",
                                                 style: TextStyle(
                                                     color: Colors.white),
                                               )),
