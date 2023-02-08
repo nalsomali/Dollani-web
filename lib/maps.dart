@@ -4,7 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:web/login.dart';
 import 'package:web/places.dart';
-
+import 'package:url_launcher/link.dart';
 import 'Origin.dart';
 import 'addMapsScreen.dart';
 
@@ -418,9 +418,30 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                             Icons.delete,
                                             color: Color.fromARGB(
                                                 255, 74, 93, 188),
-                                          )))
+                                          ))),
                                     ]),
                                 ]),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Expanded(
+                                    child: SizedBox(
+                                  width: 20,
+                                )),
+                                Link(
+                                    target: LinkTarget.blank,
+                                    uri: Uri.parse("https://estimote.com"),
+                                    builder: (context, followLink) => Expanded(
+                                          child: ElevatedButton(
+                                              onPressed: followLink,
+                                              child: Text(
+                                                "Estimote Beacon",
+                                                style: TextStyle(
+                                                    color: Colors.white),
+                                              )),
+                                        )),
+                              ],
+                            ),
                           ],
                         ),
                         // ),
