@@ -287,8 +287,8 @@ class _addPlacesState extends State<addPlaces> {
                         _updateLocation(details);
                       },
                       child: Container(
-                        width: 400,
-                        height: 530,
+                        width: 414,
+                        height: 515,
                         decoration: BoxDecoration(
                           image: DecorationImage(
                             image: NetworkImage(photo),
@@ -644,18 +644,18 @@ class _addPlacesState extends State<addPlaces> {
                       ),
                       child: Text("اضافة"),
                       onPressed: () {
-                        setState(() {
-                          placeName = [];
-                          category = [];
-                          xI = [];
-                          yI = [];
-                          beaconI = [];
-                        });
                         Navigator.pop(context);
 
                         if (_placeNameEditingController.text.isNotEmpty &&
                             selectedCat != null &&
                             selectedCat != "اخرى") {
+                          setState(() {
+                            placeName = [];
+                            category = [];
+                            xI = [];
+                            yI = [];
+                            beaconI = [];
+                          });
                           FirebaseFirestore.instance
                               .collection('places')
                               .doc(selectedCat! +
@@ -667,11 +667,11 @@ class _addPlacesState extends State<addPlaces> {
                             'name': _placeNameEditingController.text,
                             'x': "$x",
                             "y": "$y",
-                            "beacon": _placeBeaconEditingController.text
+                            "beacon": _placeBeaconEditingController.text.isEmpty
+                                ? "لا يوجد"
+                                : _placeBeaconEditingController.text
                           });
 
-                          _placeNameEditingController.clear();
-                          _placeBeaconEditingController.clear();
                           cat.clear();
                           CoolAlert.show(
                               title: "حفظ الاماكن",
@@ -688,6 +688,13 @@ class _addPlacesState extends State<addPlaces> {
                             _placeNameEditingController.text.isNotEmpty &&
                             cat.text.isNotEmpty &&
                             selectedCat != null) {
+                          setState(() {
+                            placeName = [];
+                            category = [];
+                            xI = [];
+                            yI = [];
+                            beaconI = [];
+                          });
                           options.add(cat.text);
                           updated = options;
                           FirebaseFirestore.instance
@@ -707,8 +714,11 @@ class _addPlacesState extends State<addPlaces> {
                             'name': _placeNameEditingController.text,
                             'x': "$x",
                             "y": "$y",
-                            "beacon": _placeBeaconEditingController.text
+                            "beacon": _placeBeaconEditingController.text.isEmpty
+                                ? "لا يوجد"
+                                : _placeBeaconEditingController.text
                           });
+
                           CoolAlert.show(
                               title: "حفظ الاماكن",
                               context: context,
@@ -736,6 +746,9 @@ class _addPlacesState extends State<addPlaces> {
                             showCancelBtn: false,
                           );
                         }
+                        _placeNameEditingController.clear();
+                        _placeBeaconEditingController.clear();
+                        cat.clear();
                       }),
                   SizedBox(
                     width: 10,

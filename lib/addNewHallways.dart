@@ -601,7 +601,6 @@ class _addNewHallwaysState extends State<addNewHallways> {
                       xEndI = [];
                       beaconI = [];
                     });
-                    print("before?");
 
                     if (isSelected == true) {
                       FirebaseFirestore.instance
@@ -614,10 +613,13 @@ class _addNewHallwaysState extends State<addNewHallways> {
                         "yStart": "$yStart",
                         'xEnd': "$xEnd",
                         "yEnd": "$yEnd",
-                        "beacon": _placeBeaconEditingController.text,
+                        "beacon": _placeBeaconEditingController.text.isEmpty
+                            ? "لا يوجد"
+                            : _placeBeaconEditingController.text
                       });
                       _placeNameEditingController.clear();
                       _placeBeaconEditingController.clear();
+
                       isSelected = false;
 
                       CoolAlert.show(

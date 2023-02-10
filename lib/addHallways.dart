@@ -642,7 +642,9 @@ class _addHallwaysState extends State<addHallways> {
                         "yStart": "$yStart",
                         'xEnd': "$xEnd",
                         "yEnd": "$yEnd",
-                        "beacon": _placeBeaconEditingController.text,
+                        "beacon": _placeBeaconEditingController.text.isEmpty
+                            ? "لا يوجد"
+                            : _placeBeaconEditingController.text
                       });
                       _placeNameEditingController.clear();
                       _placeBeaconEditingController.clear();
