@@ -770,6 +770,9 @@ class _addPlacesState extends State<addPlaces> {
                       ),
                       child: Text("الغاء"),
                       onPressed: () {
+                        _placeNameEditingController.clear();
+                        _placeBeaconEditingController.clear();
+                        cat.clear();
                         FocusScope.of(context).unfocus();
                         Navigator.pop(context);
                       }),

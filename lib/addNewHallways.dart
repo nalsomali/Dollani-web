@@ -646,6 +646,8 @@ class _addNewHallwaysState extends State<addNewHallways> {
                   child: Text("الغاء"),
                   onPressed: () {
                     isSelected = false;
+                    _placeNameEditingController.clear();
+                    _placeBeaconEditingController.clear();
                     FocusScope.of(context).unfocus();
                     Navigator.pop(context);
                   }),

@@ -676,6 +676,8 @@ class _addHallwaysState extends State<addHallways> {
                     isSelected = false;
                     FocusScope.of(context).unfocus();
                     Navigator.pop(context);
+                    _placeNameEditingController.clear();
+                    _placeBeaconEditingController.clear();
                   }),
             ],
           );
