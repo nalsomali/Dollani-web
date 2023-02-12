@@ -360,8 +360,7 @@ class placesScreenState extends State<places> {
                                         DataCell(Text(placeName[i])),
                                         DataCell(Text(category[i])),
                                         DataCell(Text(beaconI[i])),
-                                        DataCell(Text(
-                                            "(" + xI[i] + "," + yI[i] + ")")),
+                                        DataCell(Text("${xI[i]}) , (${yI[i]}")),
                                         DataCell(IconButton(
                                             onPressed: () {
                                               Navigator.push(
@@ -426,6 +425,7 @@ class placesScreenState extends State<places> {
                                   ]),
                             ),
                           )),
+
                           //Now let's set the pagination
                         ],
                       ),

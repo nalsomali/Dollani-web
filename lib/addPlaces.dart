@@ -298,6 +298,14 @@ class _addPlacesState extends State<addPlaces> {
                       ),
                     ),
                   ),
+                  Container(
+                    height: 50,
+                    child: _tapPosition == Offset.zero
+                        ? Text(' قم بالضغط على مكان في الخريطة')
+                        : Text(
+                            'x: ${_tapPosition.dx.round()}, y: ${_tapPosition.dy.round()}'),
+                    padding: EdgeInsets.all(16),
+                  ),
                   // Listener(
                   //   // cursor: SystemMouseCursors.click,
                   //   onPointerUp: _updateLocation,
@@ -392,8 +400,7 @@ class _addPlacesState extends State<addPlaces> {
                                 DataCell(Text(placeName[i])),
                                 DataCell(Text(category[i])),
                                 DataCell(Text(beaconI[i])),
-
-                                DataCell(Text("(" + xI[i] + "," + yI[i] + ")")),
+                                DataCell(Text("${xI[i]}) , (${yI[i]}")),
 
                                 // DataCell(TextButton(
                                 //     onPressed: () {
@@ -656,6 +663,8 @@ class _addPlacesState extends State<addPlaces> {
                             yI = [];
                             beaconI = [];
                           });
+                          x as int;
+                          y as int;
                           FirebaseFirestore.instance
                               .collection('places')
                               .doc(selectedCat! +
@@ -665,8 +674,8 @@ class _addPlacesState extends State<addPlaces> {
                             "building": mapName,
                             "category": selectedCat,
                             'name': _placeNameEditingController.text,
-                            'x': "$x",
-                            "y": "$y",
+                            'x': x,
+                            "y": y,
                             "beacon": _placeBeaconEditingController.text.isEmpty
                                 ? "لا يوجد"
                                 : _placeBeaconEditingController.text
@@ -703,6 +712,8 @@ class _addPlacesState extends State<addPlaces> {
                               .update({
                             "categoriesP": updated,
                           });
+                          x as int;
+                          y as int;
                           FirebaseFirestore.instance
                               .collection('places')
                               .doc(cat.text +
@@ -712,8 +723,8 @@ class _addPlacesState extends State<addPlaces> {
                             "building": mapName,
                             "category": cat.text,
                             'name': _placeNameEditingController.text,
-                            'x': "$x",
-                            "y": "$y",
+                            'x': x,
+                            "y": y,
                             "beacon": _placeBeaconEditingController.text.isEmpty
                                 ? "لا يوجد"
                                 : _placeBeaconEditingController.text

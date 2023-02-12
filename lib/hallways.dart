@@ -360,16 +360,8 @@ class hallwaysScreenState extends State<hallways> {
                                       DataRow(cells: [
                                         DataCell(Text(placeName[i])),
                                         DataCell(Text(beaconI[i])),
-                                        DataCell(Text(" نقطة البداية (" +
-                                            xStartI[i] +
-                                            "," +
-                                            yStartI[i] +
-                                            ")" +
-                                            " نقطة النهاية (" +
-                                            xEndI[i] +
-                                            "," +
-                                            yEndI[i] +
-                                            ")")),
+                                        DataCell(Text(
+                                            "نقطة البداية ${xStartI[i]}) , (${yStartI[i]} نقطة النهاية)  ${xEndI[i]}  , (${yEndI[i]} ")),
                                         DataCell(TextButton(
                                             onPressed: () {
                                               CoolAlert.show(

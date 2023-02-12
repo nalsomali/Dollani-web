@@ -267,6 +267,14 @@ class _addNewHallwaysState extends State<addNewHallways> {
                           ),
                         ),
                       ),
+                      Container(
+                        height: 50,
+                        child: _tapPosition == Offset.zero
+                            ? Text(' قم بالضغط على ممر في الخريطة')
+                            : Text(
+                                'x: ${_tapPosition.dx.round()}, y: ${_tapPosition.dy.round()}'),
+                        padding: EdgeInsets.all(16),
+                      ),
                       // Listener(
                       //   // cursor: SystemMouseCursors.click,
                       //   onPointerUp: isSelected == false
@@ -336,17 +344,9 @@ class _addNewHallwaysState extends State<addNewHallways> {
                                 DataRow(cells: [
                                   DataCell(Text(placeName[i])),
                                   DataCell(Text(beaconI[i])),
+                                  DataCell(Text(
+                                      "نقطة البداية ${xStartI[i]}) , (${yStartI[i]} نقطة النهاية)  ${xEndI[i]}  , (${yEndI[i]} ")),
 
-                                  DataCell(Text(" نقطة البداية (" +
-                                      xStartI[i] +
-                                      "," +
-                                      yStartI[i] +
-                                      ")" +
-                                      " نقطة النهاية (" +
-                                      xEndI[i] +
-                                      "," +
-                                      yEndI[i] +
-                                      ")")),
                                   // DataCell(TextButton(
                                   //     onPressed: () {
                                   //       CoolAlert.show(
@@ -603,16 +603,21 @@ class _addNewHallwaysState extends State<addNewHallways> {
                     });
 
                     if (isSelected == true) {
+                      xStart as int;
+                      yStart as int;
+                      yEnd as int;
+                      xEnd as int;
+
                       FirebaseFirestore.instance
                           .collection('hallways')
                           .doc(mapName + "_" + _placeNameEditingController.text)
                           .set({
                         "building": mapName,
                         "name": _placeNameEditingController.text,
-                        'xStart': "$xStart",
-                        "yStart": "$yStart",
-                        'xEnd': "$xEnd",
-                        "yEnd": "$yEnd",
+                        'xStart': xStart,
+                        "yStart": yStart,
+                        'xEnd': xEnd,
+                        "yEnd": yEnd,
                         "beacon": _placeBeaconEditingController.text.isEmpty
                             ? "لا يوجد"
                             : _placeBeaconEditingController.text
