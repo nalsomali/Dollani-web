@@ -289,8 +289,8 @@ class _adNewPlacesState extends State<addNewPlace> {
                         _updateLocation(details);
                       },
                       child: Container(
-                        width: 414,
-                        height: 515,
+                        width: 420,
+                        height: 520,
                         decoration: BoxDecoration(
                           image: DecorationImage(
                             image: NetworkImage(photo),

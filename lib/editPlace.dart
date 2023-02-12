@@ -264,8 +264,8 @@ class _editPlacesState extends State<editPlaces> {
                               _updateLocation(details);
                             },
                             child: Container(
-                              width: 400,
-                              height: 530,
+                              width: 420,
+                              height: 520,
                               decoration: BoxDecoration(
                                 image: DecorationImage(
                                   image: NetworkImage(photo),

@@ -256,8 +256,8 @@ class _addNewHallwaysState extends State<addNewHallways> {
                                 : _updateLocation2(details);
                           },
                           child: Container(
-                            width: 400,
-                            height: 530,
+                            width: 420,
+                            height: 520,
                             decoration: BoxDecoration(
                               image: DecorationImage(
                                 image: NetworkImage(photo),
@@ -560,6 +560,8 @@ class _addNewHallwaysState extends State<addNewHallways> {
                       child: Text("الغاء"),
                       onPressed: () {
                         isSelected = false;
+                        _placeNameEditingController.clear();
+                        _placeBeaconEditingController.clear();
                         FocusScope.of(context).unfocus();
                         Navigator.pop(context);
                       }),
