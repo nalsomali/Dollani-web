@@ -40,7 +40,7 @@ class MyApp extends StatelessWidget {
       ],
       locale: Locale("ar", "AE"),
       debugShowCheckedModeBanner: false,
-      home: addMaps(),
+      home: UserLogin(),
     );
   }
 }

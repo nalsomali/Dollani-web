@@ -229,126 +229,140 @@ class _adNewPlacesState extends State<addNewPlace> {
                   )
                 ],
               ),
-              Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  SizedBox(
-                    height: 20,
-                  ),
-                  Text(
-                    " لإضافة اماكن على الخريطة الرجاء اتباع التعليمات التالية ",
-                    style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                        color: Color.fromARGB(255, 23, 39, 112)),
-                  ),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  Text(
-                    "١- الرجاء النقر على المكان المراد تحديدة من صورة المبنى ",
-                    style: TextStyle(
-                        // fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                        color: Color.fromARGB(255, 0, 0, 0)),
-                    textAlign: TextAlign.center,
-                  ),
-                  Text(
-                    "٢-بعد ذلك سيُطلب منك ادخال معلومات المكان" "(" +
-                        " الاسم / التصنيف" +
-                        ")",
-                    style: TextStyle(
-                        //fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                        color: Color.fromARGB(255, 0, 0, 0)),
-                    textAlign: TextAlign.center,
-                  ),
-                  Text(
-                    "٣-قم بتعبئة المعلومات وانقر على زر" + " (" + "إضافة" + ")",
-                    style: TextStyle(
-                        //   fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                        color: Color.fromARGB(255, 0, 0, 0)),
-                    textAlign: TextAlign.center,
-                  ),
-                  Text(
-                    "٤-بعد اضافة المكان سيتم عرضه في القائمة المجاورة                          ",
-                    style: TextStyle(
-                        //   fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                        color: Color.fromARGB(255, 0, 0, 0)),
-                    textAlign: TextAlign.center,
-                  ),
-                  SizedBox(
-                    height: 20,
-                  ),
-                  CustomPaint(
-                    child: GestureDetector(
-                      onTapDown: _handleTap,
-                      onTapUp: (TapUpDetails details) {
-                        _updateLocation(details);
-                      },
-                      child: Container(
-                        width: 414,
-                        height: 515,
-                        decoration: BoxDecoration(
-                          image: DecorationImage(
-                            image: NetworkImage(photo),
-                            fit: BoxFit.cover,
+              Expanded(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    SizedBox(
+                      height: 20,
+                    ),
+                    Text(
+                      " لإضافة اماكن على الخريطة الرجاء اتباع التعليمات التالية ",
+                      style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                          color: Color.fromARGB(255, 23, 39, 112)),
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    Text(
+                      "١- الرجاء النقر على المكان المراد تحديدة من صورة المبنى ",
+                      style: TextStyle(
+                          // fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                          color: Color.fromARGB(255, 0, 0, 0)),
+                      textAlign: TextAlign.center,
+                    ),
+                    Text(
+                      "٢- بعد ذلك سيُطلب منك ادخال معلومات المكان" ")" +
+                          " الاسم / التصنيف" +
+                          "(",
+                      style: TextStyle(
+                          //fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                          color: Color.fromARGB(255, 0, 0, 0)),
+                      textAlign: TextAlign.center,
+                    ),
+                    Text(
+                      "٣- في حال تواجد بيكون في هذا الموقع، قم بإضافة معرّف البيكون واحصل على إحداثيات هذا الموقع، ثم قم بفتح موقع estimote cloud لإضافة الإحداثيات الخاصة بهذا البيكون",
+                      style: TextStyle(
+                          //fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                          color: Color.fromARGB(255, 0, 0, 0)),
+                      textAlign: TextAlign.center,
+                    ),
+                    Text(
+                      "٤- قم بتعبئة المعلومات وانقر على زر" +
+                          " )" +
+                          "إضافة" +
+                          "(",
+                      style: TextStyle(
+                          //   fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                          color: Color.fromARGB(255, 0, 0, 0)),
+                      textAlign: TextAlign.center,
+                    ),
+                    Text(
+                      "٥- بعد اضافة المكان سيتم عرضه في القائمة المجاورة                          ",
+                      style: TextStyle(
+                          //   fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                          color: Color.fromARGB(255, 0, 0, 0)),
+                      textAlign: TextAlign.center,
+                    ),
+                    SizedBox(
+                      height: 20,
+                    ),
+                    CustomPaint(
+                      child: GestureDetector(
+                        onTapDown: _handleTap,
+                        onTapUp: (TapUpDetails details) {
+                          _updateLocation(details);
+                        },
+                        child: Container(
+                          width: 400,
+                          height: 500,
+                          decoration: BoxDecoration(
+                            image: DecorationImage(
+                              image: NetworkImage(photo),
+                              fit: BoxFit.cover,
+                            ),
                           ),
                         ),
                       ),
                     ),
-                  ),
-                  Container(
-                    height: 50,
-                    child: _tapPosition == Offset.zero
-                        ? Text(' قم بالضغط على مكان في الخريطة')
-                        : Text(
-                            'x: ${_tapPosition.dx.round()}, y: ${_tapPosition.dy.round()}'),
-                    padding: EdgeInsets.all(16),
-                  ),
-                  // Listener(
-                  //   // cursor: SystemMouseCursors.click,
-                  //   onPointerUp: _updateLocation,
-                  //   child: Container(
-                  //     width: 400,
-                  //     height: 530,
-                  //     decoration: BoxDecoration(
-                  //       image: DecorationImage(
-                  //         image: NetworkImage("$photo"),
-                  //         fit: BoxFit.cover,
-                  //       ),
-                  //     ),
-                  //   ),
-                  // ),
-                  SizedBox(height: 30),
-                  Container(
-                    margin: EdgeInsets.only(right: 123),
-                    child: Container(
-                      height: 30,
-                      width: 150,
-                      child: TextButton(
-                          style: TextButton.styleFrom(
-                            backgroundColor: Color.fromARGB(255, 186, 187, 189),
-                          ),
-                          onPressed: () async {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => places(
-                                          mapName: mapName,
-                                        )));
-                          },
-                          child: Text(
-                            "العودة",
-                            style: TextStyle(
-                              color: Color.fromARGB(255, 0, 0, 0),
-                            ),
-                          )),
+                    Container(
+                      height: 50,
+                      child: _tapPosition == Offset.zero
+                          ? Text(' قم بالضغط على مكان في الخريطة')
+                          : Text(
+                              'x: ${_tapPosition.dx.round()}, y: ${_tapPosition.dy.round()}'),
+                      padding: EdgeInsets.all(16),
                     ),
-                  )
-                ],
+                    // Listener(
+                    //   // cursor: SystemMouseCursors.click,
+                    //   onPointerUp: _updateLocation,
+                    //   child: Container(
+                    //     width: 400,
+                    //     height: 530,
+                    //     decoration: BoxDecoration(
+                    //       image: DecorationImage(
+                    //         image: NetworkImage("$photo"),
+                    //         fit: BoxFit.cover,
+                    //       ),
+                    //     ),
+                    //   ),
+                    // ),
+                    SizedBox(height: 30),
+                    Container(
+                      margin: EdgeInsets.only(right: 123),
+                      child: Container(
+                        height: 30,
+                        width: 150,
+                        child: TextButton(
+                            style: TextButton.styleFrom(
+                              backgroundColor:
+                                  Color.fromARGB(255, 186, 187, 189),
+                            ),
+                            onPressed: () async {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => places(
+                                            mapName: mapName,
+                                          )));
+                            },
+                            child: Text(
+                              "العودة",
+                              style: TextStyle(
+                                color: Color.fromARGB(255, 0, 0, 0),
+                              ),
+                            )),
+                      ),
+                    )
+                  ],
+                ),
               ),
             ])),
             Expanded(

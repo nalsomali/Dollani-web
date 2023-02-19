@@ -252,7 +252,7 @@ class _addPlacesState extends State<addPlaces> {
                     textAlign: TextAlign.center,
                   ),
                   Text(
-                    "٢-بعد ذلك سيُطلب منك ادخال معلومات المكان" ")" +
+                    "٢- بعد ذلك سيُطلب منك ادخال معلومات المكان" ")" +
                         " الاسم / التصنيف" +
                         "(",
                     style: TextStyle(
@@ -262,7 +262,18 @@ class _addPlacesState extends State<addPlaces> {
                     textAlign: TextAlign.center,
                   ),
                   Text(
-                    "٣-قم بتعبئة المعلومات وانقر على زر" + " )" + "إضافة" + "(",
+                    "٣- في حال تواجد بيكون في هذا الموقع، قم بإضافة معرّف البيكون واحصل على إحداثيات هذا الموقع، ثم قم بفتح موقع estimote cloud لإضافة الإحداثيات الخاصة بهذا البيكون",
+                    style: TextStyle(
+                        //fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                        color: Color.fromARGB(255, 0, 0, 0)),
+                    textAlign: TextAlign.center,
+                  ),
+                  Text(
+                    "٤- قم بتعبئة المعلومات وانقر على زر" +
+                        " )" +
+                        "إضافة" +
+                        "(",
                     style: TextStyle(
                         //   fontSize: 20,
                         fontWeight: FontWeight.bold,
@@ -270,7 +281,7 @@ class _addPlacesState extends State<addPlaces> {
                     textAlign: TextAlign.center,
                   ),
                   Text(
-                    "٤-بعد اضافة المكان سيتم عرضه في القائمة المجاورة                          ",
+                    "٥- بعد اضافة المكان سيتم عرضه في القائمة المجاورة                          ",
                     style: TextStyle(
                         //   fontSize: 20,
                         fontWeight: FontWeight.bold,
@@ -287,8 +298,8 @@ class _addPlacesState extends State<addPlaces> {
                         _updateLocation(details);
                       },
                       child: Container(
-                        width: 414,
-                        height: 515,
+                         width: 400,
+                        height: 500,
                         decoration: BoxDecoration(
                           image: DecorationImage(
                             image: NetworkImage(photo),

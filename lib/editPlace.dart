@@ -264,8 +264,8 @@ class _editPlacesState extends State<editPlaces> {
                               _updateLocation(details);
                             },
                             child: Container(
-                              width: 414,
-                              height: 515,
+                              width: 400,
+                              height: 500,
                               decoration: BoxDecoration(
                                 image: DecorationImage(
                                   image: NetworkImage(photo),
@@ -274,6 +274,14 @@ class _editPlacesState extends State<editPlaces> {
                               ),
                             ),
                           ),
+                        ),
+                        Container(
+                          height: 50,
+                          child: _tapPosition == Offset.zero
+                              ? Text(' قم بالضغط على مكان في الخريطة')
+                              : Text(
+                                  'x: ${_tapPosition.dx.round()}, y: ${_tapPosition.dy.round()}'),
+                          padding: EdgeInsets.all(16),
                         ),
                         SizedBox(height: 30),
                         Row(
@@ -288,10 +296,13 @@ class _editPlacesState extends State<editPlaces> {
                                   ),
                                   onPressed: () async {
                                     FocusScope.of(context).unfocus();
+                                    x as int;
+                                    y as int;
+
                                     FirebaseFirestore.instance
                                         .collection('places')
                                         .doc(category + '-' + name)
-                                        .update({'x': "$x", "y": "$y"});
+                                        .update({'x': x, "y": y});
 
                                     CoolAlert.show(
                                       title: " تعديل الموقع",

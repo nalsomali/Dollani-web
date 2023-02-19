@@ -255,8 +255,8 @@ class _addHallwaysState extends State<addHallways> {
                                   : _updateLocation2(details);
                             },
                             child: Container(
-                              width: 414,
-                              height: 515,
+                              width: 400,
+                              height: 500,
                               decoration: BoxDecoration(
                                 image: DecorationImage(
                                   image: NetworkImage(photo),
