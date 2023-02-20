@@ -366,7 +366,7 @@ class hallwaysScreenState extends State<hallways> {
                                             onPressed: () {
                                               CoolAlert.show(
                                                 context: context,
-                                                title: " حذف لممر",
+                                                title: " حذف الممر",
                                                 width: size.width * 0.2,
                                                 confirmBtnColor: Color.fromARGB(
                                                     181, 172, 22, 12),
